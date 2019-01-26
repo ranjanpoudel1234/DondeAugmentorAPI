@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SimpleInjector" Version="4.4.3" />
+    <PackageReference Include="SimpleInjector.Integration.AspNetCore.Mvc" Version="4.4.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Donde.Augmentor.Core.Domain\Donde.Augmentor.Core.Domain.csproj" />
+    <ProjectReference Include="..\Donde.Augmentor.Core.Repositories.Interfaces\Donde.Augmentor.Core.Repositories.Interfaces.csproj" PrivateAssets="All" />
+    <ProjectReference Include="..\Donde.Augmentor.Core.Services.Interfaces\Donde.Augmentor.Core.Service.Interfaces.csproj" />
+  </ItemGroup>
+
+</Project>

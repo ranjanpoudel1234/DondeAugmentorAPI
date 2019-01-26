@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SimpleInjector" Version="4.4.3" />
+    <PackageReference Include="SimpleInjector.Integration.AspNetCore.Mvc" Version="4.4.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Donde.Augmentor.Core.Services\Donde.Augmentor.Core.Services.csproj" />
+    <ProjectReference Include="..\Donde.Augmentor.Infrastructure\Donde.Augmentor.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>
