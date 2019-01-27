@@ -1,0 +1,19 @@
+﻿using Donde.Augmentor.Core.Domain.Interfaces;
+using System;
+
+namespace Donde.Augmentor.Core.Domain.Models
+{
+    public class Audio : IDondeModel, IResourceModel, IAuditFieldsModel
+    {
+        public Guid Id { get; set; }
+
+        public string Name { get; set; }
+        public string Url { get; set; }
+        public Guid OrganizationId { get; set; }
+
+        public DateTime AddedDate { get; set; }
+        public DateTime UpdatedDate { get; set; }
+        public DateTime IsActive { get; set; }
+
+    }
+}
