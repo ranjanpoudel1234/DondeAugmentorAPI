@@ -5,6 +5,11 @@ namespace Donde.Augmentor.Infrastructure.Database
 {
     public class DondeContext : DbContext
     {
+        public DondeContext()
+        {
+
+        }
+
         public DondeContext(DbContextOptions<DondeContext> options) : base(options)
         {
 
@@ -49,14 +54,14 @@ namespace Donde.Augmentor.Infrastructure.Database
         }
 
         /// <summary>
-		///     This method is overridden for the EF CLI. This allows the CLI to call to the context and get a provider configured.
-		///     When using startup.cs and specifying a provider there,
-		///     this value would not be used.
+		///This method allows the CLI to call to the context and get a provider configured. This is overriden for EF CLI.
+		///When using startup.cs and specifying a provider there,
+		/// this value would not be used.
 		/// </summary>
 		/// <param name="optionsBuilder"></param>
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-           // if (!optionsBuilder.IsConfigured) optionsBuilder.UseNpgsql(@"Server=vagrant;Port=5432;Database=PEC_RegionMetric;Username=pec_postgres;Password=P3Cp0stgr3s");
+            if (!optionsBuilder.IsConfigured) optionsBuilder.UseNpgsql(@"Server=localhost;Port=5432;Database=Donde_Augmentor;Username=donde_postgress;Password=D0ND3p0stgr3s");
         }
     }
 }
