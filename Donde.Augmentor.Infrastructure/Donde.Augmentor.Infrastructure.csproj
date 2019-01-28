@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Donde.Augmentor.Core.Domain\Donde.Augmentor.Core.Domain.csproj" />
+    <ProjectReference Include="..\Donde.Augmentor.Core.Repositories.Interfaces\Donde.Augmentor.Core.Repositories.Interfaces.csproj" />
   </ItemGroup>
 
 </Project>
