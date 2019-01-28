@@ -8,10 +8,10 @@ namespace Donde.Augmentor.Core.Repositories.Interfaces.RepositoryInterfaces
     {
         IQueryable<TEntity> GetAll();
 
-        Task<TEntity> GetById(Guid id);
+        Task<TEntity> GetByIdAsync(Guid id);
 
-        Task Create(TEntity entity);
+        Task<TEntity> CreateAsync(TEntity entity);
 
-        Task Update(Guid id, TEntity entity);
+        Task<TEntity> UpdateAsync(Guid id, TEntity entity);
     }
 }
