@@ -1,9 +1,11 @@
-﻿using Donde.Augmentor.Core.Domain.Models;
+﻿using Dapper;
+using Donde.Augmentor.Core.Domain.Dto;
+using Donde.Augmentor.Core.Domain.Models;
 using Donde.Augmentor.Core.Repositories.Interfaces.RepositoryInterfaces;
 using Donde.Augmentor.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Linq;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Donde.Augmentor.Infrastructure.Repositories
@@ -15,34 +17,55 @@ namespace Donde.Augmentor.Infrastructure.Repositories
 
         }
 
-        public async Task<AugmentObject> GetAugmentObjectByImageId(Guid imageId)
+        public async Task<AugmentObject> CreateAugmentObjectAsync(AugmentObject entity)
         {
-            return await GetAll().Where(ao => ao.AugmentImageId == imageId).FirstOrDefaultAsync();
+            return await CreateAsync(entity);
         }
 
-//        SELECT "Id", "AvatarId", "AudioId", "AugmentImageId", "Description", "Latitude", "Longitude", "OrganizationId", "AddedDate", "UpdatedDate", "IsActive"
-//FROM public."AugmentObjects";
+        public async Task<AugmentObject> UpdateAugmentObjectAsync(Guid id, AugmentObject entity)
+        {
+            return await UpdateAsync(id, entity);
+        }
 
-//with index_query as (
-//  select
-//    st_distance('SRID=4326;POINT('public."Latitude" public."Longitude"')'::geometry, 'SRID=3005;POINT(1011102 450541)') as distance
-//    from public."AugmentObjects"
-//     order by geom<#> 'SRID=4326;POINT(-72.1235 42.3521)' limit 100
-//)
-//select* from index_query order by distance limit 10;
+       
+        public async Task<IEnumerable<AugmentObjectDto>> GetAugmentObjectByImageId(double latitude, double longitude)
+        {
+            string objectsByDistanceQuery = $@"SELECT 
+                            st_distance(CONCAT('SRID=4326;POINT(',""Latitude"",' ', ""Longitude"",')')::geometry, 'SRID=4326;POINT(@latitude @longitude)') as Distance,
+                            Id,
+                            AvatarId,
+                            AugmentImageId,
+                            Description,
+                            Latitude,
+                            Longitude,
+                            OrganizationId,
+                            AddedDate,
+                            UpdatedDate,
+                            IsActive
+                            from ""AugmentObjects""
+                            order by st_distance(CONCAT('SRID=4326;POINT(',""Latitude"",' ', ""Longitude"",')')::geometry, 'SRID=4326;POINT(@latitude @longitude)')";
 
-//--slidell and covington
-//SELECT ST_Distance(
-//		'SRID=4326;POINT(30.4755 90.1009)'::geometry,
-//		'SRID=4326;POINT(30.2752 89.7812)'::geometry
 
-//    );
+            var connection = _dbContext.Database.GetDbConnection();
 
-//        select
-//            st_distance(CONCAT('SRID=4326;POINT(',"Latitude",' ', "Longitude",')')::geometry, 'SRID=4326;POINT(1011102 450541)') as distance
-//            from public."AugmentObjects"
-    
-    
-CREATE EXTENSION postgis;
+            var result = await connection.QueryAsync<AugmentObjectDto>
+            (
+                objectsByDistanceQuery,
+                new
+                {
+                    latitude,
+                    longitude
+                }
+            );
+
+            return result;
+        }
+
+                //        select
+                //            st_distance(CONCAT('SRID=4326;POINT(',"Latitude",' ', "Longitude",')')::geometry, 'SRID=4326;POINT(30.4755 90.1009)') as distance
+                //            from public."AugmentObjects"
+                //    order by st_distance(CONCAT('SRID=4326;POINT(',"Latitude",' ', "Longitude",')')::geometry, 'SRID=4326;POINT(30.4755 90.1009)') 
+
+                //CREATE EXTENSION postgis; 
     }
 }

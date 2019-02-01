@@ -10,7 +10,7 @@ namespace Donde.Augmentor.Infrastructure.Repositories
 {
     public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class, IDondeModel
     {
-        private readonly DondeContext _dbContext;
+        protected readonly DondeContext _dbContext;
         public GenericRepository(DondeContext dbContext)
         {
             _dbContext = dbContext;
