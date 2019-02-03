@@ -12,7 +12,7 @@ namespace Donde.Augmentor.Web.OData
 {
     public static class ServiceCollectionExtension
     {
-        public static void AddAionOData
+        public static void AddDondeOData
             (this IServiceCollection services, 
             IConfigurationRoot configurationRoot,
             string configurationKey = null)
@@ -24,12 +24,7 @@ namespace Donde.Augmentor.Web.OData
             var modelConfigurationsTypes = GetClassesImplementing<IModelConfiguration>(modelConfigurationContainingAssemblies);
 
             foreach (var modelConfigurationType in modelConfigurationsTypes)
-                services.TryAddEnumerable(Transient(typeof(IModelConfiguration), modelConfigurationType));
-        }
-
-        private static ServiceDescriptor Transient(object @interface, object implementation)
-        {
-            throw new NotImplementedException();
+                services.TryAddEnumerable(ServiceDescriptor.Transient(typeof(IModelConfiguration), modelConfigurationType));
         }
 
         private static IEnumerable<Type> GetClassesImplementing<TInterface>(List<Assembly> assemblies)

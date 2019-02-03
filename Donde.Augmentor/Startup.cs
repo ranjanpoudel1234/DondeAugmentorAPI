@@ -1,4 +1,5 @@
-﻿using Donde.Augmentor.Web.OData;
+﻿using Donde.Augmentor.Bootstrapper;
+using Donde.Augmentor.Web.OData;
 using Microsoft.AspNet.OData.Builder;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -10,7 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using SimpleInjector;
 using SimpleInjector.Integration.AspNetCore.Mvc;
 using SimpleInjector.Lifestyles;
-
+using System.Reflection;
 
 namespace Donde.Augmentor.Web
 {
@@ -34,7 +35,7 @@ namespace Donde.Augmentor.Web
 
             IntegrateSimpleInjector(services);
 
-            services.AddAionOData(Configuration);
+            services.AddDondeOData(Configuration);
         }
 
         private void IntegrateSimpleInjector(IServiceCollection services)
@@ -50,7 +51,6 @@ namespace Donde.Augmentor.Web
 
             services.EnableSimpleInjectorCrossWiring(container);
             services.UseSimpleInjectorAspNetRequestScoping(container);
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -61,7 +61,24 @@ namespace Donde.Augmentor.Web
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseMvc(builder => { builder.BuildAionOData(modelBuilder); });
+            app.UseMvc(builder => { builder.BuildDondeOData(modelBuilder); });
+
+            InitializeAndVerifyContainer(app);
+        }
+
+        private void InitializeAndVerifyContainer(IApplicationBuilder app)
+        {
+            var connectionString = Configuration["Donde.Augmentor.Data:API:ConnectionString"];
+            DondeAugmentorBootstrapper.BootstrapDondeAugmentor
+                (container, 
+                Assembly.GetExecutingAssembly(),
+                connectionString, 
+                CurrentEnvironment.EnvironmentName);
+          
+            // Allow Simple Injector to resolve services from ASP.NET Core.
+            container.AutoCrossWireAspNetComponents(app);
+
+            container.Verify();
         }
     }
 }

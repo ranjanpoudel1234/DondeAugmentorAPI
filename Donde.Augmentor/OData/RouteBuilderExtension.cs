@@ -7,7 +7,7 @@ namespace Donde.Augmentor.Web.OData
 {
     public static class RouteBuilderExtensions
     {
-        public static IRouteBuilder BuildAionOData
+        public static IRouteBuilder BuildDondeOData
             (this IRouteBuilder builder,
             VersionedODataModelBuilder modelBuilder)
         {
