@@ -26,26 +26,36 @@ namespace Donde.Augmentor.Infrastructure.Repositories
         {
             return await UpdateAsync(id, entity);
         }
-
-       
-        public async Task<IEnumerable<AugmentObjectDto>> GetAugmentObjectByImageId(double latitude, double longitude)
+ 
+        public async Task<IEnumerable<AugmentObjectDto>> GetClosestAugmentObjectsByRadius(double latitude, double longitude, int radiusInMeters)
         {
-            string objectsByDistanceQuery = $@"SELECT 
-                            st_distance(CONCAT('SRID=4326;POINT(',""Latitude"",' ', ""Longitude"",')')::geometry, 'SRID=4326;POINT(@latitude @longitude)') as Distance,
-                            Id,
-                            AvatarId,
-                            AugmentImageId,
-                            Description,
-                            Latitude,
-                            Longitude,
-                            OrganizationId,
-                            AddedDate,
-                            UpdatedDate,
-                            IsActive
-                            from ""AugmentObjects""
-                            order by st_distance(CONCAT('SRID=4326;POINT(',""Latitude"",' ', ""Longitude"",')')::geometry, 'SRID=4326;POINT(@latitude @longitude)')";
+            string objectsByDistanceQuery = $@"with AugmentObjectWithDistance as 
 
+                    (
+                        SELECT 
+                        st_distance(ST_Transform(CONCAT('SRID=4326;POINT(',""Longitude"",' ', ""Latitude"",')')::geometry. 3857), ST_Transform('SRID=4326;POINT(@longitude @latitude)':: geometry, 3857)) as Distance,
+                        ""Id"",
+                        ""AvatarId"",
+                        ""AugmentImageId"",
+                        ""Description"",
+                        ""Latitude"",
+                        ""Longitude"",
+                        ""OrganizationId"",
+                        ""AddedDate"",
+                        ""UpdatedDate"",
+                        ""IsActive""
+                        from ""AugmentObjects""
+                    )
 
+                    SELECT 
+                        *
+                    FROM 
+                        AugmentObjectWithDistance
+                    WHERE
+                        Distance < @radiusInMeters
+                    ORDER BY
+                        Distance";
+                 
             var connection = _dbContext.Database.GetDbConnection();
 
             var result = await connection.QueryAsync<AugmentObjectDto>
@@ -53,19 +63,36 @@ namespace Donde.Augmentor.Infrastructure.Repositories
                 objectsByDistanceQuery,
                 new
                 {
+                    longitude,
                     latitude,
-                    longitude
+                    radiusInMeters
                 }
             );
 
             return result;
         }
+//; with AugmentObjectWithDistance as
+//    (
 
-                //        select
-                //            st_distance(CONCAT('SRID=4326;POINT(',"Latitude",' ', "Longitude",')')::geometry, 'SRID=4326;POINT(30.4755 90.1009)') as distance
-                //            from public."AugmentObjects"
-                //    order by st_distance(CONCAT('SRID=4326;POINT(',"Latitude",' ', "Longitude",')')::geometry, 'SRID=4326;POINT(30.4755 90.1009)') 
+//        select st_distance(ST_Transform(CONCAT('SRID=4326;POINT(',"Longitude",' ', "Latitude",')')::geometry, 3857), ST_Transform('SRID=4326;POINT(90.1009 30.4755)':: geometry, 3857)) as Distance,
+//    	"Id",
+//    	"AvatarId",
+//    	 "AugmentImageId",
+//                            "Description",
+//                            "Latitude",
+//                            "Longitude",
+//                            "OrganizationId",
+//                            "AddedDate",
+//                            "UpdatedDate",
+//                            "IsActive"
+//    	from "AugmentObjects"
+//    )
+    
+//    select* from AugmentObjectWithDistance
+//   where Distance< 160000
 
-                //CREATE EXTENSION postgis; 
+//   order by Distance
+
+        //CREATE EXTENSION postgis; 
     }
 }

@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="8.0.0" />
     <PackageReference Include="SimpleInjector" Version="4.4.3" />
     <PackageReference Include="SimpleInjector.Integration.AspNetCore.Mvc" Version="4.4.3" />
   </ItemGroup>

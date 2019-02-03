@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Donde.Augmentor.Web.OData;
+using Microsoft.AspNet.OData.Builder;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Controllers;
@@ -29,8 +31,10 @@ namespace Donde.Augmentor.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddOptions();
+
             IntegrateSimpleInjector(services);
 
+            services.AddAionOData(Configuration);
         }
 
         private void IntegrateSimpleInjector(IServiceCollection services)
@@ -46,20 +50,18 @@ namespace Donde.Augmentor.Web
 
             services.EnableSimpleInjectorCrossWiring(container);
             services.UseSimpleInjectorAspNetRequestScoping(container);
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, VersionedODataModelBuilder modelBuilder)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
-            app.Run(async (context) =>
-            {
-                await context.Response.WriteAsync("Hello World!");
-            });
+            app.UseMvc(builder => { builder.BuildAionOData(modelBuilder); });
         }
     }
 }

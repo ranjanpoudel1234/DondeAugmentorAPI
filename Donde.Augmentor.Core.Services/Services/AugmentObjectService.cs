@@ -23,9 +23,9 @@ namespace Donde.Augmentor.Core.Services.Services
             return await _augmentObjectRepository.CreateAugmentObjectAsync(entity);
         }
 
-        public async Task<IEnumerable<AugmentObjectDto>> GetAugmentObjectByImageId(double latitude, double longitude)
+        public async Task<IEnumerable<AugmentObjectDto>> GetClosestAugmentObjectsByRadius(double latitude, double longitude, int radiusInMeters)
         {
-            return await _augmentObjectRepository.GetAugmentObjectByImageId(latitude, longitude);
+            return await _augmentObjectRepository.GetClosestAugmentObjectsByRadius(latitude, longitude, radiusInMeters);
         }
 
         public async Task<AugmentObject> UpdateAugmentObjectAsync(Guid id, AugmentObject entity)
