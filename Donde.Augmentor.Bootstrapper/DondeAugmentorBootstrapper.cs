@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.Extensions.Logging;
 using SimpleInjector;
 using System;
 using System.Collections.Generic;
@@ -9,11 +10,16 @@ namespace Donde.Augmentor.Bootstrapper
 {
     public class DondeAugmentorBootstrapper : BaseBootstrapper
     {
-        public static void BootstrapDondeAugmentor(Container simpleInjectorContainer, Assembly webAssembly, string connectionString, string environmentName)
+        public static void BootstrapDondeAugmentor
+            (Container simpleInjectorContainer, 
+            Assembly webAssembly, 
+            string connectionString,
+            string environmentName,
+            ILoggerFactory loggerFactory)
         {
             BootstrapAutoMapper(simpleInjectorContainer, webAssembly);
             CoreServiceBootstrapper.BootstrapCoreService(simpleInjectorContainer);
-            InfrastructureBootstrapper.BootstrapInfrastructure(simpleInjectorContainer);
+            InfrastructureBootstrapper.BootstrapInfrastructure(simpleInjectorContainer, connectionString, environmentName, loggerFactory);
         }
 
         private static void BootstrapAutoMapper(Container simpleInjectorContainer, Assembly webAssembly)

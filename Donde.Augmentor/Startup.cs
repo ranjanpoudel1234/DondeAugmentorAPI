@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.ViewComponents;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using SimpleInjector;
 using SimpleInjector.Integration.AspNetCore.Mvc;
 using SimpleInjector.Lifestyles;
@@ -33,6 +34,14 @@ namespace Donde.Augmentor.Web
         {
             services.AddOptions();
 
+            services.AddMvc();
+
+            services.AddApiVersioning(o =>
+            {
+                o.ReportApiVersions = true;
+                o.AssumeDefaultVersionWhenUnspecified = true;
+            });
+
             IntegrateSimpleInjector(services);
 
             services.AddDondeOData(Configuration);
@@ -54,7 +63,10 @@ namespace Donde.Augmentor.Web
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, VersionedODataModelBuilder modelBuilder)
+        public void Configure(IApplicationBuilder app, 
+            IHostingEnvironment env,
+            VersionedODataModelBuilder modelBuilder,
+            ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
@@ -63,17 +75,18 @@ namespace Donde.Augmentor.Web
 
             app.UseMvc(builder => { builder.BuildDondeOData(modelBuilder); });
 
-            InitializeAndVerifyContainer(app);
+            InitializeAndVerifyContainer(app, loggerFactory);
         }
 
-        private void InitializeAndVerifyContainer(IApplicationBuilder app)
+        private void InitializeAndVerifyContainer(IApplicationBuilder app, ILoggerFactory loggerFactory)
         {
             var connectionString = Configuration["Donde.Augmentor.Data:API:ConnectionString"];
             DondeAugmentorBootstrapper.BootstrapDondeAugmentor
                 (container, 
                 Assembly.GetExecutingAssembly(),
                 connectionString, 
-                CurrentEnvironment.EnvironmentName);
+                CurrentEnvironment.EnvironmentName,
+                loggerFactory);
           
             // Allow Simple Injector to resolve services from ASP.NET Core.
             container.AutoCrossWireAspNetComponents(app);

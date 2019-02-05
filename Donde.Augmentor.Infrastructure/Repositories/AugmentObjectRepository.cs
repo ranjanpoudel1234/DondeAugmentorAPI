@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Donde.Augmentor.Infrastructure.Repositories
 {
-    public class AugmentObjectRepository : GenericRepository<AugmentObject>, IAugmentObjectRepository
+    public class AugmentObjectRepository : GenericRepository, IAugmentObjectRepository
     {
         public AugmentObjectRepository(DondeContext dbContext) : base(dbContext)
         {

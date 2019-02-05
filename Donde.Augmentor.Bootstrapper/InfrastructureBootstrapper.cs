@@ -11,20 +11,24 @@ namespace Donde.Augmentor.Bootstrapper
 {
     public class InfrastructureBootstrapper : BaseBootstrapper
     {
-        public static void BootstrapInfrastructure(Container simpleInjectorContainer)
+        public static void BootstrapInfrastructure(Container simpleInjectorContainer, string connectionString,
+            string environmentName, ILoggerFactory loggerFactory)
         {
-            RegisterInstancesByNamespace(simpleInjectorContainer,
+            RegisterInfrastructureInstancesByNamespace(simpleInjectorContainer,
                 new List<Assembly>
                 {
-                    GetInfrastructureInterfaceAssembly(),
+                   // GetInfrastructureInterfaceAssembly(),
                     GetInfrastructureAssembly()
                 },
                  new List<string>
                  {
-                    "Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces",
-                    "Donde.Augmentor.Core.Services.Services"
+                   // "Donde.Augmentor.Core.Repositories.Interfaces.RepositoryInterfaces",
+                    "Donde.Augmentor.Infrastructure.Repositories"
                  }
             );
+
+            var options = BuildDondeContextOptions(environmentName, connectionString, loggerFactory);
+            simpleInjectorContainer.Register(() => { return new DondeContext(options.Options); }, Lifestyle.Scoped);
         }
 
         private static DbContextOptionsBuilder<DondeContext> BuildDondeContextOptions(string environmentName, string connectionString, ILoggerFactory loggerFactory)

@@ -24,9 +24,9 @@ namespace Donde.Agumentor.Infrastructure.Test.Repositories
             {
                 new DondeAugmentorDataBuilder().AddAugmentObject().ApplyTo(context);
 
-                var defaultRepository = DefaultGenericRepository<AugmentObject>(context);
+                var defaultRepository = DefaultGenericRepository(context);
 
-                var result = defaultRepository.GetAll();
+                var result = defaultRepository.GetAll<AugmentObject>();
 
                 result.ShouldNotBeNull();
                 result.ShouldBeAssignableTo<IQueryable<AugmentObject>>();
@@ -39,9 +39,9 @@ namespace Donde.Agumentor.Infrastructure.Test.Repositories
         {
             using (var context = GetDondeContext())
             {           
-                var defaultRepository = DefaultGenericRepository<AugmentObject>(context);
+                var defaultRepository = DefaultGenericRepository(context);
 
-                var result = defaultRepository.GetAll();
+                var result = defaultRepository.GetAll<AugmentObject>();
 
                 result.ShouldNotBeNull();
                 result.ShouldBeAssignableTo<IQueryable<AugmentObject>>();
@@ -62,9 +62,9 @@ namespace Donde.Agumentor.Infrastructure.Test.Repositories
                     .AddAugmentObject(dondeAugmentorDataBuilder.MakeAugmentObject(augmentObjectId, audioId: audioId))
                     .ApplyTo(context);
 
-                var defaultRepository = DefaultGenericRepository<AugmentObject>(context);
+                var defaultRepository = DefaultGenericRepository(context);
 
-                var result = await defaultRepository.GetByIdAsync(augmentObjectId);
+                var result = await defaultRepository.GetByIdAsync<AugmentObject>(augmentObjectId);
 
                 result.ShouldNotBeNull();
                 result.AudioId.ShouldBe(audioId);                        
@@ -84,9 +84,9 @@ namespace Donde.Agumentor.Infrastructure.Test.Repositories
                     .AddAugmentObject(dondeAugmentorDataBuilder.MakeAugmentObject(augmentObjectId, audioId: audioId))
                     .ApplyTo(context);
 
-                var defaultRepository = DefaultGenericRepository<AugmentObject>(context);
+                var defaultRepository = DefaultGenericRepository(context);
 
-                var result = await defaultRepository.GetByIdAsync(SequentialGuidGenerator.GenerateComb());
+                var result = await defaultRepository.GetByIdAsync<AugmentObject>(SequentialGuidGenerator.GenerateComb());
 
                 result.ShouldBeNull();
             }
@@ -112,7 +112,7 @@ namespace Donde.Agumentor.Infrastructure.Test.Repositories
                     UpdatedDate = DateTime.Parse("2018/01/28")
                 };
 
-                var defaultRepository = DefaultGenericRepository<AugmentObject>(context);
+                var defaultRepository = DefaultGenericRepository(context);
 
                 var result = await defaultRepository.UpdateAsync(augmentObjectId, updatedObject);
 
@@ -135,7 +135,7 @@ namespace Donde.Agumentor.Infrastructure.Test.Repositories
                 var dondeAugmentorDataBuilder = new DondeAugmentorDataBuilder();
                 var newAugmentObject = dondeAugmentorDataBuilder.MakeAugmentObject(augmentObjectId, audioId: audioId);
 
-                var defaultRepository = DefaultGenericRepository<AugmentObject>(context);
+                var defaultRepository = DefaultGenericRepository(context);
 
                 var result = await defaultRepository.CreateAsync(newAugmentObject);
 
@@ -144,9 +144,9 @@ namespace Donde.Agumentor.Infrastructure.Test.Repositories
             }
         }
 
-        private IGenericRepository<T> DefaultGenericRepository<T>(DondeContext dbContext) where T : class, IDondeModel
+        private IGenericRepository DefaultGenericRepository(DondeContext dbContext)
         {
-            return new GenericRepository<T>(dbContext);
+            return new GenericRepository(dbContext);
         }
     }
 }

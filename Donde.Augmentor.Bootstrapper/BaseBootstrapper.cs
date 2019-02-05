@@ -24,6 +24,23 @@ namespace Donde.Augmentor.Bootstrapper
             {
                 simpleInjectorContainer.Register(reg.Service, reg.Implementation);
             }
-        } 
+        }
+
+        protected static void RegisterInfrastructureInstancesByNamespace
+           (Container simpleInjectorContainer,
+           List<Assembly> assemblies,
+           List<string> namespaces)
+        {
+            var registrations =
+           from type in assemblies.SelectMany(a => a.GetExportedTypes())
+           where namespaces.Contains(type.Namespace)
+           where type.GetInterfaces().Any()
+           select new { Service = type.GetInterfaces().SingleOrDefault(x => x.Name.Contains(type.Name)), Implementation = type };
+
+            foreach (var reg in registrations)
+            {
+                simpleInjectorContainer.Register(reg.Service, reg.Implementation);
+            }
+        }
     }
 }
