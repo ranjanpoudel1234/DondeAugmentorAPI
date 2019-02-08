@@ -33,9 +33,10 @@ namespace Donde.Augmentor.Infrastructure.Repositories
 
                     (
                         SELECT 
-                        st_distance(ST_Transform(CONCAT('SRID=4326;POINT(',""Longitude"",' ', ""Latitude"",')')::geometry. 3857), ST_Transform('SRID=4326;POINT(@longitude @latitude)':: geometry, 3857)) as Distance,
+                        st_distance(ST_Transform(CONCAT('SRID=4326;POINT(',""Longitude"",' ', ""Latitude"",')')::geometry, 3857), ST_Transform('SRID=4326;POINT({longitude} {latitude})':: geometry, 3857)) as Distance,
                         ""Id"",
                         ""AvatarId"",
+                        ""AudioId"",
                         ""AugmentImageId"",
                         ""Description"",
                         ""Latitude"",
@@ -52,7 +53,7 @@ namespace Donde.Augmentor.Infrastructure.Repositories
                     FROM 
                         AugmentObjectWithDistance
                     WHERE
-                        Distance < @radiusInMeters
+                        Distance < @RadiusInMeters
                     ORDER BY
                         Distance";
                  
@@ -63,9 +64,9 @@ namespace Donde.Augmentor.Infrastructure.Repositories
                 objectsByDistanceQuery,
                 new
                 {
-                    longitude,
-                    latitude,
-                    radiusInMeters
+                    Longitude = longitude,
+                    Latitude = latitude,
+                    RadiusInMeters = radiusInMeters
                 }
             );
 

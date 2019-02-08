@@ -32,9 +32,9 @@ namespace Donde.Augmentor.Web
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddOptions();
 
-            services.AddMvc();
+            IntegrateSimpleInjector(services);
+            services.AddOptions();
 
             services.AddApiVersioning(o =>
             {
@@ -42,9 +42,9 @@ namespace Donde.Augmentor.Web
                 o.AssumeDefaultVersionWhenUnspecified = true;
             });
 
-            IntegrateSimpleInjector(services);
-
             services.AddDondeOData(Configuration);
+
+            services.AddMvc();
         }
 
         private void IntegrateSimpleInjector(IServiceCollection services)
@@ -73,13 +73,19 @@ namespace Donde.Augmentor.Web
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseMvc(builder => { builder.BuildDondeOData(modelBuilder); });
+            app.UseMvc();
+
+            app.UseDondeOData();
 
             InitializeAndVerifyContainer(app, loggerFactory);
         }
 
         private void InitializeAndVerifyContainer(IApplicationBuilder app, ILoggerFactory loggerFactory)
         {
+            // Add application presentation components:
+             container.RegisterMvcControllers(app);
+            //container.RegisterMvcViewComponents(app);
+
             var connectionString = Configuration["Donde.Augmentor.Data:API:ConnectionString"];
             DondeAugmentorBootstrapper.BootstrapDondeAugmentor
                 (container, 
