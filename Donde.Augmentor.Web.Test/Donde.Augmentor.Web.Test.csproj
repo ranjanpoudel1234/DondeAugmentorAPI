@@ -17,4 +17,9 @@
     <PackageReference Include="Shouldly" Version="3.0.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Donde.Augmentor.Core.Services.Interfaces\Donde.Augmentor.Core.Service.Interfaces.csproj" />
+    <ProjectReference Include="..\Donde.Augmentor\Donde.Augmentor.Web.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -2,10 +2,9 @@
 
 namespace Donde.Augmentor.Web.ViewModels
 {
-    public class AudioViewModel
+    public class AugmentImageViewModel
     {
         public Guid Id { get; set; }
-
         public string Name { get; set; }
         public string Url { get; set; }
     }
