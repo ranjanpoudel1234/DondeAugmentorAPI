@@ -35,7 +35,7 @@ namespace Donde.Augmentor.Bootstrapper
         {
             var dbContextOptions = new DbContextOptionsBuilder<DondeContext>();
             
-            if(environmentName.Equals("vagrant"))
+            if(environmentName.Equals("Development"))
             {
                 dbContextOptions.UseNpgsql(connectionString, npgSqlBuilder => npgSqlBuilder.MigrationsAssembly(GetInfrastructureAssembly().FullName))
                     .UseLoggerFactory(loggerFactory)
@@ -49,6 +49,7 @@ namespace Donde.Augmentor.Bootstrapper
             var dondeContext = new DondeContext(dbContextOptions.Options);
             dondeContext.Database.Migrate();
 
+            // get the data from databuilder and add to the context/database
             return dbContextOptions;
         }
 
