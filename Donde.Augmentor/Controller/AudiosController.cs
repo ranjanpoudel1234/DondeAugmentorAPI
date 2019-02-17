@@ -7,7 +7,6 @@ using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNet.OData.Routing;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using System.Data.Entity;
 
 
 namespace Donde.Augmentor.Web.Controller
@@ -26,18 +25,19 @@ namespace Donde.Augmentor.Web.Controller
         }
 
         [ODataRoute]
-       [HttpGet]
+        [HttpGet]
         public async Task<IActionResult> Get(ODataQueryOptions<AudioViewModel> odataOptions)
         {
-            var audiosQueryable = _audioService.GetAudios();
+            //var audiosQueryable = _audioService.GetAudios();
 
-            var projectedAudios = audiosQueryable.ProjectTo<AudioViewModel>(_mapper.ConfigurationProvider);
+            //var projectedAudios = audiosQueryable.ProjectTo<AudioViewModel>(_mapper.ConfigurationProvider);
 
-            var appliedResults = odataOptions.ApplyTo(projectedAudios);
+            //var appliedResults = odataOptions.ApplyTo(projectedAudios);
 
-            var audioViewModels = await appliedResults.ToListAsync();
+            //var audioViewModels = await appliedResults.ToListAsync();
 
-            return Ok(audioViewModels);
+            //return Ok(audioViewModels);
+            return Ok(null);
         }
     }
 }
