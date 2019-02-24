@@ -2,7 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
+   <PublishWithAspNetCoreTargetManifest>false</PublishWithAspNetCoreTargetManifest>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Page.xaml" />
+  </ItemGroup>
 
   <ItemGroup>
     <Folder Include="wwwroot\" />
@@ -10,6 +15,7 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="8.0.0" />
+    <PackageReference Include="AWS.Logger.AspNetCore" Version="1.4.1" />
     <PackageReference Include="Dapper" Version="1.50.5" />
 
     <PackageReference Include="Microsoft.AspNetCore" Version="2.1.0" />
@@ -30,6 +36,22 @@
     <ProjectReference Include="..\Donde.Augmentor.Bootstrapper\Donde.Augmentor.Bootstrapper.csproj" />
     <ProjectReference Include="..\Donde.Augmentor.Core.Domain\Donde.Augmentor.Core.Domain.csproj" />
     <ProjectReference Include="..\Donde.Augmentor.Core.Services.Interfaces\Donde.Augmentor.Core.Service.Interfaces.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PropertyPageSchema Remove="Page.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Include="Page.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>
