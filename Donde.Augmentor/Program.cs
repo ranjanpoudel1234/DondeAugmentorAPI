@@ -18,15 +18,15 @@ namespace Donde.Augmentor.Web
         public static IWebHost CreateWebHostBuilder(string[] args)
         {
            return  WebHost.CreateDefaultBuilder(args)
-            //.ConfigureAppConfiguration((context, builder) =>
-            //{
-            //    builder.SetBasePath(context.HostingEnvironment.ContentRootPath)
-            //        .AddJsonFile("appsettings.json", false, true)
-            //        .AddJsonFile($"appsettings.{context.HostingEnvironment.EnvironmentName}.json", true)
-            //        .AddJsonFile(@"C:\Program Files\Amazon\ElasticBeanstalk\config\containerconfiguration", optional: true, reloadOnChange: true)
-            //        .AddEnvironmentVariables()
-            //        .AddInMemoryCollection(GetAWSElasticBeanstalkConfiguration(builder));
-            //})
+            .ConfigureAppConfiguration((context, builder) =>
+            {
+                builder.SetBasePath(context.HostingEnvironment.ContentRootPath)
+                    .AddJsonFile("appsettings.json", false, true)
+                    .AddJsonFile($"appsettings.{context.HostingEnvironment.EnvironmentName}.json", true)
+                    .AddJsonFile(@"C:\Program Files\Amazon\ElasticBeanstalk\config\containerconfiguration", optional: true, reloadOnChange: true)
+                    .AddEnvironmentVariables()
+                    .AddInMemoryCollection(GetAWSElasticBeanstalkConfiguration(builder));
+            })
             .CaptureStartupErrors(true)
             .UseSetting("detailedErrors", "true")
             .UseStartup<Startup>()

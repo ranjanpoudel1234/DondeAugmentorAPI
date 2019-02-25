@@ -88,7 +88,8 @@ namespace Donde.Augmentor.Web
              container.RegisterMvcControllers(app);
 
             //var connectionString = Configuration["Donde.Augmentor.Data:API:ConnectionString"];
-            var connectionString = "Server=dondedbinstance.cgkhjsd3ndot.us-east-1.rds.amazonaws.com;Port=5432;Database=Donde_Augmentor;Username=postgresDondeDev;Password=postgresDondeDev";
+            // var connectionString = "Server=dondedbinstance.cgkhjsd3ndot.us-east-1.rds.amazonaws.com;Port=5432;Database=Donde_Augmentor;Username=postgresDondeDev;Password=postgresDondeDev";
+            var connectionString = GetRdsConnectionString();
             // Example Logging
             loggerFactory.CreateLogger<Program>().LogInformation($"Donde_Augmentor: ConnectionString: {connectionString} and EnvironmentName: {CurrentEnvironment.EnvironmentName}");
             DondeAugmentorBootstrapper.BootstrapDondeAugmentor
