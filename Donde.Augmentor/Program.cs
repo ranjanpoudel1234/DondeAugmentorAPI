@@ -1,9 +1,12 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using NLog;
+using NLog.Web;
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.IO;
 
 namespace Donde.Augmentor.Web
 {
@@ -11,8 +14,37 @@ namespace Donde.Augmentor.Web
     {
         public static void Main(string[] args)
         {
-            //Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", "Vagrant");
-            CreateWebHostBuilder(args).Run();           
+            var configuringFileName = "nlog.config";
+
+            //If we inspect the Hosting aspnet code, we'll see that it internally looks the 
+            //ASPNETCORE_ENVIRONMENT environment variable to determine the actual environment
+            var aspnetEnvironment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+
+            var environmentSpecificLogFileName = $"nlog.{aspnetEnvironment}.config";
+
+            if (File.Exists(environmentSpecificLogFileName))
+            {
+                configuringFileName = environmentSpecificLogFileName;
+            }
+
+            // NLog: setup the logger first to catch all errors
+            var logger = NLogBuilder.ConfigureNLog(configuringFileName).GetCurrentClassLogger();
+            try
+            {
+                logger.Debug("Application started");
+                CreateWebHostBuilder(args).Run();
+            }
+            catch (Exception ex)
+            {
+                //NLog: catch setup errors
+                logger.Error(ex, "Stopped program because of exception");
+                throw;
+            }
+            finally
+            {
+                // Ensure to flush and stop internal timers/threads before application-exit (Avoid segmentation fault on Linux)
+                LogManager.Shutdown();
+            }                  
         }
 
         public static IWebHost CreateWebHostBuilder(string[] args)
@@ -30,7 +62,18 @@ namespace Donde.Augmentor.Web
             .CaptureStartupErrors(true)
             .UseSetting("detailedErrors", "true")
             .UseStartup<Startup>()
+            .ConfigureLogging(logging =>
+            {
+                logging.ClearProviders();
+                logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Information);
+            })
+            .UseNLog()
             .Build();
+        }
+
+        private static void ConfigureNLog()
+        {
+          
         }
 
         private static Dictionary<string, string> GetAWSElasticBeanstalkConfiguration(IConfigurationBuilder builder)

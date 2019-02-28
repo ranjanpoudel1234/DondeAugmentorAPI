@@ -9,11 +9,15 @@ using Microsoft.AspNetCore.Mvc.ViewComponents;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using NLog;
+using NLog.Extensions.Logging;
+using NLog.Web;
 using SimpleInjector;
 using SimpleInjector.Integration.AspNetCore.Mvc;
 using SimpleInjector.Lifestyles;
 using System.Collections.Generic;
 using System.Reflection;
+
 
 namespace Donde.Augmentor.Web
 {
@@ -53,8 +57,7 @@ namespace Donde.Augmentor.Web
             VersionedODataModelBuilder modelBuilder,
             ILoggerFactory loggerFactory)
         {
-            SetupAWSLogger(loggerFactory);
-
+          
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -65,8 +68,17 @@ namespace Donde.Augmentor.Web
             app.UseDondeOData();
 
             InitializeAndVerifyContainer(app, loggerFactory);
+
+            // SetupAWSLogger(loggerFactory);
+            GlobalDiagnosticsContext.Set("connectionString", Configuration["Donde.Augmentor.Data:API:ConnectionString"]);
+            loggerFactory.AddNLog();
+
+
+            //@todo remove this later.
+            var  connectionString = GetRdsConnectionString();         
+            loggerFactory.CreateLogger<Program>().LogInformation($"Donde_Augmentor: ConnectionString: {connectionString} and EnvironmentName: {CurrentEnvironment.EnvironmentName}");
         }
-     
+
         private void IntegrateSimpleInjector(IServiceCollection services)
         {
             container.Options.DefaultScopedLifestyle = new AsyncScopedLifestyle();
@@ -86,12 +98,17 @@ namespace Donde.Augmentor.Web
         {
             // Add application presentation components:
              container.RegisterMvcControllers(app);
-
-            //var connectionString = Configuration["Donde.Augmentor.Data:API:ConnectionString"];
-            // var connectionString = "Server=dondedbinstance.cgkhjsd3ndot.us-east-1.rds.amazonaws.com;Port=5432;Database=Donde_Augmentor;Username=postgresDondeDev;Password=postgresDondeDev";
-            var connectionString = GetRdsConnectionString();
-            // Example Logging
-            loggerFactory.CreateLogger<Program>().LogInformation($"Donde_Augmentor: ConnectionString: {connectionString} and EnvironmentName: {CurrentEnvironment.EnvironmentName}");
+            var connectionString = string.Empty;
+            if(CurrentEnvironment.EnvironmentName.Equals("Local"))
+            {
+                connectionString = Configuration["Donde.Augmentor.Data:API:ConnectionString"];
+            }
+            else
+            {
+                connectionString = GetRdsConnectionString();
+            }
+      
+            //loggerFactory.CreateLogger<Program>().LogInformation($"Donde_Augmentor: ConnectionString: {connectionString} and EnvironmentName: {CurrentEnvironment.EnvironmentName}");
             DondeAugmentorBootstrapper.BootstrapDondeAugmentor
                 (container, 
                 Assembly.GetExecutingAssembly(),

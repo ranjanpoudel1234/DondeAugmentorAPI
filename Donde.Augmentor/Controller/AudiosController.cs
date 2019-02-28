@@ -10,7 +10,8 @@ using Microsoft.AspNet.OData.Routing;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.Extensions.Logging;
+using System;
 
 namespace Donde.Augmentor.Web.Controller
 {
@@ -20,33 +21,44 @@ namespace Donde.Augmentor.Web.Controller
     {
         private readonly IAudioService _audioService;
         private readonly IMapper _mapper;
+        private readonly ILogger<AudiosController> _logger;
 
-        public AudiosController(IAudioService audioService, IMapper mapper)
+        public AudiosController(IAudioService audioService, IMapper mapper, ILogger<AudiosController> logger)
         {
             _audioService = audioService;
             _mapper = mapper;
+            _logger = logger;
         }
 
         [ODataRoute]
         [HttpGet]
         public async Task<IActionResult> Get(ODataQueryOptions<AudioViewModel> odataOptions)
         {
-            var result = new List<AudioViewModel>();
-            var audiosQueryable = _audioService.GetAudios();
-
-            var projectedAudios = audiosQueryable.ProjectTo<AudioViewModel>(_mapper.ConfigurationProvider);
-
-            var appliedResults = odataOptions.ApplyTo(projectedAudios);
-
-            // ToListAsync converts Iqueryable<T> to List<T>. thus cast needed
-            var audioViewModels = appliedResults as IQueryable<AudioViewModel>;
-
-            if (audioViewModels != null)
+            try
             {
-                result = await audioViewModels.ToListAsync();
-            }
+                _logger.LogInformation("Audios Controller Entered");
+                var result = new List<AudioViewModel>();
+                var audiosQueryable = _audioService.GetAudios();
 
-            return Ok(result);
+                var projectedAudios = audiosQueryable.ProjectTo<AudioViewModel>(_mapper.ConfigurationProvider);
+
+                var appliedResults = odataOptions.ApplyTo(projectedAudios);
+
+                // ToListAsync converts Iqueryable<T> to List<T>. thus cast needed
+                var audioViewModels = appliedResults as IQueryable<AudioViewModel>;
+
+                if (audioViewModels != null)
+                {
+                    result = await audioViewModels.ToListAsync();
+                }
+                _logger.LogInformation("Audios Controller Exit");
+                return Ok(result);
+            }
+            catch(Exception ex)
+            {
+                var test = ex;
+            }
+            return null;
         }
     }
 }
