@@ -20,7 +20,6 @@ namespace Donde.Augmentor.Infrastructure.Database
         public DbSet<Audio> Audios { get; set; }
         public DbSet<AugmentImage> AugmentImages { get; set; }
         public DbSet<AugmentObject> AugmentObjects { get; set; }
-        public DbSet<Log> Logs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -50,11 +49,6 @@ namespace Donde.Augmentor.Infrastructure.Database
                .IsUnique();
 
             modelBuilder.Entity<AugmentObject>()
-               .HasIndex(x => x.Id)
-               .IsUnique();
-
-
-            modelBuilder.Entity<Log>()
                .HasIndex(x => x.Id)
                .IsUnique();
         }

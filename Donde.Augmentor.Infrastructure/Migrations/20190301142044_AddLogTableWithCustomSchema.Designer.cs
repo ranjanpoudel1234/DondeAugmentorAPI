@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Donde.Augmentor.Infrastructure.Migrations
 {
     [DbContext(typeof(DondeContext))]
-    [Migration("20190227140820_AddNLog")]
-    partial class AddNLog
+    [Migration("20190301142044_AddLogTableWithCustomSchema")]
+    partial class AddLogTableWithCustomSchema
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -127,33 +127,6 @@ namespace Donde.Augmentor.Infrastructure.Migrations
                         .IsUnique();
 
                     b.ToTable("Avatars");
-                });
-
-            modelBuilder.Entity("Donde.Augmentor.Core.Domain.Models.Log", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Application");
-
-                    b.Property<string>("Callsite");
-
-                    b.Property<string>("Exception");
-
-                    b.Property<string>("Level");
-
-                    b.Property<string>("LoggedDateUtc");
-
-                    b.Property<string>("Logger");
-
-                    b.Property<string>("Message");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Id")
-                        .IsUnique();
-
-                    b.ToTable("Logs");
                 });
 
             modelBuilder.Entity("Donde.Augmentor.Core.Domain.Models.Organization", b =>

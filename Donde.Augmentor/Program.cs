@@ -64,7 +64,7 @@ namespace Donde.Augmentor.Web
             .UseStartup<Startup>()
             .ConfigureLogging(logging =>
             {
-                logging.ClearProviders();
+               // logging.ClearProviders();
                 logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Information);
             })
             .UseNLog()
