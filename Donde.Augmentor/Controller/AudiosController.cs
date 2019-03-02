@@ -36,7 +36,13 @@ namespace Donde.Augmentor.Web.Controller
         {
             try
             {
-                _logger.LogInformation("Audios Controller Entered");
+
+                _logger.LogTrace("Audios Controller Trace");
+                _logger.LogDebug("Audios Controller Debug");
+                _logger.LogInformation("Audios Controller Information");
+                _logger.LogWarning("Audios Controller Warning");
+                _logger.LogError("Audios Controller Error");
+                _logger.LogCritical("Audios Controller Fatal");
                 var result = new List<AudioViewModel>();
                 var audiosQueryable = _audioService.GetAudios();
 

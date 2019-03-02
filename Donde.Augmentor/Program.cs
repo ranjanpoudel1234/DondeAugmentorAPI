@@ -15,20 +15,8 @@ namespace Donde.Augmentor.Web
         public static void Main(string[] args)
         {
             var configuringFileName = "nlog.config";
-
-            //If we inspect the Hosting aspnet code, we'll see that it internally looks the 
-            //ASPNETCORE_ENVIRONMENT environment variable to determine the actual environment
-            var aspnetEnvironment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-
-            var environmentSpecificLogFileName = $"nlog.{aspnetEnvironment}.config";
-
-            if (File.Exists(environmentSpecificLogFileName))
-            {
-                configuringFileName = environmentSpecificLogFileName;
-            }
-
             // NLog: setup the logger first to catch all errors
-            var logger = NLogBuilder.ConfigureNLog(configuringFileName).GetCurrentClassLogger();
+            var logger = NLogBuilder.ConfigureNLog(configuringFileName).GetCurrentClassLogger();      
             try
             {
                 logger.Debug("Application started");
@@ -61,19 +49,14 @@ namespace Donde.Augmentor.Web
             })
             .CaptureStartupErrors(true)
             .UseSetting("detailedErrors", "true")
-            .UseStartup<Startup>()
+            .UseStartup<Startup>()     
             .ConfigureLogging(logging =>
             {
-               // logging.ClearProviders();
-                logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Information);
+                //this is important to set, because MS sets it to information when you add custom logging on top of it.
+                //we allow this here and override by using nlog.config level.
+                logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
             })
-            .UseNLog()
             .Build();
-        }
-
-        private static void ConfigureNLog()
-        {
-          
         }
 
         private static Dictionary<string, string> GetAWSElasticBeanstalkConfiguration(IConfigurationBuilder builder)
