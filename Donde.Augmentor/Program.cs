@@ -5,8 +5,7 @@ using Microsoft.Extensions.Logging;
 using NLog;
 using NLog.Web;
 using System;
-using System.Collections.Generic;
-using System.IO;
+using System.Linq;
 
 namespace Donde.Augmentor.Web
 {
@@ -20,6 +19,7 @@ namespace Donde.Augmentor.Web
             try
             {
                 logger.Debug("Application started");
+                SetElasticBeanstalkConfiguration(logger);
                 CreateWebHostBuilder(args).Run();
             }
             catch (Exception ex)
@@ -35,6 +35,34 @@ namespace Donde.Augmentor.Web
             }                  
         }
 
+        /// <summary>
+        /// Load the environment variables from elastic beanstalk(including environment name itself before the webhostbuilder builds the context)
+        /// </summary>
+        /// <param name="logger"></param>
+        private static void SetElasticBeanstalkConfiguration(Logger logger)
+        {
+            var ebConfigBuilder = new ConfigurationBuilder();
+
+            ebConfigBuilder.AddJsonFile(
+                @"C:\Program Files\Amazon\ElasticBeanstalk\config\containerconfiguration",
+                optional: true,
+                reloadOnChange: true
+            );
+
+            var configuration = ebConfigBuilder.Build();
+
+            var elasticBeanstalkConfigKeyPairs =
+                configuration.GetSection("iis:env")
+                    .GetChildren()
+                    .Select(pair => pair.Value.Split(new[] { '=' }, 2))
+                    .ToDictionary(keypair => keypair[0], keypair => keypair[1]);
+
+            foreach (var keyVal in elasticBeanstalkConfigKeyPairs)
+            {
+                Environment.SetEnvironmentVariable(keyVal.Key, keyVal.Value);
+            }
+        }
+
         public static IWebHost CreateWebHostBuilder(string[] args)
         {
            return  WebHost.CreateDefaultBuilder(args)
@@ -42,10 +70,8 @@ namespace Donde.Augmentor.Web
             {
                 builder.SetBasePath(context.HostingEnvironment.ContentRootPath)
                     .AddJsonFile("appsettings.json", false, true)
-                    .AddJsonFile($"appsettings.{context.HostingEnvironment.EnvironmentName}.json", true)
-                    .AddJsonFile(@"C:\Program Files\Amazon\ElasticBeanstalk\config\containerconfiguration", optional: true, reloadOnChange: true)
-                    .AddEnvironmentVariables()
-                    .AddInMemoryCollection(GetAWSElasticBeanstalkConfiguration(builder));
+                    .AddJsonFile($"appsettings.{context.HostingEnvironment.EnvironmentName}.json", true)                
+                    .AddEnvironmentVariables();
             })
             .CaptureStartupErrors(true)
             .UseSetting("detailedErrors", "true")
@@ -57,19 +83,6 @@ namespace Donde.Augmentor.Web
                 logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
             })
             .Build();
-        }
-
-        private static Dictionary<string, string> GetAWSElasticBeanstalkConfiguration(IConfigurationBuilder builder)
-        {
-            IConfiguration configuration = builder.Build();
-            Dictionary<string, string> dict = new Dictionary<string, string>();
-
-            foreach (IConfigurationSection pair in configuration.GetSection("iis:env").GetChildren())
-            {
-                string[] keypair = pair.Value.Split(new[] { '=' }, 2);
-                dict.Add(keypair[0], keypair[1]);
-            }       
-            return dict;
-        }
+        }    
     }
 }
