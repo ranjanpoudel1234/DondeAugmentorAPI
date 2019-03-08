@@ -30,9 +30,15 @@ namespace Donde.Augmentor.Web.AwsEnvironmentConfiguration
         /// <returns></returns>
         public static List<LogLevel> GetLogLevelsToDisable(this IConfigurationRoot configuration)
         {
-            string logLevelsConfiguredToDisable = configuration.GetValue<string>(AwsEnvironmentVariableKeys.DISABLE_NLOG_LEVELS);
-            var individualLogLevelsConfiguredToDisable = logLevelsConfiguredToDisable.Split(";");
             var nLogLevelsToDisable = new List<LogLevel>();
+            string logLevelsConfiguredToDisable = configuration.GetValue<string>(AwsEnvironmentVariableKeys.DISABLE_NLOG_LEVELS);
+            if(string.IsNullOrWhiteSpace(logLevelsConfiguredToDisable))
+            {
+                return nLogLevelsToDisable;
+            }
+
+            var individualLogLevelsConfiguredToDisable = logLevelsConfiguredToDisable.Split(";");
+      
             foreach (var logLevel in individualLogLevelsConfiguredToDisable)
             {
                 switch(logLevel)

@@ -1,5 +1,6 @@
 ﻿using Donde.Augmentor.Bootstrapper;
 using Donde.Augmentor.Web.AwsEnvironmentConfiguration;
+using Donde.Augmentor.Web.Cors;
 using Donde.Augmentor.Web.OData;
 using Microsoft.AspNet.OData.Builder;
 using Microsoft.AspNetCore.Builder;
@@ -40,6 +41,8 @@ namespace Donde.Augmentor.Web
             IntegrateSimpleInjector(services);
             services.AddOptions();
 
+            services.ConfigureCorsPolicy(Configuration.GetSection("Donde.Augmentor.Settings:Host:CorsPolicy").Get<DondeCorsPolicy>());
+
             services.AddApiVersioning(o =>
             {
                 o.ReportApiVersions = true;
@@ -69,7 +72,8 @@ namespace Donde.Augmentor.Web
             InitializeAndVerifyContainer(app, loggerFactory);
 
             AddNLog(loggerFactory);
-           
+
+            app.UseSpokenPastCorsPolicy();
         }
 
         private void IntegrateSimpleInjector(IServiceCollection services)
