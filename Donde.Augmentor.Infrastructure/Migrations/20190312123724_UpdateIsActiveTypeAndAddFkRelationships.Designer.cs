@@ -3,15 +3,17 @@ using System;
 using Donde.Augmentor.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Donde.Augmentor.Infrastructure.Migrations
 {
     [DbContext(typeof(DondeContext))]
-    partial class DondeContextModelSnapshot : ModelSnapshot
+    [Migration("20190312123724_UpdateIsActiveTypeAndAddFkRelationships")]
+    partial class UpdateIsActiveTypeAndAddFkRelationships
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,9 +26,9 @@ namespace Donde.Augmentor.Infrastructure.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTime>("AddedDate");
+                    b.Property<bool>("Active");
 
-                    b.Property<bool>("IsActive");
+                    b.Property<DateTime>("AddedDate");
 
                     b.Property<string>("Name");
 
@@ -51,9 +53,9 @@ namespace Donde.Augmentor.Infrastructure.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTime>("AddedDate");
+                    b.Property<bool>("Active");
 
-                    b.Property<bool>("IsActive");
+                    b.Property<DateTime>("AddedDate");
 
                     b.Property<string>("Name");
 
@@ -78,6 +80,8 @@ namespace Donde.Augmentor.Infrastructure.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<bool>("Active");
+
                     b.Property<DateTime>("AddedDate");
 
                     b.Property<Guid>("AudioId");
@@ -87,8 +91,6 @@ namespace Donde.Augmentor.Infrastructure.Migrations
                     b.Property<Guid>("AvatarId");
 
                     b.Property<string>("Description");
-
-                    b.Property<bool>("IsActive");
 
                     b.Property<double>("Latitude");
 
@@ -119,9 +121,9 @@ namespace Donde.Augmentor.Infrastructure.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTime>("AddedDate");
+                    b.Property<bool>("Active");
 
-                    b.Property<bool>("IsActive");
+                    b.Property<DateTime>("AddedDate");
 
                     b.Property<string>("Name");
 
@@ -146,9 +148,9 @@ namespace Donde.Augmentor.Infrastructure.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTime>("AddedDate");
+                    b.Property<bool>("Active");
 
-                    b.Property<bool>("IsActive");
+                    b.Property<DateTime>("AddedDate");
 
                     b.Property<string>("Name");
 
@@ -167,11 +169,11 @@ namespace Donde.Augmentor.Infrastructure.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<bool>("Active");
+
                     b.Property<DateTime>("AddedDate");
 
                     b.Property<string>("Email");
-
-                    b.Property<bool>("IsActive");
 
                     b.Property<string>("Name");
 

@@ -1,3 +1,3 @@
 ﻿INSERT INTO public."Audios" ("Id","Name","Url","OrganizationId","AddedDate","UpdatedDate","IsActive") VALUES 
-('8dfa5fbe-852c-4f6e-813b-4dd7dae4692c','NationalAnthem','https://s3.amazonaws.com/elasticbeanstalk-us-east-1-750996182703/DondeAugmentorAudios/nationalAnthem.mp3','36dbc88c-79b1-4810-a688-88ef9e1d7d0b','2019-01-31 00:00:00.000','2019-01-31 00:00:00.000','2019-01-31 00:00:00.000')
+('8dfa5fbe-852c-4f6e-813b-4dd7dae4692c','NationalAnthem','https://s3.amazonaws.com/elasticbeanstalk-us-east-1-750996182703/DondeAugmentorAudios/nationalAnthem.mp3','36dbc88c-79b1-4810-a688-88ef9e1d7d0b','2019-01-31 00:00:00.000','2019-01-31 00:00:00.000',true)
 ;
