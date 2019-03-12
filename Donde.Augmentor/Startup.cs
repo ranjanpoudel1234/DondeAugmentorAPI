@@ -1,4 +1,6 @@
 ﻿using Donde.Augmentor.Bootstrapper;
+using Donde.Augmentor.Web.AwsEnvironmentConfiguration;
+using Donde.Augmentor.Web.Cors;
 using Donde.Augmentor.Web.OData;
 using Microsoft.AspNet.OData.Builder;
 using Microsoft.AspNetCore.Builder;
@@ -9,10 +11,13 @@ using Microsoft.AspNetCore.Mvc.ViewComponents;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using NLog;
+using NLog.Extensions.Logging;
 using SimpleInjector;
 using SimpleInjector.Integration.AspNetCore.Mvc;
 using SimpleInjector.Lifestyles;
 using System.Reflection;
+
 
 namespace Donde.Augmentor.Web
 {
@@ -27,14 +32,16 @@ namespace Donde.Augmentor.Web
         public IConfigurationRoot Configuration { get; }
         private IHostingEnvironment CurrentEnvironment { get; }
         private Container container = new Container();
+        private bool IsLocalEnvironment => CurrentEnvironment.EnvironmentName.Equals("Local") || CurrentEnvironment.EnvironmentName.Equals("Vagrant");
 
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-
             IntegrateSimpleInjector(services);
             services.AddOptions();
+
+            services.ConfigureCorsPolicy(Configuration.GetSection("Donde.Augmentor.Settings:Host:CorsPolicy").Get<DondeCorsPolicy>());
 
             services.AddApiVersioning(o =>
             {
@@ -45,6 +52,28 @@ namespace Donde.Augmentor.Web
             services.AddDondeOData(Configuration);
 
             services.AddMvc();
+        }
+
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        public void Configure(IApplicationBuilder app, 
+            IHostingEnvironment env,
+            VersionedODataModelBuilder modelBuilder,
+            ILoggerFactory loggerFactory)
+        {        
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+
+            app.UseMvc();
+
+            app.UseDondeOData();
+
+            InitializeAndVerifyContainer(app, loggerFactory);
+
+            AddNLog(loggerFactory);
+
+            app.UseSpokenPastCorsPolicy();
         }
 
         private void IntegrateSimpleInjector(IServiceCollection services)
@@ -62,35 +91,15 @@ namespace Donde.Augmentor.Web
             services.UseSimpleInjectorAspNetRequestScoping(container);
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, 
-            IHostingEnvironment env,
-            VersionedODataModelBuilder modelBuilder,
-            ILoggerFactory loggerFactory)
-        {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-
-            app.UseMvc();
-
-            app.UseDondeOData();
-
-            InitializeAndVerifyContainer(app, loggerFactory);
-        }
-
         private void InitializeAndVerifyContainer(IApplicationBuilder app, ILoggerFactory loggerFactory)
         {
             // Add application presentation components:
              container.RegisterMvcControllers(app);
-            //container.RegisterMvcViewComponents(app);
-
-            var connectionString = Configuration["Donde.Augmentor.Data:API:ConnectionString"];
+           
             DondeAugmentorBootstrapper.BootstrapDondeAugmentor
                 (container, 
                 Assembly.GetExecutingAssembly(),
-                connectionString, 
+                GetConnectionString(), 
                 CurrentEnvironment.EnvironmentName,
                 loggerFactory);
           
@@ -98,6 +107,48 @@ namespace Donde.Augmentor.Web
             container.AutoCrossWireAspNetComponents(app);
 
             container.Verify();
+        }
+
+        private string GetConnectionString()
+        {
+            var connectionString = string.Empty;
+            if (IsLocalEnvironment)
+            {
+                connectionString = Configuration["Donde.Augmentor.Data:API:ConnectionString"];
+            }
+            else
+            {
+                connectionString = Configuration.GetRdsConnectionString();
+            }
+
+            return connectionString;
+        }
+     
+        private void AddNLog(ILoggerFactory loggerFactory)
+        {
+            var connectionString = GetConnectionString();
+
+            GlobalDiagnosticsContext.Set("connectionString", connectionString);
+            LogManager.Configuration.Variables["dondeAugmentorNlogConnectionstring"] = connectionString; // key matches one in nlog.config file
+
+            ReconfigureNLogRulesBasedOnEnvironment();
+
+            loggerFactory.AddNLog();
+
+            loggerFactory.CreateLogger<Program>().LogInformation($"Donde_Augmentor: ConnectionString: {connectionString} and EnvironmentName: {CurrentEnvironment.EnvironmentName}");
+        }
+
+        public void ReconfigureNLogRulesBasedOnEnvironment()
+        {
+            var logLevelsToDisable = Configuration.GetLogLevelsToDisable();
+            if (!IsLocalEnvironment)
+            {
+                foreach (var rule in LogManager.Configuration.LoggingRules)
+                {
+                    logLevelsToDisable.ForEach(level => rule.DisableLoggingForLevel(level));
+                }
+            }
+            LogManager.ReconfigExistingLoggers();
         }
     }
 }
