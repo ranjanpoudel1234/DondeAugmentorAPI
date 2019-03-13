@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Linq;
 
 namespace Donde.Augmentor.Core.Repositories.Interfaces.RepositoryInterfaces
 {
-    class IAvatarRepository
+    public interface IAvatarRepository
     {
+        IQueryable<Domain.Models.Avatar> GetAvatars();
     }
 }
