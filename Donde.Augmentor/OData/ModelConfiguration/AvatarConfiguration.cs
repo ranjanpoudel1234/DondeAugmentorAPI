@@ -30,6 +30,4 @@ namespace Donde.Augmentor.Web.OData.ModelConfiguration
             }
         }
     }
-    {
-    }
 }
