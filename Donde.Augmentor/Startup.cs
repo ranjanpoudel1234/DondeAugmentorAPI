@@ -32,6 +32,7 @@ namespace Donde.Augmentor.Web
         public IConfigurationRoot Configuration { get; }
         private IHostingEnvironment CurrentEnvironment { get; }
         private Container container = new Container();
+        private AppSetting AppSettings { get; set; }
         private bool IsLocalEnvironment => CurrentEnvironment.EnvironmentName.Equals("Local") || CurrentEnvironment.EnvironmentName.Equals("Vagrant");
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -41,7 +42,9 @@ namespace Donde.Augmentor.Web
             IntegrateSimpleInjector(services);
             services.AddOptions();
 
-            services.ConfigureCorsPolicy(Configuration.GetSection("Donde.Augmentor.Settings:Host:CorsPolicy").Get<DondeCorsPolicy>());
+            AppSettings = Configuration.GetSection("Donde.Augmentor.Settings").Get<AppSetting>();
+
+            services.ConfigureCorsPolicy(AppSettings.Host.CorsPolicy);
 
             services.AddApiVersioning(o =>
             {

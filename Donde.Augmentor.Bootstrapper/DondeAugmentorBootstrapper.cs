@@ -28,7 +28,7 @@ namespace Donde.Augmentor.Bootstrapper
             {
                 webAssembly,
                 Assembly.Load("Donde.Augmentor.Core.Services")
-        };
+            };
 
             var profiles = assembliesToBootstrapFrom.SelectMany(x => x.GetTypes())
                                                     .Where(x => typeof(AutoMapper.Profile).IsAssignableFrom(x));
