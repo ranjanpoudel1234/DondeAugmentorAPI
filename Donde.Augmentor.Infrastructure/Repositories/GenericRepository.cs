@@ -28,9 +28,11 @@ namespace Donde.Augmentor.Infrastructure.Repositories
                 .FirstOrDefaultAsync(e => e.Id == id);
         }
 
-        public async Task<TEntity> UpdateAsync<TEntity>(Guid id, TEntity entity) where TEntity : class, IDondeModel
+        public async Task<TEntity> UpdateAsync<TEntity>(Guid id, TEntity entity) where TEntity : class, IDondeModel, IAuditFieldsModel
         {
             DetachLocal(entity);
+
+            entity.UpdatedDate = DateTime.UtcNow;
 
             _dbContext.Set<TEntity>().Update(entity);
             await _dbContext.SaveChangesAsync();
@@ -38,8 +40,11 @@ namespace Donde.Augmentor.Infrastructure.Repositories
             return await GetByIdAsync<TEntity>(id);
         }
 
-        public async Task<TEntity> CreateAsync<TEntity>(TEntity entity) where TEntity : class, IDondeModel
+        public async Task<TEntity> CreateAsync<TEntity>(TEntity entity) where TEntity : class, IDondeModel, IAuditFieldsModel
         {
+            entity.IsActive = true;
+            entity.AddedDate = DateTime.UtcNow;
+
             await _dbContext.Set<TEntity>().AddAsync(entity);
             await _dbContext.SaveChangesAsync();
 

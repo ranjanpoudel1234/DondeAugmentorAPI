@@ -1,0 +1,4 @@
+﻿INSERT INTO public."AugmentImages" ("Id","Name","Url","OrganizationId","AddedDate","UpdatedDate","IsActive") VALUES 
+('78ea76ee-3822-413b-abc3-81128c8aa0f8','BlackPantherImage','https://s3.amazonaws.com/elasticbeanstalk-us-east-1-750996182703/DondeAugmentorImages/blackpanther.jpg','36dbc88c-79b1-4810-a688-88ef9e1d7d0b','2019-01-31 00:00:00.000','2019-01-31 00:00:00.000',true)
+,('89ea76ee-3822-413b-abc3-81128c8aa0f9','SaintsLogo','https://s3.amazonaws.com/elasticbeanstalk-us-east-1-750996182703/DondeAugmentorImages/saintslogo.png','36dbc88c-79b1-4810-a688-88ef9e1d7d0b','2019-01-31 00:00:00.000','2019-01-31 00:00:00.000',true)
+;

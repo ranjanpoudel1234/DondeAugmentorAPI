@@ -34,7 +34,7 @@ namespace Donde.Augmentor.Web.Controller
 
             var mappedResult = _mapper.Map<List<AugmentObjectViewModel>>(result);
 
-            return Ok(result);
+            return Ok(mappedResult);
         }
     }
 }

@@ -34,37 +34,22 @@ namespace Donde.Augmentor.Web.Controller
         [HttpGet]
         public async Task<IActionResult> Get(ODataQueryOptions<AudioViewModel> odataOptions)
         {
-            try
+            var result = new List<AudioViewModel>();
+
+            var audiosQueryable = _audioService.GetAudios();
+
+            var projectedAudios = audiosQueryable.ProjectTo<AudioViewModel>(_mapper.ConfigurationProvider);
+
+            var appliedResults = odataOptions.ApplyTo(projectedAudios);
+
+            var audioViewModels = appliedResults as IQueryable<AudioViewModel>;
+
+            if (audioViewModels != null)
             {
-
-                _logger.LogTrace("Audios Controller Trace");
-                _logger.LogDebug("Audios Controller Debug");
-                _logger.LogInformation("Audios Controller Information");
-                _logger.LogWarning("Audios Controller Warning");
-                _logger.LogError("Audios Controller Error");
-                _logger.LogCritical("Audios Controller Fatal");
-                var result = new List<AudioViewModel>();
-                var audiosQueryable = _audioService.GetAudios();
-
-                var projectedAudios = audiosQueryable.ProjectTo<AudioViewModel>(_mapper.ConfigurationProvider);
-
-                var appliedResults = odataOptions.ApplyTo(projectedAudios);
-
-                // ToListAsync converts Iqueryable<T> to List<T>. thus cast needed
-                var audioViewModels = appliedResults as IQueryable<AudioViewModel>;
-
-                if (audioViewModels != null)
-                {
-                    result = await audioViewModels.ToListAsync();
-                }
-                _logger.LogInformation("Audios Controller Exit");
-                return Ok(result);
+                result = await audioViewModels.ToListAsync();
             }
-            catch(Exception ex)
-            {
-                var test = ex;
-            }
-            return null;
+
+            return Ok(result);
         }
     }
 }

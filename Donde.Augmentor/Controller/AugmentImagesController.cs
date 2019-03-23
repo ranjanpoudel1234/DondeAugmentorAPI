@@ -1,0 +1,54 @@
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces;
+using Donde.Augmentor.Web.ViewModels;
+using Microsoft.AspNet.OData;
+using Microsoft.AspNet.OData.Query;
+using Microsoft.AspNet.OData.Routing;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace Donde.Augmentor.Web.Controller
+{
+    [ApiVersion("1.0")]
+    [ODataRoutePrefix("augmentImages")]
+    public class AugmentImagesController : ODataController
+    {
+        private readonly IAugmentImageService _augmentImageservice;
+        private readonly IMapper _mapper;
+        private readonly ILogger<AugmentImagesController> _logger;
+
+        public AugmentImagesController(IAugmentImageService augmentImageservice, IMapper mapper, ILogger<AugmentImagesController> logger)
+        {
+            _augmentImageservice = augmentImageservice;
+            _mapper = mapper;
+            _logger = logger;
+        }
+
+        [ODataRoute]
+        [HttpGet]
+        public async Task<IActionResult> Get(ODataQueryOptions<AugmentImageViewModel> odataOptions)
+        {
+            var result = new List<AugmentImageViewModel>();
+
+            var augmentImagesQueryable = _augmentImageservice.GetAugmentImages();
+
+            var projectedAugmentImages = augmentImagesQueryable.ProjectTo<AugmentImageViewModel>(_mapper.ConfigurationProvider);
+
+            var appliedResults = odataOptions.ApplyTo(projectedAugmentImages);
+
+            var augmentImageViewModels = appliedResults as IQueryable<AugmentImageViewModel>;
+
+            if (augmentImageViewModels != null)
+            {
+                result = await augmentImageViewModels.ToListAsync();
+            }
+
+            return Ok(result);
+        }
+    } 
+}
