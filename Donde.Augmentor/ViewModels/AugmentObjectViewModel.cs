@@ -23,5 +23,12 @@ namespace Donde.Augmentor.Web.ViewModels
         public Guid OrganizationId { get; set; }
 
         public double Distance { get; set; }
+
+
+        public string AudioName { get; set; }
+        public string AudioUrl { get; set; }
+
+        public string ImageName { get; set; }
+        public string ImageUrl { get; set; }
     }
 }
