@@ -38,6 +38,7 @@ namespace Donde.Augmentor.Infrastructure.Repositories
                         aO.""AvatarId"",
                         aO.""AudioId"",
                         aO.""AugmentImageId"",
+                        aO.""Title"",
                         aO.""Description"",
                         aO.""Latitude"",
                         aO.""Longitude"",
