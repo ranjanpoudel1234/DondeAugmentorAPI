@@ -34,18 +34,26 @@ namespace Donde.Augmentor.Infrastructure.Repositories
                     (
                         SELECT 
                         st_distance(ST_Transform(CONCAT('SRID=4326;POINT(',""Longitude"",' ', ""Latitude"",')')::geometry, 3857), ST_Transform('SRID=4326;POINT({longitude} {latitude})':: geometry, 3857)) as Distance,
-                        ""Id"",
-                        ""AvatarId"",
-                        ""AudioId"",
-                        ""AugmentImageId"",
-                        ""Description"",
-                        ""Latitude"",
-                        ""Longitude"",
-                        ""OrganizationId"",
-                        ""AddedDate"",
-                        ""UpdatedDate"",
-                        ""IsActive""
-                        from ""AugmentObjects""
+                        aO.""Id"",
+                        aO.""AvatarId"",
+                        aO.""AudioId"",
+                        aO.""AugmentImageId"",
+                        aO.""Title"",
+                        aO.""Description"",
+                        aO.""Latitude"",
+                        aO.""Longitude"",
+                        aO.""OrganizationId"",
+                        aO.""AddedDate"",
+                        aO.""UpdatedDate"",
+                        aO.""IsActive"",
+                        ai.""Name"" as ImageName,
+                        ai.""Url"" as ImageUrl,
+                        au.""Name"" as AudioName,
+                        au.""Url"" as AudioUrl
+                                        
+                        from ""AugmentObjects"" ao
+                            join ""AugmentImages"" ai on ai.""Id"" = ao.""AugmentImageId""
+                            join ""Audios"" au on au.""Id"" = ao.""AudioId""
                     )
 
                     SELECT 

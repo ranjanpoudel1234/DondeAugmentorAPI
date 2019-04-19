@@ -11,5 +11,11 @@ namespace Donde.Augmentor.Core.Domain.Dto
     public class AugmentObjectDto : AugmentObject
     {
         public double Distance { get; set; }
+
+        public string AudioName { get; set; }
+        public string AudioUrl { get; set; }
+
+        public string ImageName { get; set; }
+        public string ImageUrl { get; set; }
     }
 }
