@@ -12,8 +12,6 @@ namespace Donde.Augmentor.Core.Domain.Models
         public string Phone { get; set; }
         public Guid OrganizationId { get; set; }
 
-
-
         public DateTime AddedDate { get; set; }
         public DateTime UpdatedDate { get; set; }
         public bool IsActive { get; set; }

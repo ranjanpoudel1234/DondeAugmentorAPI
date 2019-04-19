@@ -30,5 +30,8 @@ namespace Donde.Augmentor.Web.ViewModels
 
         public string ImageName { get; set; }
         public string ImageUrl { get; set; }
+
+        public string VideoName { get; set; }
+        public string VideoUrl { get; set; }
     }
 }

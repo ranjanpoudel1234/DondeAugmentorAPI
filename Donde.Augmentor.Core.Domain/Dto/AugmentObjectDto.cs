@@ -17,5 +17,8 @@ namespace Donde.Augmentor.Core.Domain.Dto
 
         public string ImageName { get; set; }
         public string ImageUrl { get; set; }
+
+        public string VideoName { get; set; }
+        public string VideoUrl { get; set; }
     }
 }

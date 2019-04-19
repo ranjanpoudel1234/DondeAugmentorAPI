@@ -4,4 +4,8 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Models\AugmentObject.cs~RF8fa6266f.TMP" />
+  </ItemGroup>
+
 </Project>
