@@ -9,6 +9,7 @@ namespace Donde.Augmentor.Core.Domain.Models
 
         public string Name { get; set; }
         public string Url { get; set; }
+        public string MimeType { get; set; }
         public Guid OrganizationId { get; set; }
 
         public Organization Organization { get; set; }
@@ -16,5 +17,6 @@ namespace Donde.Augmentor.Core.Domain.Models
         public DateTime AddedDate { get; set; }
         public DateTime UpdatedDate { get; set; }
         public bool IsActive { get; set; }
+        
     }
 }

@@ -4,7 +4,7 @@ using Donde.Augmentor.Core.Repositories.Interfaces.RepositoryInterfaces;
 using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces;
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Donde.Augmentor.Core.Services.Services
@@ -16,6 +16,11 @@ namespace Donde.Augmentor.Core.Services.Services
         public AugmentObjectService(IAugmentObjectRepository augmentObjectRepository)
         {
             _augmentObjectRepository = augmentObjectRepository;
+        }
+
+        public IQueryable<AugmentObjectDto> GetAugmentObjects()
+        {
+           return _augmentObjectRepository.GetAugmentObjects();
         }
 
         public async Task<AugmentObject> CreateAugmentObjectAsync(AugmentObject entity)

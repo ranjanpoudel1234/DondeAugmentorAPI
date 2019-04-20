@@ -1,0 +1,7 @@
+﻿INSERT INTO public."Videos" ("Id","Name","Url","MimeType","OrganizationId","AddedDate","UpdatedDate","IsActive") VALUES 
+('a4644de9-c4fd-469b-ae30-d7450c8b2956','SeluTenMbVideoFirstFormat','https://s3.amazonaws.com/elasticbeanstalk-us-east-1-750996182703/DondeAugmentorVideos/SeluTenMbVideoFirstFormat.mp4',NULL,'36dbc88c-79b1-4810-a688-88ef9e1d7d0b','2019-01-31 00:00:00.000','2019-01-31 00:00:00.000',true)
+,('8a75ab88-8263-499b-8b3a-a6094ab2f5a9','LSUShortVideoOne','https://s3.amazonaws.com/elasticbeanstalk-us-east-1-750996182703/DondeAugmentorVideos/LSUShortVideoOne.mov',NULL,'a4644de9-c4fd-469b-ae30-d7450c8b2956','2019-01-31 00:00:00.000','2019-01-31 00:00:00.000',true)
+,('d9fd78c2-bfeb-4ed0-85be-5b866b8657d2','SeluThreeMbVideoFirstFormat','https://s3.amazonaws.com/elasticbeanstalk-us-east-1-750996182703/DondeAugmentorVideos/SeluThreeMbVideoFirstFormat.mp4',NULL,'36dbc88c-79b1-4810-a688-88ef9e1d7d0b','2019-01-31 00:00:00.000','2019-01-31 00:00:00.000',true)
+,('9e261468-0fb0-4ee9-8ae6-687a1923c806','SeluTwentyMBVideoFirstFormat','https://s3.amazonaws.com/elasticbeanstalk-us-east-1-750996182703/DondeAugmentorVideos/SeluTwentyMBVideoFirstFormat.mp4',NULL,'36dbc88c-79b1-4810-a688-88ef9e1d7d0b','2019-01-31 00:00:00.000','2019-01-31 00:00:00.000',true)
+,('ac920713-4649-47e1-a07e-c637071b77d4','SeluFivembVideoSecondFormat','https://s3.amazonaws.com/elasticbeanstalk-us-east-1-750996182703/DondeAugmentorVideos/SeluFivembVideoSecondFormat.3gp',NULL,'36dbc88c-79b1-4810-a688-88ef9e1d7d0b','2019-01-31 00:00:00.000','2019-01-31 00:00:00.000',true)
+;
