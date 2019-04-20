@@ -41,6 +41,7 @@ namespace Donde.Augmentor.Infrastructure.Repositories
                                      Id = augmentObject.Id,
                                      AvatarId = augmentObject.AvatarId,
                                      AudioId = augmentObject.AudioId,
+                                     VideoId = augmentObject.VideoId,
                                      AugmentImageId = augmentObject.AugmentImageId,
                                      Title = augmentObject.Title,
                                      Description = augmentObject.Description,

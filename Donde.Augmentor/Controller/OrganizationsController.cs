@@ -35,6 +35,7 @@ namespace Donde.Augmentor.Web.Controller
         public async Task<IActionResult> GetAugmentObject(double latitude, double longitude, int radiusInMeters)
         {
             //@todo, make this appSettings later.
+            //@todo add top by default to odata query.
             radiusInMeters = radiusInMeters == 0 ? 50 * 1610 : radiusInMeters; // 50 mile times 1690 meter per mile.
 
             //@todo, add validation here for checking latitude and longitude.

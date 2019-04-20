@@ -88,7 +88,7 @@ namespace Donde.Augmentor.Infrastructure.Migrations
 
                     b.Property<Guid>("AugmentImageId");
 
-                    b.Property<Guid>("AvatarId");
+                    b.Property<Guid?>("AvatarId");
 
                     b.Property<string>("Description");
 
@@ -266,8 +266,7 @@ namespace Donde.Augmentor.Infrastructure.Migrations
 
                     b.HasOne("Donde.Augmentor.Core.Domain.Models.Avatar", "Avatar")
                         .WithMany()
-                        .HasForeignKey("AvatarId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("AvatarId");
 
                     b.HasOne("Donde.Augmentor.Core.Domain.Models.Organization", "Organization")
                         .WithMany()

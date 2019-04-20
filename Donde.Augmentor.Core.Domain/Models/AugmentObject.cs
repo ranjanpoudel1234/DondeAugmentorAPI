@@ -8,7 +8,7 @@ namespace Donde.Augmentor.Core.Domain.Models
     {
         public Guid Id { get; set; }
 
-        public Guid AvatarId { get; set; }
+        public Guid? AvatarId { get; set; }
         public Guid? AudioId { get; set; }
         public Guid? VideoId { get; set; }
         public Guid AugmentImageId { get; set; }
