@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using AutoMapper;
+﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces;
 using Donde.Augmentor.Web.ViewModels;
@@ -8,10 +6,11 @@ using Microsoft.AspNet.OData;
 using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNet.OData.Routing;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Donde.Augmentor.Web.Controller
 {
@@ -30,9 +29,8 @@ namespace Donde.Augmentor.Web.Controller
             _logger = logger;
         }
 
-        [HttpGet]
-        [ODataRoute]
-        public async Task<IActionResult> GetAugmentObject(double latitude, double longitude, int radiusInMeters)
+        [HttpGet("api/v1/organizationsGeocoded")]
+        public async Task<IActionResult> GetOrganizationsGeocoded(double latitude, double longitude, int radiusInMeters)
         {
             //@todo, make this appSettings later.
             //@todo add top by default to odata query.
@@ -46,5 +44,29 @@ namespace Donde.Augmentor.Web.Controller
 
             return Ok(mappedResult);
         }
+
+
+        [ODataRoute]
+        [HttpGet]
+        public async Task<IActionResult> Get(ODataQueryOptions<OrganizationViewModel> odataOptions)
+        {
+            var result = new List<OrganizationViewModel>();
+
+            var organizationQueryable = _organizationService.GetOrganizations();
+
+            var projectedOrganizations = organizationQueryable.ProjectTo<OrganizationViewModel>(_mapper.ConfigurationProvider);
+
+            var appliedResults = odataOptions.ApplyTo(projectedOrganizations);
+
+            var organizationsViewModels = appliedResults as IQueryable<OrganizationViewModel>;
+
+            if (organizationsViewModels != null)
+            {
+                result = await organizationsViewModels.ToListAsync();
+            }
+
+            return Ok(result);
+        }
+
     }
 }

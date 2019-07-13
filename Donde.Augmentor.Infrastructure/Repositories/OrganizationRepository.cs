@@ -4,6 +4,7 @@ using Donde.Augmentor.Core.Repositories.Interfaces.RepositoryInterfaces;
 using Donde.Augmentor.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Donde.Augmentor.Infrastructure.Repositories
@@ -13,6 +14,11 @@ namespace Donde.Augmentor.Infrastructure.Repositories
         public OrganizationRepository(DondeContext dbContext) : base(dbContext)
         {
 
+        }
+
+        public IQueryable<Organization> GetOrganizations()
+        {
+            return GetAll<Organization>();
         }
 
         public async Task<IEnumerable<Organization>> GetClosestOrganizationByRadius(double latitude, double longitude, int radiusInMeters)

@@ -2,6 +2,7 @@
 using Donde.Augmentor.Core.Repositories.Interfaces.RepositoryInterfaces;
 using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Donde.Augmentor.Core.Services.Services
@@ -18,6 +19,11 @@ namespace Donde.Augmentor.Core.Services.Services
         public async Task<IEnumerable<Organization>> GetClosestOrganizationByRadius(double latitude, double longitude, int radiusInMeters)
         {
             return await _organizationRepository.GetClosestOrganizationByRadius(latitude, longitude, radiusInMeters);
+        }
+
+        public IQueryable<Organization> GetOrganizations()
+        {
+            return _organizationRepository.GetOrganizations();
         }
     }
 }
