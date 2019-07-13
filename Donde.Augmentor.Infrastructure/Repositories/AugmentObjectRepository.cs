@@ -30,6 +30,7 @@ namespace Donde.Augmentor.Infrastructure.Repositories
 
         public IQueryable<AugmentObjectDto> GetAugmentObjects()
         {
+            // todo potentially make a readModel out of this for faster and efficient load.
             var augmentObjects = from augmentObject in _dbContext.AugmentObjects
                                  join augmentImage in _dbContext.AugmentImages on augmentObject.AugmentImageId equals augmentImage.Id 
                                  join audio in _dbContext.Audios on augmentObject.AudioId equals audio.Id into augmentObjectAudio

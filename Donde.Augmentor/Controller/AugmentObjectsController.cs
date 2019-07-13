@@ -10,11 +10,11 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Net.Http;
 
 namespace Donde.Augmentor.Web.Controller
 {
     [ApiVersion("1.0")]
-   // [ODataRoutePrefix("augmentObjects")]
     public class AugmentObjectsController : ODataController
     {
         private readonly IAugmentObjectService _augmentObjectService;
