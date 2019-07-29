@@ -31,7 +31,7 @@ namespace Donde.Augmentor.Web.Controller
         private readonly IMapper _mapper;
         private readonly ILogger<AudiosController> _logger;
 
-        public AudiosController(IAudioService audioService, IMapper mapper, ILogger<AudiosController> logger)
+        public AudiosController(IAudioService audioService, IMapper mapper, ILogger<AudiosController> logger, IS3Service s3Service)
         {
             _audioService = audioService;
             _mapper = mapper;
