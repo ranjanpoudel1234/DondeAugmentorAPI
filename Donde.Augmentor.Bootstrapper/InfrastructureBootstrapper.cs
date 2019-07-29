@@ -35,7 +35,7 @@ namespace Donde.Augmentor.Bootstrapper
         {
             var dbContextOptions = new DbContextOptionsBuilder<DondeContext>();
             
-            if(environmentName.Equals("Development"))
+            if(environmentName.Equals("Local"))
             {
                 dbContextOptions.UseNpgsql(connectionString, npgSqlBuilder => npgSqlBuilder.MigrationsAssembly(GetInfrastructureAssembly().FullName))
                     .UseLoggerFactory(loggerFactory)

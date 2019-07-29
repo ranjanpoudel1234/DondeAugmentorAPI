@@ -11,8 +11,8 @@ namespace Donde.Augmentor.Core.Repositories.Interfaces.RepositoryInterfaces
 
         Task<TEntity> GetByIdAsync<TEntity>(Guid id) where TEntity : class, IDondeModel;
 
-        Task<TEntity> CreateAsync<TEntity>(TEntity entity) where TEntity : class, IDondeModel;
+        Task<TEntity> CreateAsync<TEntity>(TEntity entity) where TEntity : class, IDondeModel, IAuditFieldsModel;
 
-        Task<TEntity> UpdateAsync<TEntity>(Guid id, TEntity entity) where TEntity : class, IDondeModel;
+        Task<TEntity> UpdateAsync<TEntity>(Guid id, TEntity entity) where TEntity : class, IDondeModel, IAuditFieldsModel;
     }
 }

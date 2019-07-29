@@ -6,6 +6,7 @@ using Donde.Augmentor.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Donde.Augmentor.Infrastructure.Repositories
@@ -26,7 +27,42 @@ namespace Donde.Augmentor.Infrastructure.Repositories
         {
             return await UpdateAsync(id, entity);
         }
- 
+
+        public IQueryable<AugmentObjectDto> GetAugmentObjects()
+        {
+            // todo potentially make a readModel out of this for faster and efficient load.
+            var augmentObjects = from augmentObject in _dbContext.AugmentObjects
+                                 join augmentImage in _dbContext.AugmentImages on augmentObject.AugmentImageId equals augmentImage.Id 
+                                 join audio in _dbContext.Audios on augmentObject.AudioId equals audio.Id into augmentObjectAudio
+                                 from audio in augmentObjectAudio.DefaultIfEmpty()
+                                 join video in _dbContext.Videos on augmentObject.VideoId equals video.Id into augmentObjectVideo                          
+                                 from video in augmentObjectVideo.DefaultIfEmpty()
+                                 select new AugmentObjectDto()
+                                 {
+                                     Id = augmentObject.Id,
+                                     AvatarId = augmentObject.AvatarId,
+                                     AudioId = augmentObject.AudioId,
+                                     VideoId = augmentObject.VideoId,
+                                     AugmentImageId = augmentObject.AugmentImageId,
+                                     Title = augmentObject.Title,
+                                     Description = augmentObject.Description,
+                                     Latitude = augmentObject.Latitude,
+                                     Longitude = augmentObject.Longitude,
+                                     OrganizationId = augmentObject.OrganizationId,
+                                     AddedDate = augmentObject.AddedDate,
+                                     UpdatedDate = augmentObject.UpdatedDate,
+                                     IsActive = augmentObject.IsActive,
+                                     ImageName = augmentImage.Name,
+                                     ImageUrl = augmentImage.Url,
+                                     AudioName = audio == null ? null : audio.Name,
+                                     AudioUrl = audio == null ? null : audio.Url,
+                                     VideoName = video == null ? null : video.Name,
+                                     VideoUrl = video == null ? null : video.Url
+                                 };
+
+            return augmentObjects;
+        }
+
         public async Task<IEnumerable<AugmentObjectDto>> GetClosestAugmentObjectsByRadius(double latitude, double longitude, int radiusInMeters)
         {
             string objectsByDistanceQuery = $@"with AugmentObjectWithDistance as 
@@ -34,18 +70,29 @@ namespace Donde.Augmentor.Infrastructure.Repositories
                     (
                         SELECT 
                         st_distance(ST_Transform(CONCAT('SRID=4326;POINT(',""Longitude"",' ', ""Latitude"",')')::geometry, 3857), ST_Transform('SRID=4326;POINT({longitude} {latitude})':: geometry, 3857)) as Distance,
-                        ""Id"",
-                        ""AvatarId"",
-                        ""AudioId"",
-                        ""AugmentImageId"",
-                        ""Description"",
-                        ""Latitude"",
-                        ""Longitude"",
-                        ""OrganizationId"",
-                        ""AddedDate"",
-                        ""UpdatedDate"",
-                        ""IsActive""
-                        from ""AugmentObjects""
+                        aO.""Id"",
+                        aO.""AvatarId"",
+                        aO.""AudioId"",
+                        aO.""AugmentImageId"",
+                        aO.""Title"",
+                        aO.""Description"",
+                        aO.""Latitude"",
+                        aO.""Longitude"",
+                        aO.""OrganizationId"",
+                        aO.""AddedDate"",
+                        aO.""UpdatedDate"",
+                        aO.""IsActive"",
+                        ai.""Name"" as ImageName,
+                        ai.""Url"" as ImageUrl,
+                        au.""Name"" as AudioName,
+                        au.""Url"" as AudioUrl
+                                        
+                        from ""AugmentObjects"" ao
+
+
+
+                            join ""AugmentImages"" ai on ai.""Id"" = ao.""AugmentImageId""
+                            join ""Audios"" au on au.""Id"" = ao.""AudioId""
                     )
 
                     SELECT 

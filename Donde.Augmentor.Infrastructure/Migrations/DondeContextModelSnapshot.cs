@@ -26,7 +26,9 @@ namespace Donde.Augmentor.Infrastructure.Migrations
 
                     b.Property<DateTime>("AddedDate");
 
-                    b.Property<DateTime>("IsActive");
+                    b.Property<bool>("IsActive");
+
+                    b.Property<string>("MimeType");
 
                     b.Property<string>("Name");
 
@@ -40,6 +42,8 @@ namespace Donde.Augmentor.Infrastructure.Migrations
 
                     b.HasIndex("Id")
                         .IsUnique();
+
+                    b.HasIndex("OrganizationId");
 
                     b.ToTable("Audios");
                 });
@@ -51,7 +55,9 @@ namespace Donde.Augmentor.Infrastructure.Migrations
 
                     b.Property<DateTime>("AddedDate");
 
-                    b.Property<DateTime>("IsActive");
+                    b.Property<bool>("IsActive");
+
+                    b.Property<string>("MimeType");
 
                     b.Property<string>("Name");
 
@@ -65,6 +71,8 @@ namespace Donde.Augmentor.Infrastructure.Migrations
 
                     b.HasIndex("Id")
                         .IsUnique();
+
+                    b.HasIndex("OrganizationId");
 
                     b.ToTable("AugmentImages");
                 });
@@ -76,28 +84,42 @@ namespace Donde.Augmentor.Infrastructure.Migrations
 
                     b.Property<DateTime>("AddedDate");
 
-                    b.Property<Guid>("AudioId");
+                    b.Property<Guid?>("AudioId");
 
                     b.Property<Guid>("AugmentImageId");
 
-                    b.Property<Guid>("AvatarId");
+                    b.Property<Guid?>("AvatarId");
 
                     b.Property<string>("Description");
 
-                    b.Property<DateTime>("IsActive");
+                    b.Property<bool>("IsActive");
 
-                    b.Property<double>("Latitude");
+                    b.Property<double?>("Latitude");
 
-                    b.Property<double>("Longitude");
+                    b.Property<double?>("Longitude");
 
                     b.Property<Guid>("OrganizationId");
 
+                    b.Property<string>("Title");
+
                     b.Property<DateTime>("UpdatedDate");
+
+                    b.Property<Guid?>("VideoId");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AudioId");
+
+                    b.HasIndex("AugmentImageId");
+
+                    b.HasIndex("AvatarId");
+
                     b.HasIndex("Id")
                         .IsUnique();
+
+                    b.HasIndex("OrganizationId");
+
+                    b.HasIndex("VideoId");
 
                     b.ToTable("AugmentObjects");
                 });
@@ -109,7 +131,9 @@ namespace Donde.Augmentor.Infrastructure.Migrations
 
                     b.Property<DateTime>("AddedDate");
 
-                    b.Property<DateTime>("IsActive");
+                    b.Property<bool>("IsActive");
+
+                    b.Property<string>("MimeType");
 
                     b.Property<string>("Name");
 
@@ -124,6 +148,8 @@ namespace Donde.Augmentor.Infrastructure.Migrations
                     b.HasIndex("Id")
                         .IsUnique();
 
+                    b.HasIndex("OrganizationId");
+
                     b.ToTable("Avatars");
                 });
 
@@ -134,7 +160,15 @@ namespace Donde.Augmentor.Infrastructure.Migrations
 
                     b.Property<DateTime>("AddedDate");
 
-                    b.Property<DateTime>("IsActive");
+                    b.Property<string>("Code");
+
+                    b.Property<string>("EmailAddress");
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<double>("Latitude");
+
+                    b.Property<double>("Longitude");
 
                     b.Property<string>("Name");
 
@@ -157,7 +191,7 @@ namespace Donde.Augmentor.Infrastructure.Migrations
 
                     b.Property<string>("Email");
 
-                    b.Property<DateTime>("IsActive");
+                    b.Property<bool>("IsActive");
 
                     b.Property<string>("Name");
 
@@ -175,6 +209,89 @@ namespace Donde.Augmentor.Infrastructure.Migrations
                         .IsUnique();
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("Donde.Augmentor.Core.Domain.Models.Video", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("AddedDate");
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<string>("MimeType");
+
+                    b.Property<string>("Name");
+
+                    b.Property<Guid>("OrganizationId");
+
+                    b.Property<DateTime>("UpdatedDate");
+
+                    b.Property<string>("Url");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrganizationId");
+
+                    b.ToTable("Videos");
+                });
+
+            modelBuilder.Entity("Donde.Augmentor.Core.Domain.Models.Audio", b =>
+                {
+                    b.HasOne("Donde.Augmentor.Core.Domain.Models.Organization", "Organization")
+                        .WithMany()
+                        .HasForeignKey("OrganizationId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Donde.Augmentor.Core.Domain.Models.AugmentImage", b =>
+                {
+                    b.HasOne("Donde.Augmentor.Core.Domain.Models.Organization", "Organization")
+                        .WithMany()
+                        .HasForeignKey("OrganizationId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Donde.Augmentor.Core.Domain.Models.AugmentObject", b =>
+                {
+                    b.HasOne("Donde.Augmentor.Core.Domain.Models.Audio", "Audio")
+                        .WithMany()
+                        .HasForeignKey("AudioId");
+
+                    b.HasOne("Donde.Augmentor.Core.Domain.Models.AugmentImage", "AugmentImage")
+                        .WithMany()
+                        .HasForeignKey("AugmentImageId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Donde.Augmentor.Core.Domain.Models.Avatar", "Avatar")
+                        .WithMany()
+                        .HasForeignKey("AvatarId");
+
+                    b.HasOne("Donde.Augmentor.Core.Domain.Models.Organization", "Organization")
+                        .WithMany()
+                        .HasForeignKey("OrganizationId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Donde.Augmentor.Core.Domain.Models.Video", "Video")
+                        .WithMany()
+                        .HasForeignKey("VideoId");
+                });
+
+            modelBuilder.Entity("Donde.Augmentor.Core.Domain.Models.Avatar", b =>
+                {
+                    b.HasOne("Donde.Augmentor.Core.Domain.Models.Organization", "Organization")
+                        .WithMany()
+                        .HasForeignKey("OrganizationId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Donde.Augmentor.Core.Domain.Models.Video", b =>
+                {
+                    b.HasOne("Donde.Augmentor.Core.Domain.Models.Organization", "Organization")
+                        .WithMany()
+                        .HasForeignKey("OrganizationId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

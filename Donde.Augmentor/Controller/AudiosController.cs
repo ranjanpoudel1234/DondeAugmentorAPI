@@ -17,7 +17,8 @@ using Donde.Augmentor.Core.Domain.Models;
 using Donde.Augmentor.Core.Services.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.Extensions.Logging;
+using System;
 
 namespace Donde.Augmentor.Web.Controller
 {
@@ -28,11 +29,13 @@ namespace Donde.Augmentor.Web.Controller
         private readonly IAudioService _audioService;
         private readonly IS3Service _s3Service;
         private readonly IMapper _mapper;
+        private readonly ILogger<AudiosController> _logger;
 
-        public AudiosController(IAudioService audioService, IMapper mapper, IS3Service s3Service)
+        public AudiosController(IAudioService audioService, IMapper mapper, ILogger<AudiosController> logger)
         {
             _audioService = audioService;
             _mapper = mapper;
+            _logger = logger;
             _s3Service = s3Service;
         }
 
@@ -41,13 +44,13 @@ namespace Donde.Augmentor.Web.Controller
         public async Task<IActionResult> Get(ODataQueryOptions<AudioViewModel> odataOptions)
         {
             var result = new List<AudioViewModel>();
+
             var audiosQueryable = _audioService.GetAudios();
 
             var projectedAudios = audiosQueryable.ProjectTo<AudioViewModel>(_mapper.ConfigurationProvider);
 
             var appliedResults = odataOptions.ApplyTo(projectedAudios);
 
-            // ToListAsync converts Iqueryable<T> to List<T>. thus cast needed
             var audioViewModels = appliedResults as IQueryable<AudioViewModel>;
 
             if (audioViewModels != null)
