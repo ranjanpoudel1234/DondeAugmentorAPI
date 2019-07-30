@@ -27,16 +27,16 @@ namespace Donde.Augmentor.Web.Controller
     public class AudiosController : ODataController
     {
         private readonly IAudioService _audioService;
-        private readonly IS3Service _s3Service;
+     //   private readonly IS3Service _s3Service;
         private readonly IMapper _mapper;
         private readonly ILogger<AudiosController> _logger;
 
-        public AudiosController(IAudioService audioService, IMapper mapper, ILogger<AudiosController> logger, IS3Service s3Service)
+        public AudiosController(IAudioService audioService, IMapper mapper, ILogger<AudiosController> logger)
         {
             _audioService = audioService;
             _mapper = mapper;
             _logger = logger;
-            _s3Service = s3Service;
+           // _s3Service = s3Service;
         }
 
         [ODataRoute]
@@ -68,7 +68,7 @@ namespace Donde.Augmentor.Web.Controller
         {
             string bucketName = "booketofpankaj1";
             string bucketToReadFrom = "bucketofpankaj";
-            await _s3Service.GetObjectFromS3Async(bucketToReadFrom);
+          //  await _s3Service.GetObjectFromS3Async(bucketToReadFrom);
             //var createBucketResponse = await _s3Service.CreateBucketAsync(bucketName);
             //var uploadResponse = await _s3Service.UploadObjectAsync(file, bucketName);
 
