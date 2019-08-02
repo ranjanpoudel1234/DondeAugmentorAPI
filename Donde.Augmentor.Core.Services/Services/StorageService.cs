@@ -1,23 +1,20 @@
-﻿using Amazon.S3;
+﻿using Amazon;
+using Amazon.S3;
 using Amazon.S3.Model;
 using Amazon.S3.Transfer;
+using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces;
 using System;
 using System.IO;
 
 namespace Donde.Augmentor.Core.Services.Services
 {
-    public class StorageService
+    public class StorageService : IStorageService
     {
-        private IAmazonS3 client = null;
+        IAmazonS3 _client { get; set; }
 
-        public StorageService()
+        public StorageService(IAmazonS3 client)
         {
-            //string accessKey = ConfigurationManager.AppSettings["AWSAccessKey"];
-            //string secretKey = ConfigurationManager.AppSettings["AWSSecretKey"];
-            //if (this.client == null)
-            //{
-            //    this.client = Amazon.AWSClientFactory.CreateAmazonS3Client(accessKey, secretKey, RegionEndpoint.APSoutheast1);
-            //}
+            _client = client;
         }
 
         public bool UploadFile(string awsBucketName, string key, Stream stream)
@@ -26,12 +23,13 @@ namespace Donde.Augmentor.Core.Services.Services
             {
                 InputStream = stream,
                 BucketName = awsBucketName,
-                CannedACL = S3CannedACL.AuthenticatedRead,
+                CannedACL = S3CannedACL.PublicRead,
                 Key = key,
+                PartSize = 5000000
                
             };
 
-            TransferUtility fileTransferUtility = new TransferUtility(this.client);
+            TransferUtility fileTransferUtility = new TransferUtility(_client);
             fileTransferUtility.Upload(uploadRequest);
             return true;
         }
@@ -46,7 +44,7 @@ namespace Donde.Augmentor.Core.Services.Services
                 Expires = DateTime.Now.AddSeconds(expireInSeconds)
             };
 
-            urlString = this.client.GetPreSignedURL(request);
+            urlString = this._client.GetPreSignedURL(request);
             return urlString;
         }
     }

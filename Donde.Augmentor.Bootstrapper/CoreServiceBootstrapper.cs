@@ -1,4 +1,6 @@
-﻿using SimpleInjector;
+﻿using Amazon.S3;
+using Donde.Augmentor.Core.Services.Services;
+using SimpleInjector;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -12,15 +14,14 @@ namespace Donde.Augmentor.Bootstrapper
             RegisterInstancesByNamespace(simpleInjectorContainer,
                  new List<Assembly>
                 {
-                   // GetServiceInterfaceAssembly(),
                     GetServiceAssembly()
                 },
                 new List<string>
                 {
-                   // "Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces",
                     "Donde.Augmentor.Core.Services.Services"
                 });
 
+           // simpleInjectorContainer.Register(() => IAmazonS3, LifeStyle.Scoped);
             //any fluent validators can be registered here.
         }
 

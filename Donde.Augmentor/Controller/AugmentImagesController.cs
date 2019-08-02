@@ -32,16 +32,18 @@ namespace Donde.Augmentor.Web.Controller
         private readonly IAugmentImageService _augmentImageservice;
         private readonly IMapper _mapper;
         private readonly ILogger<AugmentImagesController> _logger;
+        private readonly IStorageService _storageService;
 
         // Get the default form options so that we can use them to set the default limits for
         // request body data
         private static readonly FormOptions _defaultFormOptions = new FormOptions();
 
-        public AugmentImagesController(IAugmentImageService augmentImageservice, IMapper mapper, ILogger<AugmentImagesController> logger)
+        public AugmentImagesController(IAugmentImageService augmentImageservice, IMapper mapper, IStorageService storageService, ILogger<AugmentImagesController> logger)
         {
             _augmentImageservice = augmentImageservice;
             _mapper = mapper;
             _logger = logger;
+            _storageService = storageService;
         }
 
         [ODataRoute]
@@ -70,28 +72,18 @@ namespace Donde.Augmentor.Web.Controller
         [ODataRoute]
         [HttpPost]
         [DisableFormValueModelBinding]
+        [RequestSizeLimit(100000000)] // 100 mb
         public async Task<IActionResult> Upload()
         {
-            FormValueProvider formModel;
-            using (var stream = System.IO.File.Create("c:\\temp\\myfile.temp"))
+            Stream stream;
+            using (var stream1 = new MemoryStream())
             {
-                formModel = await Request.StreamFile(stream);
+                stream = await Request.StreamFile(stream1);
+
+                _storageService.UploadFile("bucketofpankaj", "testKey", stream);
             }
 
-            var viewModel = new object();
-
-            var bindingSuccessful = await TryUpdateModelAsync(viewModel, prefix: "",
-               valueProvider: formModel);
-
-            if (!bindingSuccessful)
-            {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
-            }
-
-            return Ok(viewModel);
+            return Ok();
         }
 
         private static Encoding GetEncoding(MultipartSection section)

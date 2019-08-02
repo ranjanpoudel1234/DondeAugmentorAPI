@@ -58,6 +58,9 @@ namespace Donde.Augmentor.Web
             services.AddDondeOData(Configuration);
 
             services.AddMvc();
+
+            services.AddDefaultAWSOptions(Configuration.GetAWSOptions());
+            services.AddAWSService<IAmazonS3>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -101,6 +104,11 @@ namespace Donde.Augmentor.Web
         {
             // Add application presentation components:
              container.RegisterMvcControllers(app);
+
+            //var options = Configuration.GetAWSOptions();
+            //var s3Client = options.CreateServiceClient<IAmazonS3>();
+
+            //container.Register<IAmazonS3>(() => s3Client, Lifestyle.Scoped);
            
             DondeAugmentorBootstrapper.BootstrapDondeAugmentor
                 (container, 
