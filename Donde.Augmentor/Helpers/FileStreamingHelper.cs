@@ -8,11 +8,12 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
-public static class FileStreamingHelper
+public class FileStreamingHelper
 { 
     private static readonly FormOptions _defaultFormOptions = new FormOptions();
+    public static Stream Stream { get; set; }
 
-    public static async Task<Stream> StreamFile(this HttpRequest request, Stream targetStream)
+    public async Task<Stream> StreamFile( HttpRequest request)
     {
         if (!MultipartRequestHelper.IsMultipartContentType(request.ContentType))
         {
@@ -25,26 +26,19 @@ public static class FileStreamingHelper
 
         var reader = new MultipartReader(boundary, request.Body);
 
-        var section = await reader.ReadNextSectionAsync();
-        while (section != null)
+        var section = await reader.ReadNextSectionAsync();   
+        ContentDispositionHeaderValue contentDisposition;
+        var hasContentDispositionHeader = ContentDispositionHeaderValue.TryParse(section.ContentDisposition, out contentDisposition);
+
+        if (hasContentDispositionHeader)
         {
-            ContentDispositionHeaderValue contentDisposition;
-            var hasContentDispositionHeader = ContentDispositionHeaderValue.TryParse(section.ContentDisposition, out contentDisposition);
-
-            if (hasContentDispositionHeader)
+            if (MultipartRequestHelper.HasFileContentDisposition(contentDisposition))
             {
-                if (MultipartRequestHelper.HasFileContentDisposition(contentDisposition))
-                {
-                    await section.Body.CopyToAsync(targetStream);
-                }       
-            }
-
-            // Drains any remaining section body that has not been consumed and
-            // reads the headers for the next section.
-            section = await reader.ReadNextSectionAsync();
+                Stream = section.Body;
+            }       
         }
 
-        return targetStream;
+        return Stream;
     }
 
     private static Encoding GetEncoding(MultipartSection section)
