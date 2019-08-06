@@ -1,6 +1,4 @@
-﻿using Amazon.S3;
-using Donde.Augmentor.Core.Services.Services;
-using SimpleInjector;
+﻿using SimpleInjector;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -18,10 +16,10 @@ namespace Donde.Augmentor.Bootstrapper
                 },
                 new List<string>
                 {
-                    "Donde.Augmentor.Core.Services.Services"
+                    "Donde.Augmentor.Core.Services.Services",
+                    "Donde.Augmentor.Core.Services.Services.FileService"
                 });
 
-           // simpleInjectorContainer.Register(() => IAmazonS3, LifeStyle.Scoped);
             //any fluent validators can be registered here.
         }
 

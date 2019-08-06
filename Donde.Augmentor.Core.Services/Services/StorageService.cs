@@ -14,6 +14,8 @@ namespace Donde.Augmentor.Core.Services.Services
     public class StorageService : IStorageService
     {
         IAmazonS3 _client { get; set; }
+        private const int PartSize = 6291456; // 2 MB
+
 
         public StorageService(IAmazonS3 client)
         {
@@ -34,7 +36,7 @@ namespace Donde.Augmentor.Core.Services.Services
                     BucketName = awsBucketName,
                     FilePath = filePath,
                     StorageClass = S3StorageClass.Standard,
-                    PartSize = 6291456, // 2 MB.
+                    PartSize = PartSize, // 2 MB.
                     Key = key,
                     CannedACL = S3CannedACL.PublicRead
                 };

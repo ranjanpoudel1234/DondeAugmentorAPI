@@ -36,6 +36,7 @@ public class FileStreamingHelper
             {
                 Stream = section.Body;
                 var test = contentDisposition.FileName.ToString();
+                var mimeType = section.ContentType;
             }       
         }
 
