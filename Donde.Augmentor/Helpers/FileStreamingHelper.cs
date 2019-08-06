@@ -35,6 +35,7 @@ public class FileStreamingHelper
             if (MultipartRequestHelper.HasFileContentDisposition(contentDisposition))
             {
                 Stream = section.Body;
+                var test = contentDisposition.FileName.ToString();
             }       
         }
 

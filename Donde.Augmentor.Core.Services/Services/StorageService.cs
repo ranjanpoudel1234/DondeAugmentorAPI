@@ -1,10 +1,13 @@
 ﻿using Amazon;
+using Amazon.Runtime;
 using Amazon.S3;
 using Amazon.S3.Model;
 using Amazon.S3.Transfer;
 using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace Donde.Augmentor.Core.Services.Services
 {
@@ -17,35 +20,39 @@ namespace Donde.Augmentor.Core.Services.Services
             _client = client;
         }
 
-        public bool UploadFile(string awsBucketName, string key, Stream stream)
+        public async Task<bool> UploadFileAsync(string awsBucketName, string key, string filePath)
         {
-            var uploadRequest = new TransferUtilityUploadRequest
+            try
             {
-                InputStream = stream,
-                BucketName = awsBucketName,
-                CannedACL = S3CannedACL.PublicRead,
-                Key = key,
-                PartSize = 5000000
-               
-            };
+                var fileTransferUtility =
+                    new TransferUtility(_client);
 
-            TransferUtility fileTransferUtility = new TransferUtility(_client);
-            fileTransferUtility.Upload(uploadRequest);
-            return true;
-        }
 
-        public string GeneratePreSignedURL(string awsBucketName, string key, int expireInSeconds)
-        {
-            string urlString = string.Empty;
-            GetPreSignedUrlRequest request = new GetPreSignedUrlRequest
+                // Option 4. Specify advanced settings.
+                var fileTransferUtilityRequest = new TransferUtilityUploadRequest
+                {
+                    BucketName = awsBucketName,
+                    FilePath = filePath,
+                    StorageClass = S3StorageClass.Standard,
+                    PartSize = 6291456, // 2 MB.
+                    Key = key,
+                    CannedACL = S3CannedACL.PublicRead
+                };
+             
+
+                await fileTransferUtility.UploadAsync(fileTransferUtilityRequest);
+                return true;
+            }
+            catch (AmazonS3Exception e)
             {
-                BucketName = awsBucketName,
-                Key = key,
-                Expires = DateTime.Now.AddSeconds(expireInSeconds)
-            };
+                Console.WriteLine("Error encountered on server. Message:'{0}' when writing an object", e.Message);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Unknown encountered on server. Message:'{0}' when writing an object", e.Message);
+            }
 
-            urlString = this._client.GetPreSignedURL(request);
-            return urlString;
+            return false;
         }
     }
 }

@@ -1,9 +1,9 @@
-﻿using System.IO;
+﻿using System.Threading.Tasks;
 
 namespace Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces
 {
     public interface IStorageService
     {
-        bool UploadFile(string awsBucketName, string key, Stream stream);
+        Task<bool> UploadFileAsync(string awsBucketName, string key, string filePath);
     }
 }
