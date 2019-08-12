@@ -1,4 +1,5 @@
-﻿using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces;
+﻿using Donde.Augmentor.Core.Domain;
+using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces;
 using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces.IFileService;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -18,18 +19,17 @@ namespace Donde.Augmentor.Core.Services.Services.FileService
         private readonly IHostingEnvironment _hostingEnvironment;
         private readonly IFileStreamContentReaderService _fileStreamContentReaderService;
         private readonly IStorageService _storageService;
-        private const string ServerTempUploadFolderName = "TempUploads"; //todo make these configurable
-        private const string BucketName = "donde-augmentor-dev-bucket";
-        private const string ImageFolderName = "DondeAugmentorImages";
-        private const string VideosFolderName = "DondeAugmentorVideos";
+        private readonly DomainSettings _domainSettings;
 
-
-
-        public FileProcessingService(IHostingEnvironment hostingEnvironment, IFileStreamContentReaderService fileStreamContentReaderService, IStorageService storageService)
+        public FileProcessingService(IHostingEnvironment hostingEnvironment, 
+            IFileStreamContentReaderService fileStreamContentReaderService,
+            IStorageService storageService,
+            DomainSettings domainSettings)
         {
             _hostingEnvironment = hostingEnvironment;
             _fileStreamContentReaderService = fileStreamContentReaderService;
             _storageService = storageService;
+            _domainSettings = domainSettings;
         }
 
         public async Task<bool> UploadImageAsync(HttpRequest request)
@@ -51,7 +51,7 @@ namespace Donde.Augmentor.Core.Services.Services.FileService
                         if (!ResizeImage(filePath))
                             return false;
 
-                        var uploadResult = await _storageService.UploadFileAsync(BucketName, $"{ImageFolderName}/{uniqueFileName}", filePath);
+                        var uploadResult = await _storageService.UploadFileAsync(_domainSettings.UploadSettings.BucketName, $"{_domainSettings.UploadSettings.ImageFolderName}/{uniqueFileName}", filePath);
 
                         if (!uploadResult)
                             return false; //todo add better error handlings in all of this
@@ -59,11 +59,14 @@ namespace Donde.Augmentor.Core.Services.Services.FileService
                         DeleteFileFromPath(filePath);
 
                         //todo call AugmentImageService here to pass in the metadata and the uploadId.
+                        // add validation on the fileextension
+                        // error hanlding
+                        // configuration.
                     }
                 }
             }
 
-            return true;        
+            return false;        
         }
 
         private bool ResizeImage(string filePath)
@@ -73,13 +76,13 @@ namespace Donde.Augmentor.Core.Services.Services.FileService
                 image.Mutate(x => x
                      .Resize(new ResizeOptions
                      {
-                         Size = new Size(200, 200), //todo potentially make these configurable along with quality and size.
+                         Size = new Size(_domainSettings.MediaSettings.ImageResizeHeight, _domainSettings.MediaSettings.ImageResizeWidth), //todo potentially make these configurable along with quality and size.
                          Mode = ResizeMode.Stretch
                      })
 
                      );
                 var encoder = new JpegEncoder();
-                encoder.Quality = 75;
+                encoder.Quality = _domainSettings.MediaSettings.ImageQuality;
                 encoder.Encode(image, new MemoryStream());
 
                 image.Save(filePath, encoder); // Automatic encoder selected based on extension.
@@ -91,7 +94,7 @@ namespace Donde.Augmentor.Core.Services.Services.FileService
         {
             var filePath = string.Empty;
             var contentRoot = _hostingEnvironment.ContentRootPath;
-            var uploadsPath = Path.Combine(contentRoot, ServerTempUploadFolderName);
+            var uploadsPath = Path.Combine(contentRoot, _domainSettings.UploadSettings.ServerTempUploadFolderName);
             var directoryExists = Directory.Exists(uploadsPath);
 
             if (!Directory.Exists(uploadsPath))

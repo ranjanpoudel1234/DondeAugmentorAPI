@@ -1,11 +1,10 @@
 ﻿using Donde.Augmentor.Web.Cors;
-using System.Collections.Generic;
 
 namespace Donde.Augmentor.Web
 {
     public class AppSetting
     {
-        public Host Host { get; set; }
+        public Host Host { get; set; }   
     }
 
     public class Host
