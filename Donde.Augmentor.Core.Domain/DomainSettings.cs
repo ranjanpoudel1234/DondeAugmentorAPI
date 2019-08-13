@@ -13,6 +13,7 @@
         public string BucketName { get; set; }
         public string ImageFolderName { get; set; }
         public string VideosFolderName { get; set; }
+        public int UploadPartSizeInMB { get; set; }
     }
 
     public class MediaSettings

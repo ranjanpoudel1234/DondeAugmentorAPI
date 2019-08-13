@@ -1,8 +1,11 @@
-﻿using Donde.Augmentor.Core.Domain;
+﻿using CSharpFunctionalExtensions;
+using Donde.Augmentor.Core.Domain;
+using Donde.Augmentor.Core.Domain.Dto;
 using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces;
 using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces.IFileService;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Jpeg;
 using SixLabors.ImageSharp.PixelFormats;
@@ -19,55 +22,110 @@ namespace Donde.Augmentor.Core.Services.Services.FileService
         private readonly IHostingEnvironment _hostingEnvironment;
         private readonly IFileStreamContentReaderService _fileStreamContentReaderService;
         private readonly IStorageService _storageService;
+        private readonly ILogger<FileProcessingService> _logger;
         private readonly DomainSettings _domainSettings;
 
-        public FileProcessingService(IHostingEnvironment hostingEnvironment, 
+        public FileProcessingService(IHostingEnvironment hostingEnvironment,
             IFileStreamContentReaderService fileStreamContentReaderService,
             IStorageService storageService,
-            DomainSettings domainSettings)
+            DomainSettings domainSettings,
+            ILogger<FileProcessingService> logger)
         {
             _hostingEnvironment = hostingEnvironment;
             _fileStreamContentReaderService = fileStreamContentReaderService;
             _storageService = storageService;
             _domainSettings = domainSettings;
+            _logger = logger;
         }
 
-        public async Task<bool> UploadImageAsync(HttpRequest request)
+        public async Task<Result<MediaAttachmentDto>> UploadImageAsync(HttpRequest request)
         {
             var fileStreamReadResponse = await _fileStreamContentReaderService.StreamFileAsync(request);
 
-            if(fileStreamReadResponse)
+            if (fileStreamReadResponse)
             {
-                using (var stream = _fileStreamContentReaderService.Stream)
+                //TODO validate the stream fileName and extension here to be same as what ViroMedia supports
+
+                var uploadFileResult = await UploadFileAsync();
+                if (uploadFileResult.IsFailure)
                 {
-                    var fileExtension = Path.GetExtension(_fileStreamContentReaderService.FileName);
-
-                    var uniqueFileGuid = Guid.NewGuid().ToString();
-                    var uniqueFileName = Path.ChangeExtension(uniqueFileGuid, fileExtension);
-                    var filePath = await CreateFileLocallyAndReturnPathAsync(stream, uniqueFileName);
-
-                    if (!string.IsNullOrWhiteSpace(filePath))
-                    {
-                        if (!ResizeImage(filePath))
-                            return false;
-
-                        var uploadResult = await _storageService.UploadFileAsync(_domainSettings.UploadSettings.BucketName, $"{_domainSettings.UploadSettings.ImageFolderName}/{uniqueFileName}", filePath);
-
-                        if (!uploadResult)
-                            return false; //todo add better error handlings in all of this
-
-                        DeleteFileFromPath(filePath);
-
-                        //todo call AugmentImageService here to pass in the metadata and the uploadId.
-                        // add validation on the fileextension
-                        // error hanlding
-                        // configuration.
-                    }
+                    Result.Fail<MediaAttachmentDto>("Failure in uploading image");
                 }
             }
 
-            return false;        
+            return Result.Fail<MediaAttachmentDto>("Empty File Stream");
         }
+
+
+        public async Task<Result<MediaAttachmentDto>> UploadVideoAsync(HttpRequest request)
+        {
+            var fileStreamReadResponse = await _fileStreamContentReaderService.StreamFileAsync(request);
+
+            if (fileStreamReadResponse)
+            {
+                //TODO validate the stream fileName and extension here to be same as what ViroMedia supports
+
+                var uploadFileResult = await UploadFileAsync();
+                if (uploadFileResult.IsFailure)
+                {
+                    Result.Fail<MediaAttachmentDto>("Failure in uploading image");
+                }
+            }
+
+            return Result.Fail<MediaAttachmentDto>("Empty File Stream");
+        }
+
+        private async Task<Result<MediaAttachmentDto>> UploadFileAsync()
+        {
+            using (var stream = _fileStreamContentReaderService.Stream)
+            {
+                var fileExtension = Path.GetExtension(_fileStreamContentReaderService.FileName);
+
+                var uniqueFileGuid = Guid.NewGuid();
+                var uniqueFileName = Path.ChangeExtension(uniqueFileGuid.ToString(), fileExtension);
+                var filePath = await CreateFileLocallyAndReturnPathAsync(stream, uniqueFileName);
+
+                if (!string.IsNullOrWhiteSpace(filePath))
+                {
+                    if (!ResizeImage(filePath))
+                    {
+                        return Result.Fail<MediaAttachmentDto>("Could not resize file");
+                    }
+
+                    var uploadResult = await _storageService.UploadFileAsync(_domainSettings.UploadSettings.BucketName, $"{_domainSettings.UploadSettings.ImageFolderName}/{uniqueFileName}", filePath);
+
+                    if (uploadResult.IsFailure)
+                    {
+                        _logger.LogError("Failure in storage service");
+                        return Result.Fail<MediaAttachmentDto>("Failure in storage service while uploading file");
+                    }
+
+                    DeleteFileFromPath(filePath);
+
+                    var attachmentDto = new MediaAttachmentDto()
+                    {
+                        Id = uniqueFileGuid,
+                        FileName = _fileStreamContentReaderService.FileName,
+                        FilePath = filePath,
+                        MimeType = _fileStreamContentReaderService.MimeType
+                    };
+
+                    return Result.Ok(attachmentDto);
+                }
+            }
+
+            return Result.Fail<MediaAttachmentDto>("Error in uploading file");
+        }
+
+        //private async bool ValidateImageAsync()
+        //{
+        //    return false;
+        //}
+
+        //private async bool ValidateVideoAsync()
+        //{
+        //    return null;
+        //}
 
         private bool ResizeImage(string filePath)
         {
@@ -135,7 +193,7 @@ namespace Donde.Augmentor.Core.Services.Services.FileService
         {
             if (File.Exists(filePath))
             {
-                 File.Delete(filePath);
+                File.Delete(filePath);
             }
 
             return true;

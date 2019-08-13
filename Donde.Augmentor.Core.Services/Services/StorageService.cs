@@ -1,12 +1,9 @@
-﻿using Amazon;
-using Amazon.Runtime;
-using Amazon.S3;
-using Amazon.S3.Model;
+﻿using Amazon.S3;
 using Amazon.S3.Transfer;
+using CSharpFunctionalExtensions;
+using Donde.Augmentor.Core.Domain;
 using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces;
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Threading.Tasks;
 
 namespace Donde.Augmentor.Core.Services.Services
@@ -14,47 +11,45 @@ namespace Donde.Augmentor.Core.Services.Services
     public class StorageService : IStorageService
     {
         IAmazonS3 _client { get; set; }
-        private const int PartSize = 6291456; // 2 MB
+        private readonly DomainSettings _domainSettings;
 
 
-        public StorageService(IAmazonS3 client)
+        public StorageService(IAmazonS3 client, DomainSettings domainSettings)
         {
             _client = client;
+            _domainSettings = domainSettings;
         }
 
-        public async Task<bool> UploadFileAsync(string awsBucketName, string key, string filePath)
+        public async Task<Result<bool>> UploadFileAsync(string awsBucketName, string key, string filePath)
         {
             try
             {
-                var fileTransferUtility =
-                    new TransferUtility(_client);
+                var fileTransferUtility = new TransferUtility(_client);
 
-
-                // Option 4. Specify advanced settings.
                 var fileTransferUtilityRequest = new TransferUtilityUploadRequest
                 {
                     BucketName = awsBucketName,
                     FilePath = filePath,
                     StorageClass = S3StorageClass.Standard,
-                    PartSize = PartSize, // 2 MB.
+                    PartSize = _domainSettings.UploadSettings.UploadPartSizeInMB * 1024 * 1024,
                     Key = key,
                     CannedACL = S3CannedACL.PublicRead
                 };
              
 
                 await fileTransferUtility.UploadAsync(fileTransferUtilityRequest);
-                return true;
+
+                return Result.Ok(true);
             }
             catch (AmazonS3Exception e)
             {
-                Console.WriteLine("Error encountered on server. Message:'{0}' when writing an object", e.Message);
+                _logger.LogError($"AmazonS3Exception Occurred during upload {e.Message}");
+                return Result.Fail<bool>($"AmazonS3Exception Occurred during upload {e.Message}");
             }
             catch (Exception e)
             {
-                Console.WriteLine("Unknown encountered on server. Message:'{0}' when writing an object", e.Message);
+                return Result.Fail<bool>($"Error Occurred during upload {e.Message}");
             }
-
-            return false;
         }
     }
 }

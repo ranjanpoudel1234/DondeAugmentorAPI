@@ -2,6 +2,7 @@
 using Donde.Augmentor.Core.Repositories.Interfaces.RepositoryInterfaces;
 using Donde.Augmentor.Infrastructure.Database;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Donde.Augmentor.Infrastructure.Repositories
 {
@@ -15,6 +16,11 @@ namespace Donde.Augmentor.Infrastructure.Repositories
         public IQueryable<AugmentImage> GetAugmentImages()
         {
             return GetAll<AugmentImage>();
+        }
+
+        public async Task<AugmentImage> AddAugmentImageAsync(AugmentImage augmentImage)
+        {
+            return await CreateAsync(augmentImage);
         }
     }
 }

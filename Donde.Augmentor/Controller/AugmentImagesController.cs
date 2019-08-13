@@ -77,8 +77,10 @@ namespace Donde.Augmentor.Web.Controller
         {
             var result = await _fileProcessingService.UploadImageAsync(Request);
 
-            if (!result)
+            if (result.IsFailure)
                 return StatusCode((int)HttpStatusCode.InternalServerError);
+
+            //call augmentImage service with dto and organizationId from header.
 
             return Ok();
         }
