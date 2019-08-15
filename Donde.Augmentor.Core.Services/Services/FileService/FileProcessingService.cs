@@ -1,8 +1,11 @@
-﻿using CSharpFunctionalExtensions;
+﻿
+using CSharpFunctionalExtensions;
 using Donde.Augmentor.Core.Domain;
 using Donde.Augmentor.Core.Domain.Dto;
+using Donde.Augmentor.Core.Domain.Validations;
 using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces;
 using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces.IFileService;
+using FluentValidation;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
@@ -17,6 +20,7 @@ using System.Threading.Tasks;
 
 namespace Donde.Augmentor.Core.Services.Services.FileService
 {
+    //TODO add unit test around this 
     public class FileProcessingService : IFileProcessingService
     {
         private readonly IHostingEnvironment _hostingEnvironment;
@@ -24,38 +28,38 @@ namespace Donde.Augmentor.Core.Services.Services.FileService
         private readonly IStorageService _storageService;
         private readonly ILogger<FileProcessingService> _logger;
         private readonly DomainSettings _domainSettings;
+        private readonly IValidator<MediaAttachmentDto> _validator;
 
         public FileProcessingService(IHostingEnvironment hostingEnvironment,
             IFileStreamContentReaderService fileStreamContentReaderService,
             IStorageService storageService,
             DomainSettings domainSettings,
-            ILogger<FileProcessingService> logger)
+            ILogger<FileProcessingService> logger,
+            IValidator<MediaAttachmentDto> validator)
         {
             _hostingEnvironment = hostingEnvironment;
             _fileStreamContentReaderService = fileStreamContentReaderService;
             _storageService = storageService;
             _domainSettings = domainSettings;
             _logger = logger;
+            _validator = validator;
         }
 
         public async Task<Result<MediaAttachmentDto>> UploadImageAsync(HttpRequest request)
         {
             var fileStreamReadResponse = await _fileStreamContentReaderService.StreamFileAsync(request);
 
-            if (fileStreamReadResponse)
+            if(!fileStreamReadResponse)
+                return Result.Fail<MediaAttachmentDto>("Empty File Stream");
+          
+            var uploadFileResult = await UploadFileAsync();
+            if (uploadFileResult.IsFailure)
             {
-                //TODO validate the stream fileName and extension here to be same as what ViroMedia supports
-
-                var uploadFileResult = await UploadFileAsync();
-                if (uploadFileResult.IsFailure)
-                {
-                    Result.Fail<MediaAttachmentDto>("Failure in uploading image");
-                }
+                Result.Fail<MediaAttachmentDto>("Failure in uploading image");
             }
 
-            return Result.Fail<MediaAttachmentDto>("Empty File Stream");
+            return uploadFileResult;
         }
-
 
         public async Task<Result<MediaAttachmentDto>> UploadVideoAsync(HttpRequest request)
         {
@@ -83,16 +87,30 @@ namespace Donde.Augmentor.Core.Services.Services.FileService
 
                 var uniqueFileGuid = Guid.NewGuid();
                 var uniqueFileName = Path.ChangeExtension(uniqueFileGuid.ToString(), fileExtension);
-                var filePath = await CreateFileLocallyAndReturnPathAsync(stream, uniqueFileName);
+                var localFilePath = await CreateFileLocallyAndReturnPathAsync(stream, uniqueFileName);
+                var remoteFilePath = $"{ _domainSettings.UploadSettings.ImageFolderName }/{ uniqueFileName}";
 
-                if (!string.IsNullOrWhiteSpace(filePath))
+                if (!string.IsNullOrWhiteSpace(localFilePath))
                 {
-                    if (!ResizeImage(filePath))
+                    var attachmentDto = new MediaAttachmentDto()
+                    {
+                        Id = uniqueFileGuid,
+                        FileName = _fileStreamContentReaderService.FileName,
+                        FilePath = remoteFilePath,
+                        MimeType = _fileStreamContentReaderService.MimeType
+                    };
+
+                    await _validator.ValidateOrThrowAsync(attachmentDto, ruleSets: $"{MediaAttachmentDtoValidator.DefaultRuleSet},{MediaAttachmentDtoValidator.ImageFileRuleSet}");
+
+                    if (!ResizeImage(localFilePath))
                     {
                         return Result.Fail<MediaAttachmentDto>("Could not resize file");
-                    }
+                    }               
 
-                    var uploadResult = await _storageService.UploadFileAsync(_domainSettings.UploadSettings.BucketName, $"{_domainSettings.UploadSettings.ImageFolderName}/{uniqueFileName}", filePath);
+                    var uploadResult = await _storageService.UploadFileAsync
+                        (_domainSettings.UploadSettings.BucketName,
+                        remoteFilePath, 
+                        localFilePath);
 
                     if (uploadResult.IsFailure)
                     {
@@ -100,16 +118,8 @@ namespace Donde.Augmentor.Core.Services.Services.FileService
                         return Result.Fail<MediaAttachmentDto>("Failure in storage service while uploading file");
                     }
 
-                    DeleteFileFromPath(filePath);
-
-                    var attachmentDto = new MediaAttachmentDto()
-                    {
-                        Id = uniqueFileGuid,
-                        FileName = _fileStreamContentReaderService.FileName,
-                        FilePath = filePath,
-                        MimeType = _fileStreamContentReaderService.MimeType
-                    };
-
+                    DeleteFileFromPath(localFilePath);
+            
                     return Result.Ok(attachmentDto);
                 }
             }

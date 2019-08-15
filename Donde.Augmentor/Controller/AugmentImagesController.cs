@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Donde.Augmentor.Core.Domain.Models;
 using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces;
 using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces.IFileService;
 using Donde.Augmentor.Web.Attributes;
@@ -23,7 +24,7 @@ namespace Donde.Augmentor.Web.Controller
 {
     [ApiVersion("1.0")]
     [ODataRoutePrefix("augmentImages")]
-    public class AugmentImagesController : ODataController
+    public class AugmentImagesController : BaseController
     {
         private readonly IAugmentImageService _augmentImageservice;
         private readonly IMapper _mapper;
@@ -75,14 +76,21 @@ namespace Donde.Augmentor.Web.Controller
         [RequestSizeLimit(52428800)] // 50 mb
         public async Task<IActionResult> Upload()
         {
-            var result = await _fileProcessingService.UploadImageAsync(Request);
+            var organizationId = GetCurrentOrganizationIdOrThrow();
 
-            if (result.IsFailure)
+            var fileUploadResult = await _fileProcessingService.UploadImageAsync(Request);
+
+            if (fileUploadResult.IsFailure)
                 return StatusCode((int)HttpStatusCode.InternalServerError);
 
-            //call augmentImage service with dto and organizationId from header.
+            var augmentImage = _mapper.Map<AugmentImage>(fileUploadResult.Value);
+            augmentImage.OrganizationId = organizationId;
 
-            return Ok();
+            var addedAugmentImage = await _augmentImageservice.AddAugmentImageAsync(augmentImage);
+
+            var augmentImageViewModel = _mapper.Map<AugmentImageViewModel>(addedAugmentImage);
+
+            return Created(augmentImageViewModel);
         }
     } 
 }

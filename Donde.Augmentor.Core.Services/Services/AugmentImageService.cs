@@ -22,11 +22,8 @@ namespace Donde.Augmentor.Core.Services.Services
             return _augmentImageRepository.GetAugmentImages();
         }
 
-        public Task<AugmentImage> AddAugmentImageAsync(MediaAttachmentDto attachmentDto, Guid organizationId)
+        public Task<AugmentImage> AddAugmentImageAsync(AugmentImage augmentImage)
         {
-            //convert dto to image here
-            var augmentImage = new AugmentImage();
-
             return _augmentImageRepository.AddAugmentImageAsync(augmentImage);
         }
     }

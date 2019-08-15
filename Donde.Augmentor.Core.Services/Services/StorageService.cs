@@ -3,6 +3,7 @@ using Amazon.S3.Transfer;
 using CSharpFunctionalExtensions;
 using Donde.Augmentor.Core.Domain;
 using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 
@@ -12,12 +13,13 @@ namespace Donde.Augmentor.Core.Services.Services
     {
         IAmazonS3 _client { get; set; }
         private readonly DomainSettings _domainSettings;
+        private readonly ILogger<StorageService> _logger;
 
-
-        public StorageService(IAmazonS3 client, DomainSettings domainSettings)
+        public StorageService(IAmazonS3 client, DomainSettings domainSettings, ILogger<StorageService> logger)
         {
             _client = client;
             _domainSettings = domainSettings;
+            _logger = logger;
         }
 
         public async Task<Result<bool>> UploadFileAsync(string awsBucketName, string key, string filePath)
@@ -48,6 +50,7 @@ namespace Donde.Augmentor.Core.Services.Services
             }
             catch (Exception e)
             {
+                _logger.LogError($"Error Occurred during upload {e.Message}");
                 return Result.Fail<bool>($"Error Occurred during upload {e.Message}");
             }
         }
