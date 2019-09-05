@@ -23,11 +23,12 @@ using System.Threading.Tasks;
 
 namespace Donde.Augmentor.Web.Controller
 {
+
     [ApiVersion("1.0")]
     [ODataRoutePrefix("augmentImages")]
-    public class AugmentImagesController : BaseController
+    public class VideosController : BaseController
     {
-        private readonly IAugmentImageService _augmentImageservice;
+        private readonly IVideoService _videoService;
         private readonly IMapper _mapper;
         private readonly ILogger<AugmentImagesController> _logger;
         private readonly IFileProcessingService _fileProcessingService;
@@ -36,40 +37,17 @@ namespace Donde.Augmentor.Web.Controller
         // request body data
         private static readonly FormOptions _defaultFormOptions = new FormOptions();
 
-        public AugmentImagesController(IAugmentImageService augmentImageservice,
-            IMapper mapper, IFileProcessingService fileProcessingService, 
+        public VideosController(IVideoService videoService,
+            IMapper mapper, IFileProcessingService fileProcessingService,
             ILogger<AugmentImagesController> logger,
             IHostingEnvironment env)
         {
-            _augmentImageservice = augmentImageservice;
+            _videoService = videoService;
             _mapper = mapper;
             _logger = logger;
             _fileProcessingService = fileProcessingService;
 
         }
-
-        [ODataRoute]
-        [HttpGet]
-        public async Task<IActionResult> Get(ODataQueryOptions<AugmentImageViewModel> odataOptions)
-        {
-            var result = new List<AugmentImageViewModel>();
-
-            var augmentImagesQueryable = _augmentImageservice.GetAugmentImages();
-
-            var projectedAugmentImages = augmentImagesQueryable.ProjectTo<AugmentImageViewModel>(_mapper.ConfigurationProvider);
-
-            var appliedResults = odataOptions.ApplyTo(projectedAugmentImages);
-
-            var augmentImageViewModels = appliedResults as IQueryable<AugmentImageViewModel>;
-
-            if (augmentImageViewModels != null)
-            {
-                result = await augmentImageViewModels.ToListAsync();
-            }
-
-            return Ok(result);
-        }
-
 
         [ODataRoute]
         [HttpPost]
@@ -84,14 +62,14 @@ namespace Donde.Augmentor.Web.Controller
             if (fileUploadResult.IsFailure)
                 return StatusCode((int)HttpStatusCode.InternalServerError);
 
-            var augmentImage = _mapper.Map<AugmentImage>(fileUploadResult.Value);
-            augmentImage.OrganizationId = organizationId;
+            var video = _mapper.Map<Video>(fileUploadResult.Value);
+            video.OrganizationId = organizationId;
 
-            var addedAugmentImage = await _augmentImageservice.AddAugmentImageAsync(augmentImage);
+            var addedVideo = await _videoService.AddVideoAsync(video);
 
-            var augmentImageViewModel = _mapper.Map<AugmentImageViewModel>(addedAugmentImage);
+            var addedVideoViewModel = _mapper.Map<VideoViewModel>(addedVideo);
 
-            return Created(augmentImageViewModel);
+            return Created(addedVideoViewModel);
         }
-    } 
+    }
 }

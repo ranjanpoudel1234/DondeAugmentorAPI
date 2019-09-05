@@ -2,6 +2,7 @@
 using CSharpFunctionalExtensions;
 using Donde.Augmentor.Core.Domain;
 using Donde.Augmentor.Core.Domain.Dto;
+using Donde.Augmentor.Core.Domain.Enum;
 using Donde.Augmentor.Core.Domain.Validations;
 using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces;
 using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces.IFileService;
@@ -45,41 +46,24 @@ namespace Donde.Augmentor.Core.Services.Services.FileService
             _validator = validator;
         }
 
-        public async Task<Result<MediaAttachmentDto>> UploadImageAsync(HttpRequest request)
+        public async Task<Result<MediaAttachmentDto>> UploadMediaAsync(HttpRequest request, MediaTypes mediaType)
         {
             var fileStreamReadResponse = await _fileStreamContentReaderService.StreamFileAsync(request);
 
             if(!fileStreamReadResponse)
                 return Result.Fail<MediaAttachmentDto>("Empty File Stream");
           
-            var uploadFileResult = await UploadFileAsync();
+            var uploadFileResult = await UploadFileAsync(mediaType);
             if (uploadFileResult.IsFailure)
             {
-                Result.Fail<MediaAttachmentDto>("Failure in uploading image");
+                Result.Fail<MediaAttachmentDto>($"Failure in uploading {nameof(mediaType)}");
             }
 
             return uploadFileResult;
         }
 
-        public async Task<Result<MediaAttachmentDto>> UploadVideoAsync(HttpRequest request)
-        {
-            var fileStreamReadResponse = await _fileStreamContentReaderService.StreamFileAsync(request);
 
-            if (fileStreamReadResponse)
-            {
-                //TODO validate the stream fileName and extension here to be same as what ViroMedia supports
-
-                var uploadFileResult = await UploadFileAsync();
-                if (uploadFileResult.IsFailure)
-                {
-                    Result.Fail<MediaAttachmentDto>("Failure in uploading image");
-                }
-            }
-
-            return Result.Fail<MediaAttachmentDto>("Empty File Stream");
-        }
-
-        private async Task<Result<MediaAttachmentDto>> UploadFileAsync()
+        private async Task<Result<MediaAttachmentDto>> UploadFileAsync(MediaTypes mediaType)
         {
             using (var stream = _fileStreamContentReaderService.Stream)
             {
@@ -100,8 +84,16 @@ namespace Donde.Augmentor.Core.Services.Services.FileService
                         MimeType = _fileStreamContentReaderService.MimeType
                     };
 
-                    await _validator.ValidateOrThrowAsync(attachmentDto, ruleSets: $"{MediaAttachmentDtoValidator.DefaultRuleSet},{MediaAttachmentDtoValidator.ImageFileRuleSet}");
+                    if (mediaType == MediaTypes.Image)
+                    {
+                        await _validator.ValidateOrThrowAsync(attachmentDto, ruleSets: $"{MediaAttachmentDtoValidator.DefaultRuleSet},{MediaAttachmentDtoValidator.ImageFileRuleSet}");
+                    }
+                    else
+                    {
+                        await _validator.ValidateOrThrowAsync(attachmentDto, ruleSets: $"{MediaAttachmentDtoValidator.DefaultRuleSet},{MediaAttachmentDtoValidator.VideoFileRuleSet}");
+                    }
 
+                   
                     if (!ResizeImage(localFilePath))
                     {
                         return Result.Fail<MediaAttachmentDto>("Could not resize file");
@@ -126,16 +118,6 @@ namespace Donde.Augmentor.Core.Services.Services.FileService
 
             return Result.Fail<MediaAttachmentDto>("Error in uploading file");
         }
-
-        //private async bool ValidateImageAsync()
-        //{
-        //    return false;
-        //}
-
-        //private async bool ValidateVideoAsync()
-        //{
-        //    return null;
-        //}
 
         private bool ResizeImage(string filePath)
         {
