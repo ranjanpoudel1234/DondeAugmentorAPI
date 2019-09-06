@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Donde.Augmentor.Core.Domain.Models;
 using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces;
 using Donde.Augmentor.Web.ViewModels;
 using Microsoft.AspNet.OData;
@@ -10,11 +11,11 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Net.Http;
 
 namespace Donde.Augmentor.Web.Controller
 {
     [ApiVersion("1.0")]
+    [ODataRoutePrefix("augmentObjects")]
     public class AugmentObjectsController : ODataController
     {
         private readonly IAugmentObjectService _augmentObjectService;
@@ -26,7 +27,7 @@ namespace Donde.Augmentor.Web.Controller
             _mapper = mapper;
         }
 
-        [ODataRoute("augmentObjects")]
+        [ODataRoute]
         [HttpGet]
         public async Task<IActionResult> Get(ODataQueryOptions<AugmentObjectViewModel> odataOptions)
         {
@@ -57,6 +58,19 @@ namespace Donde.Augmentor.Web.Controller
             var mappedResult = _mapper.Map<List<AugmentObjectViewModel>>(result);
 
             return Ok(mappedResult);
+        }
+
+        [ODataRoute]
+        [HttpPost]
+        public async Task<IActionResult> Post(AugmentObjectViewModel augmentObjectViewModel)
+        {
+            var augmentObject = _mapper.Map<AugmentObject>(augmentObjectViewModel);
+
+            var result = await _augmentObjectService.CreateAugmentObjectAsync(augmentObject);
+
+            var addedAugmentObjectViewModel = _mapper.Map<AugmentObjectViewModel>(result);
+
+            return Ok(addedAugmentObjectViewModel);
         }
     }
 }

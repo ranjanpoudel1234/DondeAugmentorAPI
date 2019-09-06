@@ -25,6 +25,7 @@ namespace Donde.Augmentor.Core.Services.Services
 
         public async Task<AugmentObject> CreateAugmentObjectAsync(AugmentObject entity)
         {
+            //todo need to add fluent validation here.
             return await _augmentObjectRepository.CreateAugmentObjectAsync(entity);
         }
 
