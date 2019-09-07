@@ -16,6 +16,12 @@ namespace Donde.Augmentor.Infrastructure.Repositories
 
         }
 
+        public async Task<Organization> CreateOrganizationAsync(Organization entity)
+        {
+            return await CreateAsync(entity);
+        }
+
+
         public IQueryable<Organization> GetOrganizations()
         {
             return GetAll<Organization>();

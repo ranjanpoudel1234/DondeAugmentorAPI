@@ -1,23 +1,15 @@
 ﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Donde.Augmentor.Core.Domain.Enum;
 using Donde.Augmentor.Core.Domain.Models;
 using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces;
 using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces.IFileService;
 using Donde.Augmentor.Web.Attributes;
 using Donde.Augmentor.Web.ViewModels;
-using Microsoft.AspNet.OData;
-using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNet.OData.Routing;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -25,7 +17,7 @@ namespace Donde.Augmentor.Web.Controller
 {
 
     [ApiVersion("1.0")]
-    [ODataRoutePrefix("augmentImages")]
+    [ODataRoutePrefix("videos")]
     public class VideosController : BaseController
     {
         private readonly IVideoService _videoService;
@@ -52,12 +44,12 @@ namespace Donde.Augmentor.Web.Controller
         [ODataRoute]
         [HttpPost]
         [DisableFormValueModelBinding]
-        [RequestSizeLimit(52428800)] // 50 mb
+        [RequestSizeLimit(83886080)] // 80 mb
         public async Task<IActionResult> Upload()
         {
             var organizationId = GetCurrentOrganizationIdOrThrow();
 
-            var fileUploadResult = await _fileProcessingService.UploadMediaAsync(Request, MediaTypes.Image);
+            var fileUploadResult = await _fileProcessingService.UploadMediaAsync(Request, MediaTypes.Video);
 
             if (fileUploadResult.IsFailure)
                 return StatusCode((int)HttpStatusCode.InternalServerError);

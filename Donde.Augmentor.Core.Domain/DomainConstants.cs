@@ -7,7 +7,7 @@ namespace Donde.Augmentor.Core.Domain
         public class DondeErrorMessages
         {
             public const string INVALID_IMAGE_FILE_TYPE = "INVALID_IMAGE_FILE_TYPE";
-            public const string INVALID_VIDEO_FILE_TYPE = "INVALID_IMAGE_FILE_TYPE";
+            public const string INVALID_VIDEO_FILE_TYPE = "INVALID_VIDEO_FILE_TYPE";
             public const string PROPERTY_EMPTY = "PROPERTY_EMPTY";
         }
 

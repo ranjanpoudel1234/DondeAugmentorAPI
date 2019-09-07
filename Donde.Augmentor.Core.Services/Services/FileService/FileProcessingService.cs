@@ -3,6 +3,7 @@ using CSharpFunctionalExtensions;
 using Donde.Augmentor.Core.Domain;
 using Donde.Augmentor.Core.Domain.Dto;
 using Donde.Augmentor.Core.Domain.Enum;
+using Donde.Augmentor.Core.Domain.Helpers;
 using Donde.Augmentor.Core.Domain.Validations;
 using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces;
 using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces.IFileService;
@@ -69,10 +70,9 @@ namespace Donde.Augmentor.Core.Services.Services.FileService
             {
                 var fileExtension = Path.GetExtension(_fileStreamContentReaderService.FileName);
 
-                var uniqueFileGuid = Guid.NewGuid();
+                var uniqueFileGuid = SequentialGuidGenerator.GenerateComb();
                 var uniqueFileName = Path.ChangeExtension(uniqueFileGuid.ToString(), fileExtension);
                 var localFilePath = await CreateFileLocallyAndReturnPathAsync(stream, uniqueFileName);
-                var remoteFilePath = $"{ _domainSettings.UploadSettings.ImageFolderName }/{ uniqueFileName}";
 
                 if (!string.IsNullOrWhiteSpace(localFilePath))
                 {
@@ -80,28 +80,29 @@ namespace Donde.Augmentor.Core.Services.Services.FileService
                     {
                         Id = uniqueFileGuid,
                         FileName = _fileStreamContentReaderService.FileName,
-                        FilePath = remoteFilePath,
                         MimeType = _fileStreamContentReaderService.MimeType
                     };
 
                     if (mediaType == MediaTypes.Image)
                     {
+                        attachmentDto.FilePath = $"{ _domainSettings.UploadSettings.ImageFolderName }/{ uniqueFileName}";
                         await _validator.ValidateOrThrowAsync(attachmentDto, ruleSets: $"{MediaAttachmentDtoValidator.DefaultRuleSet},{MediaAttachmentDtoValidator.ImageFileRuleSet}");
+
+                        if (!ResizeImage(localFilePath))
+                        {
+                            return Result.Fail<MediaAttachmentDto>("Could not resize file");
+                        }
                     }
                     else
                     {
-                        await _validator.ValidateOrThrowAsync(attachmentDto, ruleSets: $"{MediaAttachmentDtoValidator.DefaultRuleSet},{MediaAttachmentDtoValidator.VideoFileRuleSet}");
+                        attachmentDto.FilePath = $"{ _domainSettings.UploadSettings.VideosFolderName }/{ uniqueFileName}";
+                        await _validator.ValidateOrThrowAsync(attachmentDto, ruleSets: $"{MediaAttachmentDtoValidator.DefaultRuleSet},{MediaAttachmentDtoValidator.VideoFileRuleSet}");                      
+                        //todo potentially convert video here. May be move this to interface with implementation with handler so i dont have to do switch.
                     }
-
-                   
-                    if (!ResizeImage(localFilePath))
-                    {
-                        return Result.Fail<MediaAttachmentDto>("Could not resize file");
-                    }               
-
+                                
                     var uploadResult = await _storageService.UploadFileAsync
                         (_domainSettings.UploadSettings.BucketName,
-                        remoteFilePath, 
+                        attachmentDto.FilePath, 
                         localFilePath);
 
                     if (uploadResult.IsFailure)

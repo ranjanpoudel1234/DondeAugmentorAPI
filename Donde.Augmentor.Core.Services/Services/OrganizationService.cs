@@ -25,5 +25,11 @@ namespace Donde.Augmentor.Core.Services.Services
         {
             return _organizationRepository.GetOrganizations();
         }
+
+        public async Task<Organization> CreateOrganizationAsync(Organization entity)
+        {
+            //todo need to add fluent validation here.
+            return await _organizationRepository.CreateOrganizationAsync(entity);
+        }
     }
 }

@@ -62,7 +62,7 @@ namespace Donde.Augmentor.Web.Controller
 
         [ODataRoute]
         [HttpPost]
-        public async Task<IActionResult> Post(AugmentObjectViewModel augmentObjectViewModel)
+        public async Task<IActionResult> Post([FromBody] AugmentObjectViewModel augmentObjectViewModel)
         {
             var augmentObject = _mapper.Map<AugmentObject>(augmentObjectViewModel);
 
