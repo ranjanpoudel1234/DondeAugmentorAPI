@@ -1,4 +1,5 @@
-﻿using Donde.Augmentor.Core.Domain.Dto;
+﻿using Donde.Augmentor.Core.Domain;
+using Donde.Augmentor.Core.Domain.Dto;
 using Donde.Augmentor.Core.Domain.Models;
 using Donde.Augmentor.Core.Repositories.Interfaces.RepositoryInterfaces;
 using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces;
@@ -12,15 +13,47 @@ namespace Donde.Augmentor.Core.Services.Services
     public class AugmentObjectService : IAugmentObjectService
     {
         private IAugmentObjectRepository _augmentObjectRepository;
+        private DomainSettings _domainSettings;
 
-        public AugmentObjectService(IAugmentObjectRepository augmentObjectRepository)
+        public AugmentObjectService(IAugmentObjectRepository augmentObjectRepository, DomainSettings domainSettings)
         {
             _augmentObjectRepository = augmentObjectRepository;
+            _domainSettings = domainSettings;
         }
 
         public IQueryable<AugmentObjectDto> GetAugmentObjects()
         {
-           return _augmentObjectRepository.GetAugmentObjects();
+           var augmentObjects = _augmentObjectRepository.GetAugmentObjects().Select(augmentObject => new AugmentObjectDto
+           {
+               Id = augmentObject.Id,
+               AvatarId = augmentObject.AvatarId,
+               AudioId = augmentObject.AudioId,
+               VideoId = augmentObject.VideoId,
+               AugmentImageId = augmentObject.AugmentImageId,
+               Title = augmentObject.Title,
+               Description = augmentObject.Description,
+               Latitude = augmentObject.Latitude,
+               Longitude = augmentObject.Longitude,
+               OrganizationId = augmentObject.OrganizationId,
+               AddedDate = augmentObject.AddedDate,
+               UpdatedDate = augmentObject.UpdatedDate,
+               IsActive = augmentObject.IsActive,
+               ImageName = augmentObject.ImageName,
+               ImageUrl = GetPathWithRootLocationOrNull(augmentObject.ImageUrl),
+               AudioName = augmentObject.AudioName == null ? null : augmentObject.AudioName,
+               AudioUrl = GetPathWithRootLocationOrNull(augmentObject.AudioUrl),
+               VideoName = augmentObject.VideoName == null ? null : augmentObject.VideoName,
+               VideoUrl = GetPathWithRootLocationOrNull(augmentObject.VideoUrl)
+           });
+
+            return augmentObjects;
+        }
+
+        private string GetPathWithRootLocationOrNull(string url)
+        {
+            if (url == null) return null;
+
+            return $"{_domainSettings.GeneralSettings.StorageBasePath}{url}";
         }
 
         public async Task<AugmentObject> CreateAugmentObjectAsync(AugmentObject entity)

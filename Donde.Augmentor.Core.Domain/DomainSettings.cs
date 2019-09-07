@@ -5,6 +5,8 @@
         public UploadSettings UploadSettings { get; set; }
 
         public MediaSettings MediaSettings { get; set; }
+
+        public GeneralSettings GeneralSettings { get; set; }
     }
 
     public class UploadSettings
@@ -21,5 +23,10 @@
         public int ImageResizeWidth { get; set; }
         public int ImageResizeHeight { get; set; }
         public int ImageQuality { get; set; }
+    }
+
+    public class GeneralSettings
+    {
+        public string StorageBasePath { get; set; }
     }
 }
