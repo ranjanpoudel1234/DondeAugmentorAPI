@@ -7,3 +7,14 @@ iv) run vagrant provision, this should install docker.
 v) vagrant up, vagrant ssh
 vi) docker-compose pull
 vii) docker-compose up -d. You should have docker container.
+
+Deployment Notes
+# File Upload
+i) Make sure the instance gives permission to the App_Data folder for IIS. For now, we use ebExtensions folder's config file that automatically gives that permission to DefaultAppPool.
+ii) Add AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY to the environment variable. This has to be same as the profile that has access to s3. Might need to be extended for more permission in future.
+
+#RDP
+i) Make sure the ec2 instance has the inbound rule in the default security group to be your ip address.
+ii) Download the .pem file of the ec2 instance.
+iii) Run it from visual studio.
+

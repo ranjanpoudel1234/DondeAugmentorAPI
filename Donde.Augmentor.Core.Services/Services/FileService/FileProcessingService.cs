@@ -11,6 +11,7 @@ using FluentValidation;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Jpeg;
 using SixLabors.ImageSharp.PixelFormats;
@@ -36,14 +37,14 @@ namespace Donde.Augmentor.Core.Services.Services.FileService
             IFileStreamContentReaderService fileStreamContentReaderService,
             IStorageService storageService,
             DomainSettings domainSettings,
-            ILogger<FileProcessingService> logger,
+            ILoggerFactory loggerFactory,
             IValidator<MediaAttachmentDto> validator)
         {
             _hostingEnvironment = hostingEnvironment;
             _fileStreamContentReaderService = fileStreamContentReaderService;
             _storageService = storageService;
             _domainSettings = domainSettings;
-            _logger = logger;
+            _logger = loggerFactory.CreateLogger<FileProcessingService>();
             _validator = validator;
         }
 
@@ -66,6 +67,7 @@ namespace Donde.Augmentor.Core.Services.Services.FileService
 
         private async Task<Result<MediaAttachmentDto>> UploadFileAsync(MediaTypes mediaType)
         {
+            _logger.LogError("FileStreamReaderService {@FileStreamContentReaderService}", _fileStreamContentReaderService);
             using (var stream = _fileStreamContentReaderService.Stream)
             {
                 var fileExtension = Path.GetExtension(_fileStreamContentReaderService.FileName);
@@ -127,7 +129,7 @@ namespace Donde.Augmentor.Core.Services.Services.FileService
                 image.Mutate(x => x
                      .Resize(new ResizeOptions
                      {
-                         Size = new Size(_domainSettings.MediaSettings.ImageResizeHeight, _domainSettings.MediaSettings.ImageResizeWidth), //todo potentially make these configurable along with quality and size.
+                         Size = new Size(_domainSettings.MediaSettings.ImageResizeHeight, _domainSettings.MediaSettings.ImageResizeWidth),
                          Mode = ResizeMode.Stretch
                      })
 
@@ -145,7 +147,8 @@ namespace Donde.Augmentor.Core.Services.Services.FileService
         {
             var filePath = string.Empty;
             var contentRoot = _hostingEnvironment.ContentRootPath;
-            var uploadsPath = Path.Combine(contentRoot, _domainSettings.UploadSettings.ServerTempUploadFolderName);
+            var uploadsPath = Directory.GetCurrentDirectory();
+            Path.Combine(contentRoot, _domainSettings.UploadSettings.ServerTempUploadFolderName);
             var directoryExists = Directory.Exists(uploadsPath);
 
             if (!Directory.Exists(uploadsPath))
@@ -154,6 +157,8 @@ namespace Donde.Augmentor.Core.Services.Services.FileService
             }
 
             var path = Path.Combine(uploadsPath, Path.Combine(fileName));
+
+            _logger.LogError("CreateFileLocallyAndReturnPathAsync: Path {@path}", path);
 
             try
             {
@@ -176,6 +181,9 @@ namespace Donde.Augmentor.Core.Services.Services.FileService
             }
             catch (Exception ex)
             {
+
+                _logger.LogError("CreateFileLocallyAndReturnPathAsync: Exception {@Exception}", ex);
+                throw ex;
                 // todo throw some invalid exception here.
             }
 

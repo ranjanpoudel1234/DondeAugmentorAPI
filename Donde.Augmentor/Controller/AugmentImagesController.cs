@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -38,12 +39,12 @@ namespace Donde.Augmentor.Web.Controller
 
         public AugmentImagesController(IAugmentImageService augmentImageservice,
             IMapper mapper, IFileProcessingService fileProcessingService, 
-            ILogger<AugmentImagesController> logger,
+            ILoggerFactory loggerFactory,
             IHostingEnvironment env)
         {
             _augmentImageservice = augmentImageservice;
             _mapper = mapper;
-            _logger = logger;
+            _logger = loggerFactory.CreateLogger<AugmentImagesController>();
             _fileProcessingService = fileProcessingService;
 
         }
@@ -78,12 +79,15 @@ namespace Donde.Augmentor.Web.Controller
         public async Task<IActionResult> Upload()
         {
             var organizationId = GetCurrentOrganizationIdOrThrow();
-
+          
             var fileUploadResult = await _fileProcessingService.UploadMediaAsync(Request, MediaTypes.Image);
-
+         
             if (fileUploadResult.IsFailure)
+            {
+                _logger.LogError($"Error on file Upload {JsonConvert.SerializeObject(fileUploadResult)}");
                 return StatusCode((int)HttpStatusCode.InternalServerError);
-
+            }
+            
             var augmentImage = _mapper.Map<AugmentImage>(fileUploadResult.Value);
             augmentImage.OrganizationId = organizationId;
 

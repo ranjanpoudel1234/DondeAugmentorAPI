@@ -6,11 +6,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="ExceptionHandlers\**" />
+    <Content Remove="ExceptionHandlers\**" />
+    <EmbeddedResource Remove="ExceptionHandlers\**" />
+    <None Remove="ExceptionHandlers\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Page.xaml" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ExceptionHandlers\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
@@ -48,6 +54,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include=".ebextensions\Donde.Augmentor.Web.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
     <Page Include="Page.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -60,6 +72,12 @@
     <Content Update="nlog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="TempUploads\TextFile.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

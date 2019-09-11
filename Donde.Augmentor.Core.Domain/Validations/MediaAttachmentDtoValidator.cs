@@ -29,13 +29,13 @@ namespace Donde.Augmentor.Core.Domain.Validations
             bool BeValidImageFile(string filePath)
             {
                 var fileExtension = Path.GetExtension(filePath);
-                return DomainConstants.ValidMediaExtensions.VALID_IMAGE_EXTENSIONS.Contains(fileExtension);
+                return DomainConstants.ValidMediaExtensions.VALID_IMAGE_EXTENSIONS.Contains(fileExtension.ToLower());
             }
 
             bool BeValidVideoFile(string filePath)
             {
                 var fileExtension = Path.GetExtension(filePath);
-                return DomainConstants.ValidMediaExtensions.VALID_VIDEO_EXTENSIONS.Contains(fileExtension);
+                return DomainConstants.ValidMediaExtensions.VALID_VIDEO_EXTENSIONS.Contains(fileExtension.ToLower());
             }
         }
     }
