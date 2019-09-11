@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Donde.Augmentor.Core.Domain.Models;
 using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces;
 using Donde.Augmentor.Web.ViewModels;
 using Microsoft.AspNet.OData;
@@ -68,5 +69,17 @@ namespace Donde.Augmentor.Web.Controller
             return Ok(result);
         }
 
+        [ODataRoute]
+        [HttpPost]
+        public async Task<IActionResult> Post([FromBody] OrganizationViewModel augmentObjectViewModel)
+        {
+            var organization = _mapper.Map<Organization>(augmentObjectViewModel);
+
+            var result = await _organizationService.CreateOrganizationAsync(organization);
+
+            var organizationViewModel = _mapper.Map<OrganizationViewModel>(result);
+
+            return Ok(organizationViewModel);
+        }
     }
 }

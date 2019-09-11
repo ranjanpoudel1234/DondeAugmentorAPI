@@ -1,7 +1,10 @@
-﻿using Donde.Augmentor.Core.Domain.Models;
+﻿using Donde.Augmentor.Core.Domain.Dto;
+using Donde.Augmentor.Core.Domain.Models;
 using Donde.Augmentor.Core.Repositories.Interfaces.RepositoryInterfaces;
 using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces;
+using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Donde.Augmentor.Core.Services.Services
 {
@@ -17,6 +20,11 @@ namespace Donde.Augmentor.Core.Services.Services
         public IQueryable<AugmentImage> GetAugmentImages()
         {
             return _augmentImageRepository.GetAugmentImages();
+        }
+
+        public Task<AugmentImage> AddAugmentImageAsync(AugmentImage augmentImage)
+        {
+            return _augmentImageRepository.AddAugmentImageAsync(augmentImage);
         }
     }
 }

@@ -119,8 +119,7 @@ namespace Donde.Agumentor.Infrastructure.Test.Repositories
                 result.ShouldNotBeNull();
                 var updatedEntity = context.AugmentObjects.FirstOrDefault(x => x.Id == augmentObjectId);
 
-                updatedEntity.ShouldNotBeNull();
-                updatedEntity.UpdatedDate.ShouldBe(DateTime.Parse("2018/01/28"));
+                updatedEntity.ShouldNotBeNull();            
             }
         }
 

@@ -1,6 +1,9 @@
-﻿using Donde.Augmentor.Bootstrapper;
+﻿using Amazon.S3;
+using Donde.Augmentor.Bootstrapper;
+using Donde.Augmentor.Core.Domain;
 using Donde.Augmentor.Web.AwsEnvironmentConfiguration;
 using Donde.Augmentor.Web.Cors;
+using Donde.Augmentor.Web.Filters;
 using Donde.Augmentor.Web.OData;
 using Microsoft.AspNet.OData.Builder;
 using Microsoft.AspNetCore.Builder;
@@ -18,7 +21,6 @@ using SimpleInjector.Integration.AspNetCore.Mvc;
 using SimpleInjector.Lifestyles;
 using System.Reflection;
 
-
 namespace Donde.Augmentor.Web
 {
     public class Startup
@@ -33,6 +35,7 @@ namespace Donde.Augmentor.Web
         private IHostingEnvironment CurrentEnvironment { get; }
         private Container container = new Container();
         private AppSetting AppSettings { get; set; }
+        private DomainSettings DomainSettings { get; set; }
         private bool IsLocalEnvironment => CurrentEnvironment.EnvironmentName.Equals("Local") || CurrentEnvironment.EnvironmentName.Equals("Vagrant");
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -43,6 +46,7 @@ namespace Donde.Augmentor.Web
             services.AddOptions();
 
             AppSettings = Configuration.GetSection("Donde.Augmentor.Settings").Get<AppSetting>();
+            DomainSettings = Configuration.GetSection("Donde.Augmentor.DomainSettings").Get<DomainSettings>();
 
             services.ConfigureCorsPolicy(AppSettings.Host.CorsPolicy);
 
@@ -54,7 +58,14 @@ namespace Donde.Augmentor.Web
 
             services.AddDondeOData(Configuration);
 
-            services.AddMvc();
+            services.AddMvc(
+               config =>
+               {
+                   config.Filters.Add(typeof(DondeCustomExceptionFilter));
+               });
+
+            services.AddDefaultAWSOptions(Configuration.GetAWSOptions());
+            services.AddAWSService<IAmazonS3>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -97,7 +108,9 @@ namespace Donde.Augmentor.Web
         private void InitializeAndVerifyContainer(IApplicationBuilder app, ILoggerFactory loggerFactory)
         {
             // Add application presentation components:
-             container.RegisterMvcControllers(app);
+            container.RegisterMvcControllers(app);
+
+            container.Register(() => DomainSettings);
            
             DondeAugmentorBootstrapper.BootstrapDondeAugmentor
                 (container, 

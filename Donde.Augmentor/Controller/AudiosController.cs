@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
@@ -9,6 +11,11 @@ using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNet.OData.Routing;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using Amazon.S3;
+using Amazon.S3.Model;
+using Donde.Augmentor.Core.Domain.Models;
+using Donde.Augmentor.Core.Services.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
@@ -20,6 +27,7 @@ namespace Donde.Augmentor.Web.Controller
     public class AudiosController : ODataController
     {
         private readonly IAudioService _audioService;
+     //   private readonly IS3Service _s3Service;
         private readonly IMapper _mapper;
         private readonly ILogger<AudiosController> _logger;
 
@@ -28,6 +36,7 @@ namespace Donde.Augmentor.Web.Controller
             _audioService = audioService;
             _mapper = mapper;
             _logger = logger;
+           // _s3Service = s3Service;
         }
 
         [ODataRoute]
@@ -50,6 +59,20 @@ namespace Donde.Augmentor.Web.Controller
             }
 
             return Ok(result);
+        }
+
+
+        [ODataRoute]
+        [HttpPost("UploadSmallAudio")]
+        public async Task<Audio> UploadSmallAudio(IFormFile file)
+        {
+            string bucketName = "booketofpankaj1";
+            string bucketToReadFrom = "bucketofpankaj";
+          //  await _s3Service.GetObjectFromS3Async(bucketToReadFrom);
+            //var createBucketResponse = await _s3Service.CreateBucketAsync(bucketName);
+            //var uploadResponse = await _s3Service.UploadObjectAsync(file, bucketName);
+
+            return null;        
         }
     }
 }

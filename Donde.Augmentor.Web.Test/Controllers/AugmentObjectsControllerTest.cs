@@ -33,7 +33,7 @@ namespace Donde.Augmentor.Web.Test.Controllers
 
         private AugmentObjectsController GetDefaultAugmentObjectController(IAugmentObjectService augmentObjectService = null)
         {
-            return new AugmentObjectsController(augmentObjectService, A.Fake<IMapper>());
+            return new AugmentObjectsController(augmentObjectService ?? GetDefaultAugmentObjectService(), A.Fake<IMapper>());
         }
 
         private IAugmentObjectService GetDefaultAugmentObjectService()
