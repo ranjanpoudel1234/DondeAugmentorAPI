@@ -130,7 +130,7 @@ namespace Donde.Augmentor.Core.Services.Services.FileService
                      .Resize(new ResizeOptions
                      {
                          Size = new Size(_domainSettings.MediaSettings.ImageResizeHeight, _domainSettings.MediaSettings.ImageResizeWidth),
-                         Mode = ResizeMode.Stretch
+                         Mode = ResizeMode.Min
                      })
 
                      );
