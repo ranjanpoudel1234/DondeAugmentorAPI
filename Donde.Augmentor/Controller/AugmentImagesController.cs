@@ -75,7 +75,7 @@ namespace Donde.Augmentor.Web.Controller
         [ODataRoute]
         [HttpPost]
         [DisableFormValueModelBinding]
-        [RequestSizeLimit(52428800)] // 50 mb
+        [RequestSizeLimit(15728640)] // 15 mb
         public async Task<IActionResult> Upload()
         {
             var organizationId = GetCurrentOrganizationIdOrThrow();
