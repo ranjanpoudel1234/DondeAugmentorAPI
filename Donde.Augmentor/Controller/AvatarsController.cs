@@ -1,0 +1,54 @@
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces;
+using Donde.Augmentor.Web.ViewModels;
+using Microsoft.AspNet.OData;
+using Microsoft.AspNet.OData.Query;
+using Microsoft.AspNet.OData.Routing;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace Donde.Augmentor.Web.Controller
+{
+    [ApiVersion("1.0")]
+    [ODataRoutePrefix("avatars")]
+    public class AvatarsController : ODataController
+    {
+        private readonly IAvatarService _avatarService;
+        private readonly IMapper _mapper;
+        private readonly ILogger<AvatarsController> _logger;
+
+        public AvatarsController(IAvatarService avatarService, IMapper mapper, ILogger<AvatarsController> logger)
+        {
+            _avatarService = avatarService;
+            _mapper = mapper;
+            _logger = logger;
+        }
+
+        [ODataRoute]
+        [HttpGet]
+        public async Task<IActionResult> Get(ODataQueryOptions<AvatarViewModel> odataOptions)
+        {
+            var result = new List<AvatarViewModel>();
+
+            var avatarsQueryablee = _avatarService.GetAvatars();
+
+            var projectedAudios = avatarsQueryablee.ProjectTo<AvatarViewModel>(_mapper.ConfigurationProvider);
+
+            var appliedResults = odataOptions.ApplyTo(projectedAudios);
+
+            var audioViewModels = appliedResults as IQueryable<AvatarViewModel>;
+
+            if (audioViewModels != null)
+            {
+                result = await audioViewModels.ToListAsync();
+            }
+
+            return Ok(result);
+        }
+    }
+}

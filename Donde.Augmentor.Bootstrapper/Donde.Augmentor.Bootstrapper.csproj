@@ -10,6 +10,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Donde.Augmentor.Core.Repositories.Interfaces\Donde.Augmentor.Core.Repositories.Interfaces.csproj" />
+    <ProjectReference Include="..\Donde.Augmentor.Core.Services.Interfaces\Donde.Augmentor.Core.Service.Interfaces.csproj" />
     <ProjectReference Include="..\Donde.Augmentor.Core.Services\Donde.Augmentor.Core.Services.csproj" />
     <ProjectReference Include="..\Donde.Augmentor.Infrastructure\Donde.Augmentor.Infrastructure.csproj" />
   </ItemGroup>
