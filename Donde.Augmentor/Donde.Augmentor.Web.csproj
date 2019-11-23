@@ -5,6 +5,13 @@
    <PublishWithAspNetCoreTargetManifest>false</PublishWithAspNetCoreTargetManifest>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'Vagrant' ">
+    <StartAction>Project</StartAction>
+    <EnvironmentVariables>
+      <Variable name="ASPNETCORE_ENVIRONMENT" value="Vagrant" />
+    </EnvironmentVariables>
+    <ApplicationURL>https://localhost:5001;http://localhost:5000</ApplicationURL>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Remove="ExceptionHandlers\**" />
     <Content Remove="ExceptionHandlers\**" />
