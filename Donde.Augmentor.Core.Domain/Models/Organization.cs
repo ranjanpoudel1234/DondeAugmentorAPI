@@ -1,4 +1,5 @@
-﻿using Donde.Augmentor.Core.Domain.Interfaces;
+﻿using Donde.Augmentor.Core.Domain.Enum;
+using Donde.Augmentor.Core.Domain.Interfaces;
 using System;
 
 namespace Donde.Augmentor.Core.Domain.Models
@@ -15,5 +16,7 @@ namespace Donde.Augmentor.Core.Domain.Models
         public DateTime AddedDate { get; set; }
         public DateTime UpdatedDate { get; set; }
         public bool IsActive { get; set; }
+
+        public OrganizationType OrganizationType { get; set;}
     }
 }

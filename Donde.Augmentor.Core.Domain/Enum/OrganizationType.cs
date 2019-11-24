@@ -1,7 +1,10 @@
 namespace Donde.Augmentor.Core.Domain.Enum
 {
-    public class OrganizationType
+    public enum OrganizationType
     {
-        
+
+        University = 0,
+        Museam = 1
+
     }
 }
