@@ -1,4 +1,5 @@
-﻿using Donde.Augmentor.Infrastructure.Database;
+﻿
+using Donde.Augmentor.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Logging;
@@ -51,6 +52,7 @@ namespace Donde.Augmentor.Bootstrapper
 
             // get the data from databuilder and add to the context/database
             return dbContextOptions;
+
         }
 
         protected static Func<Assembly> GetInfrastructureInterfaceAssembly { get; } = () => Assembly.Load("Donde.Augmentor.Core.Repositories.Interfaces");

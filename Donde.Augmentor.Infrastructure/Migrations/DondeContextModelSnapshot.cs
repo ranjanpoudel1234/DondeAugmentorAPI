@@ -107,9 +107,18 @@ namespace Donde.Augmentor.Infrastructure.Migrations
                     b.Property<Guid?>("VideoId");
 
                     b.HasKey("Id");
+                    b.HasIndex("AudioId");	
+
+                    b.HasIndex("AugmentImageId");	
+
+                    b.HasIndex("AvatarId");
 
                     b.HasIndex("Id")
                         .IsUnique();
+
+                    b.HasIndex("OrganizationId");	
+
+                    b.HasIndex("VideoId");
 
                     b.ToTable("AugmentObjects");
                 });
@@ -243,6 +252,30 @@ namespace Donde.Augmentor.Infrastructure.Migrations
                         .WithMany()
                         .HasForeignKey("OrganizationId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+                      modelBuilder.Entity("Donde.Augmentor.Core.Domain.Models.AugmentObject", b =>	
+                {	
+                    b.HasOne("Donde.Augmentor.Core.Domain.Models.Audio", "Audio")	
+                        .WithMany()	
+                        .HasForeignKey("AudioId");	
+
+                    b.HasOne("Donde.Augmentor.Core.Domain.Models.AugmentImage", "AugmentImage")	
+                        .WithMany()	
+                        .HasForeignKey("AugmentImageId")	
+                        .OnDelete(DeleteBehavior.Cascade);	
+
+                    b.HasOne("Donde.Augmentor.Core.Domain.Models.Avatar", "Avatar")	
+                        .WithMany()	
+                        .HasForeignKey("AvatarId");	
+
+                    b.HasOne("Donde.Augmentor.Core.Domain.Models.Organization", "Organization")	
+                        .WithMany()	
+                        .HasForeignKey("OrganizationId")	
+                        .OnDelete(DeleteBehavior.Cascade);	
+
+                    b.HasOne("Donde.Augmentor.Core.Domain.Models.Video", "Video")	
+                        .WithMany()	
+                        .HasForeignKey("VideoId");	
                 });
 
             modelBuilder.Entity("Donde.Augmentor.Core.Domain.Models.Avatar", b =>
