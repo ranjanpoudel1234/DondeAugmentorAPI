@@ -16,7 +16,6 @@ namespace Donde.Augmentor.Web.ViewModels
         public DateTime AddedDate { get; set; }
         public DateTime UpdatedDate { get; set; }
         public bool IsActive { get; set; }
-
         public AugmentObjectMediaTypes MediaType { get; set; }
         public Guid? AvatarId { get; set; }
         public string AvatarName { get; set; }

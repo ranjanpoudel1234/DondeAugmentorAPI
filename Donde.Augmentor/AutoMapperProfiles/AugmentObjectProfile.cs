@@ -11,6 +11,7 @@ namespace Donde.Augmentor.Web.AutoMapperProfiles
         public AugmentObjectProfile()
         {
             CreateMap<AugmentObjectDto, AugmentObjectViewModel>();
+            CreateMap<GeographicalAugmentObjectDto, GeographicalAugmentObjectsViewModel>();
 
             CreateMap<AugmentObjectViewModel, AugmentObject>()
                 .ForMember(x => x.Id, opts => opts.MapFrom(src => SequentialGuidGenerator.GenerateComb()))
