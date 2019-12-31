@@ -33,7 +33,7 @@ namespace Donde.Augmentor.Web.Controller
         {
             var result = new List<AugmentObjectViewModel>();
 
-            var augmentObjectQueryable = _augmentObjectService.GetAugmentObjects();
+            var augmentObjectQueryable = _augmentObjectService.GetStaticAugmentObjects();
 
             var projectedAudios = augmentObjectQueryable.ProjectTo<AugmentObjectViewModel>(_mapper.ConfigurationProvider);
 
@@ -45,13 +45,13 @@ namespace Donde.Augmentor.Web.Controller
             {
                 result = await augmentObjectViewModels.ToListAsync();
             }
-
+             
             return Ok(result);
         }
 
         [HttpGet("api/v1/augmentObjectsGeocoded")]
        
-        public async Task<IActionResult> GetAugmentObject(double latitude, double longitude, int radiusInMeters)
+        public async Task<IActionResult> GetAugmentObjectGeocoded(double latitude, double longitude, int radiusInMeters)
         {
             var result = await _augmentObjectService.GetClosestAugmentObjectsByRadius(latitude, longitude, radiusInMeters);
 

@@ -21,29 +21,30 @@ namespace Donde.Augmentor.Core.Services.Services
             _domainSettings = domainSettings;
         }
 
-        public IQueryable<AugmentObjectDto> GetAugmentObjects()
+        public IQueryable<AugmentObjectDto> GetStaticAugmentObjects()
         {
-           var augmentObjects = _augmentObjectRepository.GetAugmentObjects().Select(augmentObject => new AugmentObjectDto
+           var augmentObjects = _augmentObjectRepository.GetStaticAugmentObjects().Select(augmentObject => new AugmentObjectDto
            {
                Id = augmentObject.Id,
-               //AvatarId = augmentObject.AvatarId,
-               //AudioId = augmentObject.AudioId,
-               //VideoId = augmentObject.VideoId,
                AugmentImageId = augmentObject.AugmentImageId,
                Title = augmentObject.Title,
                Description = augmentObject.Description,
-               //Latitude = augmentObject.Latitude,
-               //Longitude = augmentObject.Longitude,
                OrganizationId = augmentObject.OrganizationId,
                AddedDate = augmentObject.AddedDate,
                UpdatedDate = augmentObject.UpdatedDate,
                IsActive = augmentObject.IsActive,
-               ImageName = augmentObject.ImageName,
-               ImageUrl = GetPathWithRootLocationOrNull(augmentObject.ImageUrl),
+               MediaType = augmentObject.MediaType,
+               AvatarId = augmentObject.AvatarId,
+               AvatarName = augmentObject.AvatarName == null ? null : augmentObject.AvatarName,
+               AvatarUrl = GetPathWithRootLocationOrNull(augmentObject.AvatarUrl),
+               AudioId = augmentObject.AudioId,
                AudioName = augmentObject.AudioName == null ? null : augmentObject.AudioName,
                AudioUrl = GetPathWithRootLocationOrNull(augmentObject.AudioUrl),
+               VideoId = augmentObject.VideoId,
                VideoName = augmentObject.VideoName == null ? null : augmentObject.VideoName,
-               VideoUrl = GetPathWithRootLocationOrNull(augmentObject.VideoUrl)
+               VideoUrl = GetPathWithRootLocationOrNull(augmentObject.VideoUrl),
+               ImageName = augmentObject.ImageName,
+               ImageUrl = GetPathWithRootLocationOrNull(augmentObject.ImageUrl)         
            });
 
             return augmentObjects;
@@ -64,7 +65,7 @@ namespace Donde.Augmentor.Core.Services.Services
 
         public async Task<IEnumerable<AugmentObjectDto>> GetClosestAugmentObjectsByRadius(double latitude, double longitude, int radiusInMeters)
         {
-            return await _augmentObjectRepository.GetClosestAugmentObjectsByRadius(latitude, longitude, radiusInMeters);
+            return await _augmentObjectRepository.GetGeographicalAugmentObjectsByRadius(latitude, longitude, radiusInMeters);
         }
 
         public async Task<AugmentObject> UpdateAugmentObjectAsync(Guid id, AugmentObject entity)

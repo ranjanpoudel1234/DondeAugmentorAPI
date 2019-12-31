@@ -58,6 +58,10 @@ namespace Donde.Augmentor.Infrastructure.Database
             modelBuilder.Entity<AugmentObjectMedia>()
              .HasIndex(x => x.Id)
              .IsUnique();
+
+            modelBuilder.Entity<AugmentObjectMedia>()
+       .HasIndex(u => u.AugmentObjectId)
+       .IsUnique();
         }
 
         /// <summary>

@@ -18,14 +18,14 @@ namespace Donde.Augmentor.Web.AutoMapperProfiles
                 .ForMember(x => x.UpdatedDate, opts => opts.Ignore())
                 .ForMember(x => x.IsActive, opts => opts.Ignore());
 
-            CreateMap<AugmentObject, AugmentObjectViewModel>()
-                .ForMember(x => x.Distance, opts => opts.Ignore())
-                .ForMember(x => x.AudioName, opts => opts.Ignore())
-                .ForMember(x => x.AudioUrl, opts => opts.Ignore())
-                .ForMember(x => x.ImageName, opts => opts.Ignore())
-                .ForMember(x => x.ImageUrl, opts => opts.Ignore())
-                .ForMember(x => x.VideoName, opts => opts.Ignore())
-                .ForMember(x => x.VideoUrl, opts => opts.Ignore());
+            //CreateMap<AugmentObject, AugmentObjectViewModel>()
+            //    .ForMember(x => x.Distance, opts => opts.Ignore())
+            //    .ForMember(x => x.AudioName, opts => opts.Ignore())
+            //    .ForMember(x => x.AudioUrl, opts => opts.Ignore())
+            //    .ForMember(x => x.ImageName, opts => opts.Ignore())
+            //    .ForMember(x => x.ImageUrl, opts => opts.Ignore())
+            //    .ForMember(x => x.VideoName, opts => opts.Ignore())
+            //    .ForMember(x => x.VideoUrl, opts => opts.Ignore());
         }
     }
 }

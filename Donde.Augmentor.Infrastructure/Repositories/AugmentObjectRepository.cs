@@ -28,43 +28,51 @@ namespace Donde.Augmentor.Infrastructure.Repositories
             return await UpdateAsync(id, entity);
         }
 
-        public IQueryable<AugmentObjectDto> GetAugmentObjects()
+        public IQueryable<AugmentObjectDto> GetStaticAugmentObjects()
         {
             // todo potentially make a readModel out of this for faster and efficient load.
             // also might look into dapper for it too.
-            var augmentObjects = from augmentObject in _dbContext.AugmentObjects
+            //OR
+            //There is local warning on DefaultIfEmpty, hence we can load augmentObjects first with mediaType and Image, apply odata,
+            // then call audio and video based on the mediatype and load those properties afterwards.THIS WILL MAKE IT BETTER TOO IMO THEN HAVING TO DO ALL THOSE JOINGs
+            // BUT POST MVP
+            var augmentObjects = from augmentObject in _dbContext.AugmentObjects.Where(ao => ao.IsActive && ao.Type == Core.Domain.Enum.AugmentObjectTypes.Static)
+                                 join augmentObjectMedia in _dbContext.AugmentObjectMedias on augmentObject.Id equals augmentObjectMedia.AugmentObjectId
                                  join augmentImage in _dbContext.AugmentImages on augmentObject.AugmentImageId equals augmentImage.Id 
-                                // join audio in _dbContext.Audios on augmentObject.AudioId equals audio.Id into augmentObjectAudio
-                                // from audio in augmentObjectAudio.DefaultIfEmpty()
-                                 //join video in _dbContext.Videos on augmentObject.VideoId equals video.Id into augmentObjectVideo                          
-                                 //from video in augmentObjectVideo.DefaultIfEmpty()
+                                 join audio in _dbContext.Audios on augmentObjectMedia.AudioId equals audio.Id into augmentObjectAudio
+                                 from audio in augmentObjectAudio.DefaultIfEmpty()
+                                 join video in _dbContext.Videos on augmentObjectMedia.VideoId equals video.Id into augmentObjectVideo                          
+                                 from video in augmentObjectVideo.DefaultIfEmpty()
+                                 join avatar in _dbContext.Avatars on augmentObjectMedia.AvatarId equals avatar.Id into augmentObjectAvatar
+                                 from avatar in augmentObjectAvatar.DefaultIfEmpty()
                                  select new AugmentObjectDto()
                                  {
                                      Id = augmentObject.Id,
-                                     //AvatarId = augmentObject.AvatarId,
-                                     //AudioId = augmentObject.AudioId,
-                                     //VideoId = augmentObject.VideoId,
                                      AugmentImageId = augmentObject.AugmentImageId,
                                      Title = augmentObject.Title,
                                      Description = augmentObject.Description,
-                                     //Latitude = augmentObject.Latitude,
-                                     //Longitude = augmentObject.Longitude,
                                      OrganizationId = augmentObject.OrganizationId,
                                      AddedDate = augmentObject.AddedDate,
                                      UpdatedDate = augmentObject.UpdatedDate,
                                      IsActive = augmentObject.IsActive,
+                                     MediaType = augmentObjectMedia.MediaType,
                                      ImageName = augmentImage.Name,
                                      ImageUrl = augmentImage.Url,
-                                     //AudioName = audio == null ? null : audio.Name,
-                                     //AudioUrl = audio == null ? null : audio.Url,
-                                    // VideoName = video == null ? null : video.Name,
-                                     //VideoUrl = video == null ? null : video.Url
+                                     AvatarId = augmentObjectMedia.AvatarId,
+                                     AvatarName = avatar == null ? null: avatar.Name,
+                                     AvatarUrl = avatar == null? null: avatar.Url,
+                                     AudioId = augmentObjectMedia.AudioId,
+                                     AudioName = audio == null ? null : audio.Name,
+                                     AudioUrl = audio == null ? null : audio.Url,
+                                     VideoId = augmentObjectMedia.VideoId,
+                                     VideoName = video == null ? null : video.Name,
+                                     VideoUrl = video == null ? null : video.Url                                                                                          
                                  };
 
             return augmentObjects;
         }
 
-        public async Task<IEnumerable<AugmentObjectDto>> GetClosestAugmentObjectsByRadius(double latitude, double longitude, int radiusInMeters)
+        public async Task<IEnumerable<AugmentObjectDto>> GetGeographicalAugmentObjectsByRadius(double latitude, double longitude, int radiusInMeters)
         {
             string objectsByDistanceQuery = $@"with AugmentObjectWithDistance as 
 

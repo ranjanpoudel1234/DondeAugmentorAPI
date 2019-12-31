@@ -41,6 +41,11 @@ namespace Donde.Augmentor.Bootstrapper
                     .UseLoggerFactory(loggerFactory)
                     .ConfigureWarnings(warnings => warnings.Throw(RelationalEventId.QueryClientEvaluationWarning));
             }
+            else if(environmentName.Equals("Vagrant"))
+            {
+                dbContextOptions.UseNpgsql(connectionString, npgSqlBuilder => npgSqlBuilder.MigrationsAssembly(GetInfrastructureAssembly().FullName))
+                       .UseLoggerFactory(loggerFactory);
+            }
             else
             {
                 dbContextOptions.UseNpgsql(connectionString, npgSqlBuilder => npgSqlBuilder.MigrationsAssembly(GetInfrastructureAssembly().FullName));
