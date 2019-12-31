@@ -24,13 +24,9 @@ namespace Donde.Augmentor.Core.Domain.DataBuilder
         {
             return new AugmentObject
             {
-                Id = id ?? SequentialGuidGenerator.GenerateComb(),
-                AvatarId = avatarId ?? SequentialGuidGenerator.GenerateComb(),
-                AudioId = audioId ?? SequentialGuidGenerator.GenerateComb(),
+                Id = id ?? SequentialGuidGenerator.GenerateComb(),           
                 AugmentImageId = augmentImageId ?? SequentialGuidGenerator.GenerateComb(),
                 Description = description ?? "Test Description",
-                Latitude = latitude ?? 30.65456,
-                Longitude = longitude ?? 45.2445
             };
         }
     }

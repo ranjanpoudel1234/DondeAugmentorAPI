@@ -1,4 +1,5 @@
-﻿using Donde.Augmentor.Core.Domain.Interfaces;
+﻿using Donde.Augmentor.Core.Domain.Enum;
+using Donde.Augmentor.Core.Domain.Interfaces;
 using System;
 
 namespace Donde.Augmentor.Core.Domain.Models
@@ -10,7 +11,9 @@ namespace Donde.Augmentor.Core.Domain.Models
         public double Latitude { get; set; }
         public double Longitude { get; set; }
         public string Code { get; set; }
+        public string Address { get; set; }
         public string EmailAddress { get; set; }
+        public OrganizationTypes Type { get; set; }
 
         public DateTime AddedDate { get; set; }
         public DateTime UpdatedDate { get; set; }

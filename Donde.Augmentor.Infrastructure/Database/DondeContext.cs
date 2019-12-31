@@ -21,6 +21,8 @@ namespace Donde.Augmentor.Infrastructure.Database
         public DbSet<Video> Videos { get; set; }
         public DbSet<AugmentImage> AugmentImages { get; set; }
         public DbSet<AugmentObject> AugmentObjects { get; set; }
+        public DbSet<AugmentObjectMedia> AugmentObjectMedias { get; set; }
+        public DbSet<AugmentObjectLocation> AugmentObjectLocations { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -52,6 +54,10 @@ namespace Donde.Augmentor.Infrastructure.Database
             modelBuilder.Entity<AugmentObject>()
                .HasIndex(x => x.Id)
                .IsUnique();
+
+            modelBuilder.Entity<AugmentObjectMedia>()
+             .HasIndex(x => x.Id)
+             .IsUnique();
         }
 
         /// <summary>
@@ -62,7 +68,7 @@ namespace Donde.Augmentor.Infrastructure.Database
 		/// <param name="optionsBuilder"></param>
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (!optionsBuilder.IsConfigured) optionsBuilder.UseNpgsql(@"Server=localhost;Port=5432;Database=Donde_Augmentor;Username=postgres;Password=postgres");
+            if (!optionsBuilder.IsConfigured) optionsBuilder.UseNpgsql(@"Server=localhost;Port=5432;Database=Donde_Augmentor;Username=donde_postgress;Password=D0ND3p0stgr3s");
         }
     }
 }
