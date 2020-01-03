@@ -1,6 +1,7 @@
 ﻿using Donde.Augmentor.Core.Domain.Enum;
 using Donde.Augmentor.Core.Domain.Interfaces;
 using System;
+using System.Collections.Generic;
 
 namespace Donde.Augmentor.Core.Domain.Models
 {
@@ -21,5 +22,7 @@ namespace Donde.Augmentor.Core.Domain.Models
 
         public AugmentImage AugmentImage { get; set; }
         public Organization Organization { get; set; }
+        public ICollection<AugmentObjectMedia> AugmentObjectMedias { get; set; } = new List<AugmentObjectMedia>();
+        public ICollection<AugmentObjectLocation> AugmentObjectLocations { get; set; } = new List<AugmentObjectLocation>();
     }
 }

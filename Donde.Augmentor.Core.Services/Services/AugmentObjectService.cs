@@ -21,9 +21,9 @@ namespace Donde.Augmentor.Core.Services.Services
             _domainSettings = domainSettings;
         }
 
-        public IQueryable<AugmentObjectDto> GetStaticAugmentObjects()
+        public IQueryable<AugmentObjectDto> GetAugmentObjects()
         {
-           var augmentObjects = _augmentObjectRepository.GetStaticAugmentObjects().Select(augmentObject => new AugmentObjectDto
+           var augmentObjects = _augmentObjectRepository.GetAugmentObjects().Select(augmentObject => new AugmentObjectDto
            {
                Id = augmentObject.Id,
                AugmentImageId = augmentObject.AugmentImageId,

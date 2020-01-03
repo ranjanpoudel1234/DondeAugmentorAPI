@@ -29,7 +29,7 @@ namespace Donde.Augmentor.Infrastructure.Repositories
             return await UpdateAsync(id, entity);
         }
 
-        public IQueryable<AugmentObjectDto> GetStaticAugmentObjects()
+        public IQueryable<AugmentObjectDto> GetAugmentObjects()
         {
             // todo potentially make a readModel out of this for faster and efficient load.
             // also might look into dapper for it too.
@@ -37,7 +37,7 @@ namespace Donde.Augmentor.Infrastructure.Repositories
             //There is local warning on DefaultIfEmpty, hence we can load augmentObjects first with mediaType and Image, apply odata,
             // then call audio and video based on the mediatype and load those properties afterwards.THIS WILL MAKE IT BETTER TOO IMO THEN HAVING TO DO ALL THOSE JOINGs
             // BUT POST MVP
-            var augmentObjects = from augmentObject in _dbContext.AugmentObjects.Where(ao => ao.IsActive && ao.Type == Core.Domain.Enum.AugmentObjectTypes.Static)
+            var augmentObjects = from augmentObject in _dbContext.AugmentObjects
                                  join augmentObjectMedia in _dbContext.AugmentObjectMedias on augmentObject.Id equals augmentObjectMedia.AugmentObjectId
                                  join augmentImage in _dbContext.AugmentImages on augmentObject.AugmentImageId equals augmentImage.Id 
                                  join audio in _dbContext.Audios on augmentObjectMedia.AudioId equals audio.Id into augmentObjectAudio
