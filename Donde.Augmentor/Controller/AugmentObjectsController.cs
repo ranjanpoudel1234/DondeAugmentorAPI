@@ -87,7 +87,7 @@ namespace Donde.Augmentor.Web.Controller
             if(augmentObjectLocations != null)
             {
                 augmentObjectLocations.ForEach(x => x.AugmentObjectId = augmentObjectId);
-                augmentObject.AugmentObjectLocations.ToList().AddRange(augmentObjectLocations);
+                augmentObject.AugmentObjectLocations.AddRange(augmentObjectLocations);
             }
            
             var result = await _augmentObjectService.CreateAugmentObjectAsync(augmentObject);
