@@ -4,9 +4,8 @@ using Newtonsoft.Json.Converters;
 namespace Donde.Augmentor.Core.Domain.Enum
 {
     [JsonConverter(typeof(StringEnumConverter))]
-    public enum MediaTypes
+    public enum OrganizationTypes
     {
-        Image = 0,
-        Video = 1
+        University = 0
     }
 }

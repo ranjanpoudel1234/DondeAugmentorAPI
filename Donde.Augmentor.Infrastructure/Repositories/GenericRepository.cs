@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Donde.Augmentor.Core.Domain.Interfaces;
 using Donde.Augmentor.Core.Repositories.Interfaces.RepositoryInterfaces;
@@ -45,6 +48,8 @@ namespace Donde.Augmentor.Infrastructure.Repositories
             entity.IsActive = true;
             entity.AddedDate = DateTime.UtcNow;
 
+            SetAuditPropertiesOnChildCollectionsOrThrow(entity);
+
             await _dbContext.Set<TEntity>().AddAsync(entity);
             await _dbContext.SaveChangesAsync();
 
@@ -63,6 +68,41 @@ namespace Donde.Augmentor.Infrastructure.Repositories
             }
 
             _dbContext.Entry(entity).State = EntityState.Modified;
+        }
+
+        private TEntity SetAuditPropertiesOnChildCollectionsOrThrow<TEntity>(TEntity entity) where TEntity : class, IDondeModel, IAuditFieldsModel
+        {
+            var nestedCollectionsPropertyInfo = GetNestedCollectionsPropertyInfo(entity);
+
+            foreach (var collectionPropertyInfo in nestedCollectionsPropertyInfo)
+            {
+                var childObjects = collectionPropertyInfo.GetValue(entity, null);
+                if (childObjects != null)
+                {
+                    var childObjectsCasted = childObjects as IEnumerable<IAuditFieldsModel>;
+                    if (childObjectsCasted == null)
+                    {
+                        throw new InvalidOperationException("Child collections property type must implement IDondeModelModel interface");
+                    }
+
+                    foreach (var eachChild in childObjectsCasted)
+                    {
+                        eachChild.IsActive = true;
+                        eachChild.AddedDate = DateTime.UtcNow;                
+                    }
+                }
+            }
+            return entity;
+        }
+
+        private IEnumerable<PropertyInfo> GetNestedCollectionsPropertyInfo(object entity)
+        {
+            var nestedCollectionsPropertyInfo = entity.GetType()
+                .GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                .Where(x =>
+                    x.PropertyType.IsGenericType && x.PropertyType.GetGenericTypeDefinition().GetInterfaces().Contains(typeof(IEnumerable)));
+
+            return nestedCollectionsPropertyInfo;
         }
     }
 }

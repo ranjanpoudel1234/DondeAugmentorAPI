@@ -25,9 +25,6 @@ namespace Donde.Augmentor.Web.Filters
                 case HttpNotFoundException _:
                     context.Result = ProcessException(context, HttpStatusCode.NotFound, ErrorMessages.ObjectNotFound);
                     break;
-                case NullReferenceException _:
-                    context.Result = ProcessException(context, HttpStatusCode.NotFound, ErrorMessages.ObjectNotFound);
-                    break;
                 case UnauthorizedAccessException _:
                     context.Result = ProcessException(context, HttpStatusCode.Unauthorized);
                     break;

@@ -17,6 +17,5 @@ namespace Donde.Augmentor.Core.Domain.Models
         public DateTime AddedDate { get; set; }
         public DateTime UpdatedDate { get; set; }
         public bool IsActive { get; set; }
-
     }
 }
