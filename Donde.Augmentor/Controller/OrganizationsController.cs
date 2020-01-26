@@ -71,15 +71,15 @@ namespace Donde.Augmentor.Web.Controller
 
         [ODataRoute]
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] OrganizationViewModel augmentObjectViewModel)
+        public async Task<IActionResult> Post([FromBody] OrganizationViewModel organizationViewModel)
         {
-            var organization = _mapper.Map<Organization>(augmentObjectViewModel);
+            var organization = _mapper.Map<Organization>(organizationViewModel);
 
             var result = await _organizationService.CreateOrganizationAsync(organization);
 
-            var organizationViewModel = _mapper.Map<OrganizationViewModel>(result);
+            var organizationViewModelResult = _mapper.Map<OrganizationViewModel>(result);
 
-            return Ok(organizationViewModel);
+            return Ok(organizationViewModelResult);
         }
     }
 }

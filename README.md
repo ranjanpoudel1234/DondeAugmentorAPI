@@ -18,3 +18,7 @@ i) Make sure the ec2 instance has the inbound rule in the default security group
 ii) Download the .pem file of the ec2 instance.
 iii) Run it from visual studio.
 
+#First Time Environmen
+i) When we create new environment or we deploy for the first time, remove the contents of ebExtensions file(otherwise it will error) and deploy.
+ii) After that, deploy again with ebExtensions not commented, this time it will give the right permissions.
+

@@ -3,15 +3,17 @@ using System;
 using Donde.Augmentor.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Donde.Augmentor.Infrastructure.Migrations
 {
     [DbContext(typeof(DondeContext))]
-    partial class DondeContextModelSnapshot : ModelSnapshot
+    [Migration("20191231163213_RevampAugmentObjectLocationAndMediaMapping")]
+    partial class RevampAugmentObjectLocationAndMediaMapping
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -159,8 +161,7 @@ namespace Donde.Augmentor.Infrastructure.Migrations
 
                     b.HasIndex("AudioId");
 
-                    b.HasIndex("AugmentObjectId")
-                        .IsUnique();
+                    b.HasIndex("AugmentObjectId");
 
                     b.HasIndex("AvatarId");
 
@@ -217,12 +218,6 @@ namespace Donde.Augmentor.Infrastructure.Migrations
                     b.Property<bool>("IsActive");
 
                     b.Property<double>("Latitude");
-
-                    b.Property<string>("LogoMimeType");
-
-                    b.Property<string>("LogoName");
-
-                    b.Property<string>("LogoUrl");
 
                     b.Property<double>("Longitude");
 
@@ -327,7 +322,7 @@ namespace Donde.Augmentor.Infrastructure.Migrations
             modelBuilder.Entity("Donde.Augmentor.Core.Domain.Models.AugmentObjectLocation", b =>
                 {
                     b.HasOne("Donde.Augmentor.Core.Domain.Models.AugmentObject", "AugmentObject")
-                        .WithMany("AugmentObjectLocations")
+                        .WithMany()
                         .HasForeignKey("AugmentObjectId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
@@ -339,7 +334,7 @@ namespace Donde.Augmentor.Infrastructure.Migrations
                         .HasForeignKey("AudioId");
 
                     b.HasOne("Donde.Augmentor.Core.Domain.Models.AugmentObject", "AugmentObject")
-                        .WithMany("AugmentObjectMedias")
+                        .WithMany()
                         .HasForeignKey("AugmentObjectId")
                         .OnDelete(DeleteBehavior.Cascade);
 
