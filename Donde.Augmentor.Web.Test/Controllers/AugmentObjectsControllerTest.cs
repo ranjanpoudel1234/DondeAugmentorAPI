@@ -8,6 +8,7 @@ using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
+using System;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -22,7 +23,7 @@ namespace Donde.Augmentor.Web.Test.Controllers
         {
             var augmentObjectController = GetDefaultAugmentObjectController();
 
-            var result = await augmentObjectController.GetAugmentObjectGeocoded(A.Dummy<double>(), A.Dummy<double>(), A.Dummy<int>());
+            var result = await augmentObjectController.GetAugmentObjectGeocoded(A.Dummy<Guid>(), A.Dummy<double>(), A.Dummy<double>(), A.Dummy<int>());
 
             var okResult = result as OkObjectResult;
 
@@ -39,8 +40,8 @@ namespace Donde.Augmentor.Web.Test.Controllers
         private IAugmentObjectService GetDefaultAugmentObjectService()
         {
             var fakeService = A.Fake<IAugmentObjectService>();
-            A.CallTo(() => fakeService.GetClosestAugmentObjectsByRadius(A<double>._, A<double>._, A<int>._))
-                .Returns(Task.FromResult(A.CollectionOfDummy<AugmentObjectDto>(10).AsEnumerable()));
+            A.CallTo(() => fakeService.GetGeographicalAugmentObjectsByRadius(A<Guid>._, A<double>._, A<double>._, A<int>._))
+                .Returns(Task.FromResult(A.CollectionOfDummy<GeographicalAugmentObjectDto>(10).AsEnumerable()));
 
             return fakeService;
         }
