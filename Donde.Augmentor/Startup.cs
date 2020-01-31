@@ -20,6 +20,10 @@ using SimpleInjector;
 using SimpleInjector.Integration.AspNetCore.Mvc;
 using SimpleInjector.Lifestyles;
 using System.Reflection;
+using Donde.Augmentor.Core.Domain.Models.Identity;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace Donde.Augmentor.Web
 {
@@ -66,6 +70,14 @@ namespace Donde.Augmentor.Web
 
             services.AddDefaultAWSOptions(Configuration.GetAWSOptions());
             services.AddAWSService<IAmazonS3>();
+
+            var connectionString = GetConnectionString();
+            services.AddDbContext<IdentityDbContext>(options => options.UseNpgsql(connectionString,
+                npgSqlBuilder =>
+                    npgSqlBuilder.MigrationsAssembly(Assembly.Load("Donde.Augmentor.Infrastructure").FullName)));
+
+            services.AddIdentity<User, IdentityRole>()
+                .AddEntityFrameworkStores<IdentityDbContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -78,6 +90,8 @@ namespace Donde.Augmentor.Web
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseAuthentication();
 
             app.UseMvc();
 
