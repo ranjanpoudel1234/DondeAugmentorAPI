@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace Donde.Augmentor.Infrastructure.Identity.Database
+namespace Donde.Augmentor.Infrastructure.Database.Identity
 {
-    class DondeIdentityContext : IdentityDbContext<User>
+    public class DondeIdentityContext : IdentityDbContext<User>
     {
         public DondeIdentityContext(DbContextOptions<DondeIdentityContext> options) : base(options)
         {

@@ -71,13 +71,38 @@ namespace Donde.Augmentor.Web
             services.AddDefaultAWSOptions(Configuration.GetAWSOptions());
             services.AddAWSService<IAmazonS3>();
 
-            var connectionString = GetConnectionString();
-            services.AddDbContext<IdentityDbContext>(options => options.UseNpgsql(connectionString,
-                npgSqlBuilder =>
-                    npgSqlBuilder.MigrationsAssembly(Assembly.Load("Donde.Augmentor.Infrastructure").FullName)));
-
             services.AddIdentity<User, IdentityRole>()
                 .AddEntityFrameworkStores<IdentityDbContext>();
+
+            //var builder = services.AddIdentityServer()
+            //  // this adds the operational data from DB (codes, tokens, consents)
+            //  .AddOperationalStore(options =>
+            //  {
+            //      options.ConfigureDbContext = ConfigureDatabase;
+            //      // this enables automatic token cleanup. this is optional.
+            //      options.EnableTokenCleanup = true;
+            //      options.TokenCleanupInterval = 30; // interval in seconds
+            //  })
+            //  //.AddInMemoryPersistedGrants()
+            //  .AddInMemoryIdentityResources(Config.GetIdentityResources())
+            //  .AddInMemoryApiResources(Config.GetApiResources())
+            //  .AddInMemoryClients(Config.GetClients(Configuration.GetValue("AppSettings:Address", "")))
+            //  .AddAspNetIdentity<AppUser>();
+
+            //if (Environment.IsDevelopment())
+            //{
+            //    builder.AddDeveloperSigningCredential();
+            //}
+            //else
+            //{
+            //    throw new Exception("need to configure key material");
+            //}
+
+            //services.ConfigureApplicationCookie((obj) =>
+            //{
+            //    obj.LoginPath = "/Accounts/Login";
+            //    obj.LogoutPath = "/Accounts/Logout";
+            //});
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -101,7 +126,7 @@ namespace Donde.Augmentor.Web
 
             AddNLog(loggerFactory);
 
-            app.UseSpokenPastCorsPolicy();
+            app.UseDondeCorsPolicy();
         }
 
         private void IntegrateSimpleInjector(IServiceCollection services)
