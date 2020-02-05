@@ -24,6 +24,9 @@ using Donde.Augmentor.Core.Domain.Models.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System;
+using Donde.Augmentor.Infrastructure.Database.Identity;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace Donde.Augmentor.Web
 {
@@ -71,38 +74,36 @@ namespace Donde.Augmentor.Web
             services.AddDefaultAWSOptions(Configuration.GetAWSOptions());
             services.AddAWSService<IAmazonS3>();
 
+
+            //necessary here otherwise the Account controller will give registration issue on userStore
+            services.AddDbContext<DondeIdentityContext>(options =>
+             options.UseNpgsql(GetConnectionString())
+                    .ConfigureWarnings(warnings => warnings.Throw(RelationalEventId.QueryClientEvaluationWarning)));
+
             services.AddIdentity<User, IdentityRole>()
-                .AddEntityFrameworkStores<IdentityDbContext>();
+                .AddEntityFrameworkStores<DondeIdentityContext>();
 
-            //var builder = services.AddIdentityServer()
-            //  // this adds the operational data from DB (codes, tokens, consents)
-            //  .AddOperationalStore(options =>
-            //  {
-            //      options.ConfigureDbContext = ConfigureDatabase;
-            //      // this enables automatic token cleanup. this is optional.
-            //      options.EnableTokenCleanup = true;
-            //      options.TokenCleanupInterval = 30; // interval in seconds
-            //  })
-            //  //.AddInMemoryPersistedGrants()
-            //  .AddInMemoryIdentityResources(Config.GetIdentityResources())
-            //  .AddInMemoryApiResources(Config.GetApiResources())
-            //  .AddInMemoryClients(Config.GetClients(Configuration.GetValue("AppSettings:Address", "")))
-            //  .AddAspNetIdentity<AppUser>();
+            //identityServer code
+            var builder = services.AddIdentityServer()
+              .AddInMemoryIdentityResources(Config.GetIdentityResources())
+              .AddInMemoryApiResources(Config.GetApiResources())
+              .AddInMemoryClients(Config.GetClients(Configuration.GetValue("AppSettings:Address", "")))
+              .AddAspNetIdentity<User>();
 
-            //if (Environment.IsDevelopment())
-            //{
-            //    builder.AddDeveloperSigningCredential();
-            //}
-            //else
-            //{
-            //    throw new Exception("need to configure key material");
-            //}
-
-            //services.ConfigureApplicationCookie((obj) =>
-            //{
-            //    obj.LoginPath = "/Accounts/Login";
-            //    obj.LogoutPath = "/Accounts/Logout";
-            //});
+            if (IsLocalEnvironment)
+            {
+                builder.AddDeveloperSigningCredential();
+            }
+            else
+            {
+                throw new Exception("need to configure key material");
+            }
+     
+            services.ConfigureApplicationCookie((obj) =>
+            {
+                obj.LoginPath = "/Accounts/Login";
+                obj.LogoutPath = "/Accounts/Logout";
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -110,13 +111,15 @@ namespace Donde.Augmentor.Web
             IHostingEnvironment env,
             VersionedODataModelBuilder modelBuilder,
             ILoggerFactory loggerFactory)
-        {        
+        {
+            app.UseAuthentication();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseAuthentication();
+            app.UseIdentityServer();
 
             app.UseMvc();
 

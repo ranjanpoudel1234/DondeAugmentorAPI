@@ -13,7 +13,7 @@ namespace Donde.Augmentor.Web.OData.ModelConfiguration
 
         private EntityTypeConfiguration<AccountViewModel> ConfigureCurrent(ODataModelBuilder builder)
         {
-            var account = builder.EntitySet<AccountViewModel>("augmentImages").EntityType;
+            var account = builder.EntitySet<AccountViewModel>("accounts").EntityType;
             return account;
         }
 
