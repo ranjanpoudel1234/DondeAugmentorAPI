@@ -20,13 +20,15 @@ using SimpleInjector;
 using SimpleInjector.Integration.AspNetCore.Mvc;
 using SimpleInjector.Lifestyles;
 using System.Reflection;
-using Donde.Augmentor.Core.Domain.Models.Identity;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using Donde.Augmentor.Infrastructure.Database.Identity;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using Donde.Augmentor.Web.Identity;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Threading.Tasks;
+using IdentityServer4.AccessTokenValidation;
 
 namespace Donde.Augmentor.Web
 {
@@ -49,6 +51,26 @@ namespace Donde.Augmentor.Web
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            //necessary here otherwise the Account controller will give registration issue on userStore
+            services.AddDbContext<DondeIdentityContext>(options =>
+             options.UseNpgsql(GetConnectionString())
+                    .ConfigureWarnings(warnings => warnings.Throw(RelationalEventId.QueryClientEvaluationWarning)));
+
+            services.AddDondeIdentityServer(IsLocalEnvironment);
+
+            services.AddAuthorization();
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = IdentityServerAuthenticationDefaults.AuthenticationScheme; // straight 401
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme; // causes 401 instead of 404 and redirect
+            })
+               .AddIdentityServerAuthentication(options =>
+               {              
+                   options.Authority = "http://localhost:5000";
+                   options.RequireHttpsMetadata = false;
+                   options.ApiName = "donde-api";
+               });
+
             IntegrateSimpleInjector(services);
             services.AddOptions();
 
@@ -74,36 +96,6 @@ namespace Donde.Augmentor.Web
             services.AddDefaultAWSOptions(Configuration.GetAWSOptions());
             services.AddAWSService<IAmazonS3>();
 
-
-            //necessary here otherwise the Account controller will give registration issue on userStore
-            services.AddDbContext<DondeIdentityContext>(options =>
-             options.UseNpgsql(GetConnectionString())
-                    .ConfigureWarnings(warnings => warnings.Throw(RelationalEventId.QueryClientEvaluationWarning)));
-
-            services.AddIdentity<User, IdentityRole>()
-                .AddEntityFrameworkStores<DondeIdentityContext>();
-
-            //identityServer code
-            var builder = services.AddIdentityServer()
-              .AddInMemoryIdentityResources(Config.GetIdentityResources())
-              .AddInMemoryApiResources(Config.GetApiResources())
-              .AddInMemoryClients(Config.GetClients(Configuration.GetValue("AppSettings:Address", "")))
-              .AddAspNetIdentity<User>();
-
-            if (IsLocalEnvironment)
-            {
-                builder.AddDeveloperSigningCredential();
-            }
-            else
-            {
-                throw new Exception("need to configure key material");
-            }
-     
-            services.ConfigureApplicationCookie((obj) =>
-            {
-                obj.LoginPath = "/Accounts/Login";
-                obj.LogoutPath = "/Accounts/Logout";
-            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -206,6 +198,7 @@ namespace Donde.Augmentor.Web
                     logLevelsToDisable.ForEach(level => rule.DisableLoggingForLevel(level));
                 }
             }
+ 
             LogManager.ReconfigExistingLoggers();
         }
     }

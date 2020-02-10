@@ -80,7 +80,7 @@ namespace Donde.Augmentor.Web
             {
                 //this is important to set, because MS sets it to information when you add custom logging on top of it.
                 //we allow this here and override by using nlog.config level.
-                logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
+                logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Information);
             })
             .Build();
         }    

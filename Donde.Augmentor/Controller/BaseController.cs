@@ -1,9 +1,11 @@
 ﻿using Donde.Augmentor.Core.Domain.CustomExceptions;
 using Microsoft.AspNet.OData;
+using Microsoft.AspNetCore.Authorization;
 using System;
 
 namespace Donde.Augmentor.Web.Controller
 {
+
     public class BaseController : ODataController
     {
         private const string DONDE_AUGMENTOR_ORGANIZATION_ID = "DONDE-AUGMENTOR-ORGANIZATION-ID";

@@ -12,9 +12,9 @@ namespace Donde.Augmentor.Web
         {
             return new List<IdentityResource>
             {
-                new IdentityResources.OpenId(),
-                new IdentityResources.Email(),
-                new IdentityResources.Profile(),
+                new IdentityResources.OpenId(), //enables identity part
+                new IdentityResources.Email(), // tokenservice exposes email resource.
+                new IdentityResources.Profile(), //claims like name, birthdate
             };
         }
 
@@ -22,43 +22,44 @@ namespace Donde.Augmentor.Web
         {
             return new List<ApiResource>
             {
-                new ApiResource("resourceapi", "Resource API")
+                new ApiResource("donde-api", "Donde API")
                 {
-                    Scopes = {new Scope("api.read")}
+                    Scopes = {new Scope("donde-api-read"), new Scope("donde-api-write")}
                 }
             };
         }
 
         public static IEnumerable<Client> GetClients(string devHost = "")
         {
-            return new[]
+            var clients = new[]
             {
                 new Client {
                     RequireConsent = false,
-                    ClientId = "js_test_client",
-                    ClientName = "Javascript Test Client",
-                    AllowedGrantTypes = GrantTypes.Code,
-                    RequirePkce = true,
-                    RequireClientSecret = false,
-                    AllowedScopes = { "openid", "profile", "email", "api.read" },
-                    RedirectUris = {$"http://{devHost}/test-client/callback.html"}, // test client runs on same host
-                    AllowedCorsOrigins = {$"http://{devHost}" }, // test client runs on same host
-                    AccessTokenLifetime = (int)TimeSpan.FromMinutes(120).TotalSeconds
+                    ClientId = "AugmentUWeb",
+                    AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
+                      ClientSecrets =
+                     {
+                         new Secret("secret".Sha256())
+                     },
+                    AllowedScopes = { "openid", "profile", "email", "donde-api-read" },
+                   // RedirectUris = {$"http://{devHost}/test-client/callback.html"}, // test client runs on same host
+                   // AllowedCorsOrigins = {$"http://{devHost}" }, // test client runs on same host
+                   // AccessTokenLifetime = (int)TimeSpan.FromMinutes(120).TotalSeconds
                 },
                  new Client {
                     RequireConsent = false,
-                    ClientId = "angular_spa",
-                    ClientName = "Angular Client",
-                    AllowedGrantTypes = GrantTypes.Code,
-                    RequirePkce = true,
-                    RequireClientSecret = false,
-                    AllowedScopes = { "openid", "profile", "email", "api.read" },
-                    RedirectUris = {"http://localhost:4200/auth-callback"}, // test client runs on same host,
-                    PostLogoutRedirectUris = new List<string> {"http://localhost:4200/"},
-                    AllowedCorsOrigins = {"http://localhost:4200" }, // test client runs on same host
-                    AccessTokenLifetime = (int)TimeSpan.FromMinutes(120).TotalSeconds
+                    ClientId = "AugmentUMobile",
+                    ClientSecrets =
+                     {
+                         new Secret("secret".Sha256())
+                     },
+                    AllowedGrantTypes = GrantTypes.ClientCredentials,
+                    AllowedScopes = { "donde-api-read" },
+                   // RedirectUris = {"http://localhost:4200/auth-callback"}, // test client runs on same host,                 
                 }
             };
+
+            return clients;
         }
     }
 }
