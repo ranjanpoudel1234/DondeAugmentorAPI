@@ -41,7 +41,8 @@ namespace Donde.Augmentor.Web
                      {
                          new Secret("secret".Sha256())
                      },
-                    AllowedScopes = { "openid", "profile", "email", "donde-api-read" },
+                    AllowedScopes = { "openid", "profile", "email", "donde-api", "offline_access" },
+                    AllowOfflineAccess = true
                    // RedirectUris = {$"http://{devHost}/test-client/callback.html"}, // test client runs on same host
                    // AllowedCorsOrigins = {$"http://{devHost}" }, // test client runs on same host
                    // AccessTokenLifetime = (int)TimeSpan.FromMinutes(120).TotalSeconds
@@ -55,6 +56,7 @@ namespace Donde.Augmentor.Web
                      },
                     AllowedGrantTypes = GrantTypes.ClientCredentials,
                     AllowedScopes = { "donde-api-read" },
+                    AccessTokenLifetime = 1
                    // RedirectUris = {"http://localhost:4200/auth-callback"}, // test client runs on same host,                 
                 }
             };

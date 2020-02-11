@@ -29,6 +29,7 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Threading.Tasks;
 using IdentityServer4.AccessTokenValidation;
+using IdentityServer4.Models;
 
 namespace Donde.Augmentor.Web
 {
@@ -45,6 +46,7 @@ namespace Donde.Augmentor.Web
         private Container container = new Container();
         private AppSetting AppSettings { get; set; }
         private DomainSettings DomainSettings { get; set; }
+        private Client[] Clients { get; set; }
         private bool IsLocalEnvironment => CurrentEnvironment.EnvironmentName.Equals("Local") || CurrentEnvironment.EnvironmentName.Equals("Vagrant");
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -76,7 +78,7 @@ namespace Donde.Augmentor.Web
 
             AppSettings = Configuration.GetSection("Donde.Augmentor.Settings").Get<AppSetting>();
             DomainSettings = Configuration.GetSection("Donde.Augmentor.DomainSettings").Get<DomainSettings>();
-
+            Clients = Configuration.GetSection("Donde.Augmentor.IdentitySettings:Clients").Get<Client[]>();
             services.ConfigureCorsPolicy(AppSettings.Host.CorsPolicy);
 
             services.AddApiVersioning(o =>
