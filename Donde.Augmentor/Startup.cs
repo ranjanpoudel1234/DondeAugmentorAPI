@@ -53,12 +53,16 @@ namespace Donde.Augmentor.Web
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            AppSettings = Configuration.GetSection("Donde.Augmentor.Settings").Get<AppSetting>();
+            DomainSettings = Configuration.GetSection("Donde.Augmentor.DomainSettings").Get<DomainSettings>();
+            Clients = Configuration.GetSection("Donde.Augmentor.IdentitySettings:Clients").Get<Client[]>();
+
             //necessary here otherwise the Account controller will give registration issue on userStore
             services.AddDbContext<DondeIdentityContext>(options =>
              options.UseNpgsql(GetConnectionString())
                     .ConfigureWarnings(warnings => warnings.Throw(RelationalEventId.QueryClientEvaluationWarning)));
 
-            services.AddDondeIdentityServer(IsLocalEnvironment);
+            services.AddDondeIdentityServer(IsLocalEnvironment, Clients);
 
             services.AddAuthorization();
             services.AddAuthentication(options =>
@@ -66,19 +70,17 @@ namespace Donde.Augmentor.Web
                 options.DefaultAuthenticateScheme = IdentityServerAuthenticationDefaults.AuthenticationScheme; // straight 401
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme; // causes 401 instead of 404 and redirect
             })
-               .AddIdentityServerAuthentication(options =>
-               {              
-                   options.Authority = "http://localhost:5000";
-                   options.RequireHttpsMetadata = false;
-                   options.ApiName = "donde-api";
-               });
+            .AddIdentityServerAuthentication(options =>
+            {              
+                options.Authority = AppSettings.Host.APIEndPointUrl;
+                options.RequireHttpsMetadata = false;
+                options.ApiName = "donde-api";
+            });
 
             IntegrateSimpleInjector(services);
+
             services.AddOptions();
 
-            AppSettings = Configuration.GetSection("Donde.Augmentor.Settings").Get<AppSetting>();
-            DomainSettings = Configuration.GetSection("Donde.Augmentor.DomainSettings").Get<DomainSettings>();
-            Clients = Configuration.GetSection("Donde.Augmentor.IdentitySettings:Clients").Get<Client[]>();
             services.ConfigureCorsPolicy(AppSettings.Host.CorsPolicy);
 
             services.AddApiVersioning(o =>

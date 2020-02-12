@@ -29,38 +29,23 @@ namespace Donde.Augmentor.Web
             };
         }
 
-        public static IEnumerable<Client> GetClients(string devHost = "")
+        public static IEnumerable<Client> GetClients(Client[] dondeClients)
         {
-            var clients = new[]
+            var clients = new List<Client>();
+            foreach(var client in dondeClients)
             {
-                new Client {
-                    RequireConsent = false,
-                    ClientId = "AugmentUWeb",
-                    AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
-                      ClientSecrets =
-                     {
-                         new Secret("secret".Sha256())
-                     },
-                    AllowedScopes = { "openid", "profile", "email", "donde-api", "offline_access" },
-                    AllowOfflineAccess = true
-                   // RedirectUris = {$"http://{devHost}/test-client/callback.html"}, // test client runs on same host
-                   // AllowedCorsOrigins = {$"http://{devHost}" }, // test client runs on same host
-                   // AccessTokenLifetime = (int)TimeSpan.FromMinutes(120).TotalSeconds
-                },
-                 new Client {
-                    RequireConsent = false,
-                    ClientId = "AugmentUMobile",
-                    ClientSecrets =
-                     {
-                         new Secret("secret".Sha256())
-                     },
-                    AllowedGrantTypes = GrantTypes.ClientCredentials,
-                    AllowedScopes = { "donde-api-read" },
-                    AccessTokenLifetime = 1
-                   // RedirectUris = {"http://localhost:4200/auth-callback"}, // test client runs on same host,                 
-                }
-            };
-
+                clients.Add(new Client
+                {
+                    RequireConsent = client.RequireConsent,
+                    ClientId = client.ClientId,
+                    AllowedGrantTypes = client.AllowedGrantTypes,
+                    ClientSecrets = client.ClientSecrets.Select(x => new Secret(x.Value.Sha256())).ToList(),
+                    AllowedScopes = client.AllowedScopes,
+                    AllowOfflineAccess = client.AllowOfflineAccess,
+                    AccessTokenLifetime = client.AccessTokenLifetime
+                });
+            }
+          
             return clients;
         }
     }
