@@ -24,8 +24,13 @@
     <PackageReference Include="AutoMapper" Version="8.0.0" />
     <PackageReference Include="AWS.Logger.AspNetCore" Version="1.4.1" />
     <PackageReference Include="Dapper" Version="1.50.5" />
+    <PackageReference Include="IdentityServer4" Version="2.3.0" />
+    <PackageReference Include="IdentityServer4.AspNetIdentity" Version="2.3.0" />
 
+    <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="2.3.0" />
     <PackageReference Include="Microsoft.AspNetCore" Version="2.1.0" />
+
+
      <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.OData" Version="7.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.OData.Versioning" Version="3.0.0-beta2" />
@@ -84,6 +89,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Certs\augmentUDev.crt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Certs\augmentUDev.key">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Certs\augmentUDev.pfx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="TempUploads\TextFile.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

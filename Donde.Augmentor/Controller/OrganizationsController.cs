@@ -6,6 +6,7 @@ using Donde.Augmentor.Web.ViewModels;
 using Microsoft.AspNet.OData;
 using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNet.OData.Routing;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -17,6 +18,7 @@ namespace Donde.Augmentor.Web.Controller
 {
     [ApiVersion("1.0")]
     [ODataRoutePrefix("organizations")]
+    [Authorize]
     public class OrganizationsController : ODataController
     {
         private readonly IOrganizationService _organizationService;
@@ -31,6 +33,7 @@ namespace Donde.Augmentor.Web.Controller
         }
 
         [HttpGet("api/v1/organizationsGeocoded")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetOrganizationsGeocoded(double latitude, double longitude, int radiusInMeters)
         {
             //@todo, make this appSettings later.
@@ -49,6 +52,7 @@ namespace Donde.Augmentor.Web.Controller
 
         [ODataRoute]
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> Get(ODataQueryOptions<OrganizationViewModel> odataOptions)
         {
             var result = new List<OrganizationViewModel>();

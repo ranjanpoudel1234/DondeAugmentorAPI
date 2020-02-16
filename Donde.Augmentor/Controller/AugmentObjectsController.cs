@@ -7,6 +7,7 @@ using Donde.Augmentor.Web.ViewModels;
 using Microsoft.AspNet.OData;
 using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNet.OData.Routing;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -18,6 +19,7 @@ namespace Donde.Augmentor.Web.Controller
 {
     [ApiVersion("1.0")]
     [ODataRoutePrefix("augmentObjects")]
+    [Authorize]
     public class AugmentObjectsController : ODataController
     {
         private readonly IAugmentObjectService _augmentObjectService;
@@ -31,6 +33,7 @@ namespace Donde.Augmentor.Web.Controller
 
         [ODataRoute]
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> Get(ODataQueryOptions<AugmentObjectViewModel> odataOptions)
         {
             var result = new List<AugmentObjectViewModel>();
@@ -52,6 +55,7 @@ namespace Donde.Augmentor.Web.Controller
         }
 
         [HttpGet("api/v1/organizations/{organizationId}/geographicalAugmentObjects")]
+        [AllowAnonymous]
        
         public async Task<IActionResult> GetAugmentObjectGeocoded(Guid organizationId, double latitude, double longitude, int radiusInMeters)
         {

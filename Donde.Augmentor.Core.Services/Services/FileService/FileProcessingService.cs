@@ -11,7 +11,6 @@ using FluentValidation;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Jpeg;
 using SixLabors.ImageSharp.PixelFormats;
@@ -63,7 +62,6 @@ namespace Donde.Augmentor.Core.Services.Services.FileService
 
             return uploadFileResult;
         }
-
 
         private async Task<Result<MediaAttachmentDto>> UploadFileAsync(MediaTypes mediaType)
         {

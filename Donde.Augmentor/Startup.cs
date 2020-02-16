@@ -20,6 +20,16 @@ using SimpleInjector;
 using SimpleInjector.Integration.AspNetCore.Mvc;
 using SimpleInjector.Lifestyles;
 using System.Reflection;
+using Microsoft.EntityFrameworkCore;
+using System;
+using Donde.Augmentor.Infrastructure.Database.Identity;
+using Microsoft.EntityFrameworkCore.Diagnostics;
+using Donde.Augmentor.Web.Identity;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Threading.Tasks;
+using IdentityServer4.AccessTokenValidation;
+using IdentityServer4.Models;
 
 namespace Donde.Augmentor.Web
 {
@@ -33,20 +43,47 @@ namespace Donde.Augmentor.Web
 
         public IConfigurationRoot Configuration { get; }
         private IHostingEnvironment CurrentEnvironment { get; }
+        private ILogger<Startup> logger;
         private Container container = new Container();
         private AppSetting AppSettings { get; set; }
         private DomainSettings DomainSettings { get; set; }
+        private SignInKeyCredentialSettings IdentitySignInKeyCredentialSettings { get; set; }
+        private Client[] Clients { get; set; }
         private bool IsLocalEnvironment => CurrentEnvironment.EnvironmentName.Equals("Local") || CurrentEnvironment.EnvironmentName.Equals("Vagrant");
 
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            IntegrateSimpleInjector(services);
-            services.AddOptions();
-
             AppSettings = Configuration.GetSection("Donde.Augmentor.Settings").Get<AppSetting>();
             DomainSettings = Configuration.GetSection("Donde.Augmentor.DomainSettings").Get<DomainSettings>();
+            Clients = Configuration.GetSection("Donde.Augmentor.IdentitySettings:Clients").Get<Client[]>();
+            IdentitySignInKeyCredentialSettings = Configuration.GetSection("Donde.Augmentor.IdentitySettings:SigninKeyCredentials").Get<SignInKeyCredentialSettings>();
+
+            //necessary here otherwise the Account controller will give registration issue on userStore
+             services.AddDbContext<DondeIdentityContext>(options =>
+             options.UseNpgsql(GetConnectionString())
+                    .ConfigureWarnings(warnings => warnings.Throw(RelationalEventId.QueryClientEvaluationWarning)));
+
+            services.AddDondeIdentityServer(IsLocalEnvironment, Clients, IdentitySignInKeyCredentialSettings);
+           
+
+            services.AddAuthorization();
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = IdentityServerAuthenticationDefaults.AuthenticationScheme; // straight 401
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme; // causes 401 instead of 404 and redirect
+            })
+            .AddIdentityServerAuthentication(options =>
+            {              
+                options.Authority = AppSettings.Host.APIEndPointUrl;
+                options.RequireHttpsMetadata = false;
+                options.ApiName = "donde-api";
+            });
+
+            IntegrateSimpleInjector(services);
+
+            services.AddOptions();
 
             services.ConfigureCorsPolicy(AppSettings.Host.CorsPolicy);
 
@@ -66,6 +103,7 @@ namespace Donde.Augmentor.Web
 
             services.AddDefaultAWSOptions(Configuration.GetAWSOptions());
             services.AddAWSService<IAmazonS3>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -73,11 +111,15 @@ namespace Donde.Augmentor.Web
             IHostingEnvironment env,
             VersionedODataModelBuilder modelBuilder,
             ILoggerFactory loggerFactory)
-        {        
+        {
+            app.UseAuthentication();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseIdentityServer();
 
             app.UseMvc();
 
@@ -87,7 +129,7 @@ namespace Donde.Augmentor.Web
 
             AddNLog(loggerFactory);
 
-            app.UseSpokenPastCorsPolicy();
+            app.UseDondeCorsPolicy();
         }
 
         private void IntegrateSimpleInjector(IServiceCollection services)
@@ -164,6 +206,7 @@ namespace Donde.Augmentor.Web
                     logLevelsToDisable.ForEach(level => rule.DisableLoggingForLevel(level));
                 }
             }
+ 
             LogManager.ReconfigExistingLoggers();
         }
     }
