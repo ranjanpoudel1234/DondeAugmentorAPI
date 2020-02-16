@@ -43,9 +43,11 @@ namespace Donde.Augmentor.Web
 
         public IConfigurationRoot Configuration { get; }
         private IHostingEnvironment CurrentEnvironment { get; }
+        private ILogger<Startup> logger;
         private Container container = new Container();
         private AppSetting AppSettings { get; set; }
         private DomainSettings DomainSettings { get; set; }
+        private SignInKeyCredentialSettings IdentitySignInKeyCredentialSettings { get; set; }
         private Client[] Clients { get; set; }
         private bool IsLocalEnvironment => CurrentEnvironment.EnvironmentName.Equals("Local") || CurrentEnvironment.EnvironmentName.Equals("Vagrant");
 
@@ -56,13 +58,15 @@ namespace Donde.Augmentor.Web
             AppSettings = Configuration.GetSection("Donde.Augmentor.Settings").Get<AppSetting>();
             DomainSettings = Configuration.GetSection("Donde.Augmentor.DomainSettings").Get<DomainSettings>();
             Clients = Configuration.GetSection("Donde.Augmentor.IdentitySettings:Clients").Get<Client[]>();
+            IdentitySignInKeyCredentialSettings = Configuration.GetSection("Donde.Augmentor.IdentitySettings:SigninKeyCredentials").Get<SignInKeyCredentialSettings>();
 
             //necessary here otherwise the Account controller will give registration issue on userStore
-            services.AddDbContext<DondeIdentityContext>(options =>
+             services.AddDbContext<DondeIdentityContext>(options =>
              options.UseNpgsql(GetConnectionString())
                     .ConfigureWarnings(warnings => warnings.Throw(RelationalEventId.QueryClientEvaluationWarning)));
 
-            services.AddDondeIdentityServer(IsLocalEnvironment, Clients);
+            services.AddDondeIdentityServer(IsLocalEnvironment, Clients, IdentitySignInKeyCredentialSettings);
+           
 
             services.AddAuthorization();
             services.AddAuthentication(options =>

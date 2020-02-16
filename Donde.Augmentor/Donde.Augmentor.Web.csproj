@@ -89,6 +89,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Certs\augmentUDev.crt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Certs\augmentUDev.key">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Certs\augmentUDev.pfx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="TempUploads\TextFile.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
