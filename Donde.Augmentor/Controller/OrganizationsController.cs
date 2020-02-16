@@ -33,6 +33,7 @@ namespace Donde.Augmentor.Web.Controller
         }
 
         [HttpGet("api/v1/organizationsGeocoded")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetOrganizationsGeocoded(double latitude, double longitude, int radiusInMeters)
         {
             //@todo, make this appSettings later.
@@ -51,6 +52,7 @@ namespace Donde.Augmentor.Web.Controller
 
         [ODataRoute]
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> Get(ODataQueryOptions<OrganizationViewModel> odataOptions)
         {
             var result = new List<OrganizationViewModel>();

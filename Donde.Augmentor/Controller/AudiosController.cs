@@ -19,11 +19,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Donde.Augmentor.Web.Controller
 {
     [ApiVersion("1.0")]
     [ODataRoutePrefix("audios")]
+    [Authorize]
     public class AudiosController : ODataController
     {
         private readonly IAudioService _audioService;
@@ -41,6 +43,7 @@ namespace Donde.Augmentor.Web.Controller
 
         [ODataRoute]
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> Get(ODataQueryOptions<AudioViewModel> odataOptions)
         {
             var result = new List<AudioViewModel>();

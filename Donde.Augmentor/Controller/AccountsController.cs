@@ -1,6 +1,7 @@
 ﻿using Donde.Augmentor.Core.Domain.Models.Identity;
 using Donde.Augmentor.Web.ViewModels.Account;
 using Microsoft.AspNet.OData.Routing;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 namespace Donde.Augmentor.Web.Controller
 {
     [ApiVersion("1.0")]
+    [Authorize]
     public class AccountsController : BaseController
     {
         private readonly SignInManager<User> _signInManager; 
@@ -18,12 +20,12 @@ namespace Donde.Augmentor.Web.Controller
         public AccountsController(SignInManager<User> signInManager, UserManager<User> userManager)
         {
             _signInManager = signInManager;
-            _userManager = userManager;
-     
+            _userManager = userManager;  
         }
 
         [HttpPost]
         [Route("api/v1/accounts/register")]
+        [AllowAnonymous]
         public async Task<IActionResult> Register([FromBody]AccountViewModel model)
         {
             if (!ModelState.IsValid)
@@ -47,6 +49,7 @@ namespace Donde.Augmentor.Web.Controller
 
 
         [HttpPost("api/v1/accounts/login")]
+        [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody]LoginViewModel model)
         {
             if (!ModelState.IsValid)
