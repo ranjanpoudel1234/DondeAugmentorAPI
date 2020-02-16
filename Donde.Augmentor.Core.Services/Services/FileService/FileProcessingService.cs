@@ -144,10 +144,8 @@ namespace Donde.Augmentor.Core.Services.Services.FileService
         private async Task<string> CreateFileLocallyAndReturnPathAsync(Stream stream, string fileName)
         {
             var filePath = string.Empty;
-            var contentRoot = _hostingEnvironment.ContentRootPath;
             var uploadsPath = Directory.GetCurrentDirectory();
-            Path.Combine(contentRoot, _domainSettings.UploadSettings.ServerTempUploadFolderName);
-            var directoryExists = Directory.Exists(uploadsPath);
+            uploadsPath = Path.Combine(uploadsPath, _domainSettings.UploadSettings.ServerTempUploadFolderName);
 
             if (!Directory.Exists(uploadsPath))
             {
