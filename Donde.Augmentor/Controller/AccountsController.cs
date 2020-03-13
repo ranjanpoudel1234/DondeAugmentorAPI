@@ -1,9 +1,12 @@
-﻿using Donde.Augmentor.Core.Domain.Models.Identity;
+﻿using Donde.Augmentor.Core.Domain.CustomExceptions;
+using Donde.Augmentor.Core.Domain.Models.Identity;
 using Donde.Augmentor.Web.ViewModels.Account;
 using Microsoft.AspNet.OData.Routing;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -47,33 +50,25 @@ namespace Donde.Augmentor.Web.Controller
             return Ok(user); //todo map user back
         }
 
-
-        [HttpPost("api/v1/accounts/login")]
-        [AllowAnonymous]
-        public async Task<IActionResult> Login([FromBody]LoginViewModel model)
+        [Route("api/v1/accounts/userInfo")]
+        public async Task<IActionResult> GetUserInfo()
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+            var userIdClaim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "sub");
 
-            var result = await _signInManager.PasswordSignInAsync(model.Username, model.Password, false, false);
-            if (result.Succeeded)
+            if (userIdClaim != null)
             {
-                var currentLoggedInUser = await _userManager.FindByNameAsync(model.Username);
+                var currentLoggedInUser = await _userManager.FindByIdAsync(userIdClaim.Value);
                 return Ok(currentLoggedInUser);
             }
-             
-            if (result.IsLockedOut)
-                return BadRequest("User Locked out");
 
-            return StatusCode((int)HttpStatusCode.InternalServerError, "Failure authenticating user");
+            return StatusCode((int)HttpStatusCode.InternalServerError, "Error Getting user info");
         }
 
+
         [HttpPost("api/v1/accounts/logout")]
-        public async Task<IActionResult> Logout([FromBody]LoginViewModel model)
+        public async Task<IActionResult> Logout()
         {
-            await _signInManager.SignOutAsync();
+            await HttpContext.SignOutAsync();
             return Ok();
         }
     }
