@@ -89,7 +89,7 @@ namespace Donde.Augmentor.Web.Controller
         [ODataRoute]
         [HttpPost]
         ///Improvement, there could be two different post endpoint, one geographical, one regular returning 
-        ///respective viewModels that match their GET counterparts.
+        ///respective viewModels that match their GET counterparts instead of sending back Geographical each time.
         public async Task<IActionResult> Post([FromBody] AugmentObjectPostViewModel augmentObjectPostViewModel)
         {
             var augmentObject = _mapper.Map<AugmentObject>(augmentObjectPostViewModel);
