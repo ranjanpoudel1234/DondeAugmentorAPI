@@ -10,7 +10,7 @@ namespace Donde.Augmentor.Web.ViewModels
     /// the children properties. For that to happen, we will have to update the get queries(which will also be an improvement)
     /// to get the augmentObjects first and then to hydrate media and location information if needed.
     /// </summary>
-    public class AugmentObjectViewModel
+    public class AugmentObjectViewModel : IAugmentObjectViewModel
     {
         public Guid Id { get; set; }
         public Guid AugmentImageId { get; set; }
@@ -27,6 +27,8 @@ namespace Donde.Augmentor.Web.ViewModels
         public Guid? AvatarId { get; set; }
         public string AvatarName { get; set; }
         public string AvatarUrl { get; set; }
+        public string AvatarConfigurationString { get; set; }
+        public AvatarConfigurationViewModel AvatarConfiguration { get; set; }
         public Guid? AudioId { get; set; }
         public string AudioName { get; set; }
         public string AudioUrl { get; set; }

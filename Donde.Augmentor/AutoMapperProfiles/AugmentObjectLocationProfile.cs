@@ -10,7 +10,11 @@ namespace Donde.Augmentor.Web.AutoMapperProfiles
         public AugmentObjectLocationProfile()
         {
             CreateMap<AugmentObjectLocationViewModel, AugmentObjectLocation>()
-            .ForMember(x => x.Id, opts => opts.MapFrom(src => SequentialGuidGenerator.GenerateComb()));
+            .ForMember(x => x.Id, opts => opts.MapFrom(src => SequentialGuidGenerator.GenerateComb()))
+            .ForMember(x => x.AddedDate, opts => opts.Ignore())
+            .ForMember(x => x.UpdatedDate, opts => opts.Ignore())
+            .ForMember(x => x.IsActive, opts => opts.Ignore())
+            .ForMember(x => x.AugmentObject, opts => opts.Ignore());
 
             CreateMap<AugmentObjectLocation, AugmentObjectLocationViewModel>();
         }

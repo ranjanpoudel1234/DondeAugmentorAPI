@@ -13,6 +13,7 @@ namespace Donde.Augmentor.Core.Domain.Dto
         public Guid? AvatarId { get; set; }
         public string AvatarName { get; set; }
         public string AvatarUrl { get; set; }
+        public string AvatarConfiguration { get; set; }
         public Guid? AudioId { get; set; }
         public string AudioName { get; set; }
         public string AudioUrl { get; set; }

@@ -14,5 +14,4 @@ namespace Donde.Augmentor.Web.ViewModels.AugmentObject
         public AugmentObjectMediaTypes MediaType { get; set; }
         public Guid AugmentObjectId { get; set; }
     }
-
 }

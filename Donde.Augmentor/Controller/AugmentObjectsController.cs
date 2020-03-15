@@ -4,12 +4,14 @@ using Donde.Augmentor.Core.Domain.CustomExceptions;
 using Donde.Augmentor.Core.Domain.Models;
 using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces;
 using Donde.Augmentor.Web.ViewModels;
+using Donde.Augmentor.Web.ViewModels.AugmentObject;
 using Microsoft.AspNet.OData;
 using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNet.OData.Routing;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -50,7 +52,9 @@ namespace Donde.Augmentor.Web.Controller
             {
                 result = await augmentObjectViewModels.ToListAsync();
             }
-             
+
+            MapAvatarConfiguration(result);
+
             return Ok(result);
         }
 
@@ -65,13 +69,21 @@ namespace Donde.Augmentor.Web.Controller
             }
 
             if (radiusInMeters == 0)
-                radiusInMeters = 500;// hardcoded for now.
+                radiusInMeters = 5000;// hardcoded for now.
 
             var result = await _augmentObjectService.GetGeographicalAugmentObjectsByRadius(organizationId, latitude, longitude, radiusInMeters);
 
             var mappedResult = _mapper.Map<List<GeographicalAugmentObjectsViewModel>>(result);
 
+            MapAvatarConfiguration(mappedResult);
+
             return Ok(mappedResult);
+        }
+
+        private void MapAvatarConfiguration<T>(List<T> augmentObjectViewModels) where T: IAugmentObjectViewModel
+        {
+            augmentObjectViewModels.ForEach(au => au.AvatarConfiguration = !string.IsNullOrWhiteSpace(au.AvatarConfigurationString)
+            ? JsonConvert.DeserializeObject<AvatarConfigurationViewModel>(au.AvatarConfigurationString) : null);
         }
 
         [ODataRoute]

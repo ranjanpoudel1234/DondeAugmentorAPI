@@ -15,7 +15,6 @@ namespace Donde.Augmentor.Infrastructure.Database
 		{
 
 		}
-		public DbSet<User> Users { get; set; }
 		public DbSet<Organization> Organizations { get; set; }
 		public DbSet<Avatar> Avatars { get; set; }
 		public DbSet<Audio> Audios { get; set; }
@@ -31,11 +30,7 @@ namespace Donde.Augmentor.Infrastructure.Database
 		}
 
 		private void ApplyIndexes(ModelBuilder modelBuilder)
-		{
-			modelBuilder.Entity<User>()
-				.HasIndex(x => x.Id)
-				.IsUnique();
-
+		{		
 			modelBuilder.Entity<Organization>()
 				.HasIndex(x => x.Id)
 				.IsUnique();
