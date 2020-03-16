@@ -1,5 +1,6 @@
 ﻿using Donde.Augmentor.Core.Domain.Interfaces;
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Donde.Augmentor.Core.Domain.Models
 {
@@ -9,6 +10,11 @@ namespace Donde.Augmentor.Core.Domain.Models
 
         public string Name { get; set; }
         public string Url { get; set; }
+        public string TextureFileName { get; set; }
+        public string TextureFileUrl { get; set; }
+
+        [Column(TypeName = "jsonb")]
+        public string AvatarConfiguration { get; set; }
         public string MimeType { get; set; }
         public Guid OrganizationId { get; set; }
         public Organization Organization { get; set; }

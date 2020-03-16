@@ -3,6 +3,7 @@ using Donde.Augmentor.Core.Domain.Dto;
 using Donde.Augmentor.Core.Domain.Models;
 using Donde.Augmentor.Core.Repositories.Interfaces.RepositoryInterfaces;
 using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,6 +39,7 @@ namespace Donde.Augmentor.Core.Services.Services
                AvatarId = augmentObject.AvatarId,
                AvatarName = augmentObject.AvatarName == null ? null : augmentObject.AvatarName,
                AvatarUrl = GetPathWithRootLocationOrNull(augmentObject.AvatarUrl),
+               AvatarConfiguration = augmentObject.AvatarConfiguration,          
                AudioId = augmentObject.AudioId,
                AudioName = augmentObject.AudioName == null ? null : augmentObject.AudioName,
                AudioUrl = GetPathWithRootLocationOrNull(augmentObject.AudioUrl),
@@ -83,6 +85,7 @@ namespace Donde.Augmentor.Core.Services.Services
                 AvatarId = augmentObject.AvatarId,
                 AvatarName = augmentObject.AvatarName == null ? null : augmentObject.AvatarName,
                 AvatarUrl = GetPathWithRootLocationOrNull(augmentObject.AvatarUrl),
+                AvatarConfiguration = augmentObject.AvatarConfiguration,
                 AudioId = augmentObject.AudioId,
                 AudioName = augmentObject.AudioName == null ? null : augmentObject.AudioName,
                 AudioUrl = GetPathWithRootLocationOrNull(augmentObject.AudioUrl),

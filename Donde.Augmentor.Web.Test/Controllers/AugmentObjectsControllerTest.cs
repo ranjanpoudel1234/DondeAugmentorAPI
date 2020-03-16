@@ -23,7 +23,7 @@ namespace Donde.Augmentor.Web.Test.Controllers
         {
             var augmentObjectController = GetDefaultAugmentObjectController();
 
-            var result = await augmentObjectController.GetAugmentObjectGeocoded(A.Dummy<Guid>(), A.Dummy<double>(), A.Dummy<double>(), A.Dummy<int>());
+            var result = await augmentObjectController.GetAugmentObjectGeocoded(A.Dummy<Guid>(),32,34, A.Dummy<int>());
 
             var okResult = result as OkObjectResult;
 

@@ -41,6 +41,8 @@ namespace Donde.Augmentor.Bootstrapper
                 }
             });
 
+            config.AssertConfigurationIsValid();
+
             simpleInjectorContainer.Register(() => config.CreateMapper(simpleInjectorContainer.GetInstance), Lifestyle.Scoped);
         }
     }
