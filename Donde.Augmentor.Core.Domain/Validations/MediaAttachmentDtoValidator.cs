@@ -10,7 +10,7 @@ namespace Donde.Augmentor.Core.Domain.Validations
         public const string DefaultRuleSet = "default";
         public const string ImageFileRuleSet = "ImageFileRuleSet";
         public const string VideoFileRuleSet = "VideoFileRuleSet";
-
+        public const string AudioFileRuleSet = "AudioFileRuleSet";
         public MediaAttachmentDtoValidator()
         {
             RuleFor(x => x.Id).NotEmpty().WithMessage(DondeErrorMessages.PROPERTY_EMPTY);
@@ -25,7 +25,12 @@ namespace Donde.Augmentor.Core.Domain.Validations
             RuleSet(VideoFileRuleSet, () => {
                 RuleFor(x => x.FilePath).Must(BeValidVideoFile).WithMessage(DondeErrorMessages.INVALID_VIDEO_FILE_TYPE);
             });
-      
+
+
+            RuleSet(AudioFileRuleSet, () => {
+                RuleFor(x => x.FilePath).Must(BeValidAudioFile).WithMessage(DondeErrorMessages.INVALID_AUDIO_FILE_TYPE);
+            });
+
             bool BeValidImageFile(string filePath)
             {
                 var fileExtension = Path.GetExtension(filePath);
@@ -36,6 +41,12 @@ namespace Donde.Augmentor.Core.Domain.Validations
             {
                 var fileExtension = Path.GetExtension(filePath);
                 return DomainConstants.ValidMediaExtensions.VALID_VIDEO_EXTENSIONS.Contains(fileExtension.ToLower());
+            }
+
+            bool BeValidAudioFile(string filePath)
+            {
+                var fileExtension = Path.GetExtension(filePath);
+                return DomainConstants.ValidMediaExtensions.VALID_AUDIO_EXTENSIONS.Contains(fileExtension.ToLower());
             }
         }
     }

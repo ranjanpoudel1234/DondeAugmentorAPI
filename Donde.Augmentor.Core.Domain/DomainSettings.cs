@@ -15,6 +15,7 @@
         public string BucketName { get; set; }
         public string ImageFolderName { get; set; }
         public string VideosFolderName { get; set; }
+        public string AudiosFolderName { get; set; }
         public int UploadPartSizeInMB { get; set; }
     }
 

@@ -54,7 +54,7 @@ namespace Donde.Augmentor.Core.Services.Services.FileService
             if(!fileStreamReadResponse)
                 return Result.Fail<MediaAttachmentDto>("Empty File Stream");
           
-            var uploadFileResult = await UploadFileAsync(mediaType);
+            var uploadFileResult = await ValidateAndUploadFileAsync(mediaType);
             if (uploadFileResult.IsFailure)
             {
                 Result.Fail<MediaAttachmentDto>($"Failure in uploading {nameof(mediaType)}");
@@ -63,7 +63,7 @@ namespace Donde.Augmentor.Core.Services.Services.FileService
             return uploadFileResult;
         }
 
-        private async Task<Result<MediaAttachmentDto>> UploadFileAsync(MediaTypes mediaType)
+        private async Task<Result<MediaAttachmentDto>> ValidateAndUploadFileAsync(MediaTypes mediaType)
         {
             _logger.LogError("FileStreamReaderService {@FileStreamContentReaderService}", _fileStreamContentReaderService);
             using (var stream = _fileStreamContentReaderService.Stream)
@@ -74,47 +74,60 @@ namespace Donde.Augmentor.Core.Services.Services.FileService
                 var uniqueFileName = Path.ChangeExtension(uniqueFileGuid.ToString(), fileExtension);
                 var localFilePath = await CreateFileLocallyAndReturnPathAsync(stream, uniqueFileName);
 
-                if (!string.IsNullOrWhiteSpace(localFilePath))
+                try
                 {
-                    var attachmentDto = new MediaAttachmentDto()
+                    if (!string.IsNullOrWhiteSpace(localFilePath))
                     {
-                        Id = uniqueFileGuid,
-                        FileName = _fileStreamContentReaderService.FileName,
-                        MimeType = _fileStreamContentReaderService.MimeType
-                    };
-
-                    if (mediaType == MediaTypes.Image)
-                    {
-                        attachmentDto.FilePath = $"{ _domainSettings.UploadSettings.ImageFolderName }/{ uniqueFileName}";
-                        await _validator.ValidateOrThrowAsync(attachmentDto, ruleSets: $"{MediaAttachmentDtoValidator.DefaultRuleSet},{MediaAttachmentDtoValidator.ImageFileRuleSet}");
-
-                        if (!ResizeImage(localFilePath))
+                        var attachmentDto = new MediaAttachmentDto()
                         {
-                            return Result.Fail<MediaAttachmentDto>("Could not resize file");
+                            Id = uniqueFileGuid,
+                            FileName = _fileStreamContentReaderService.FileName,
+                            MimeType = _fileStreamContentReaderService.MimeType
+                        };
+
+                        if (mediaType == MediaTypes.Image)
+                        {
+                            attachmentDto.FilePath = $"{ _domainSettings.UploadSettings.ImageFolderName }/{ uniqueFileName}";
+                            await _validator.ValidateOrThrowAsync(attachmentDto, ruleSets: $"{MediaAttachmentDtoValidator.DefaultRuleSet},{MediaAttachmentDtoValidator.ImageFileRuleSet}");
+
+                            if (!ResizeImage(localFilePath))
+                            {
+                                return Result.Fail<MediaAttachmentDto>("Could not resize image file");
+                            }
                         }
-                    }
-                    else
-                    {
-                        attachmentDto.FilePath = $"{ _domainSettings.UploadSettings.VideosFolderName }/{ uniqueFileName}";
-                        await _validator.ValidateOrThrowAsync(attachmentDto, ruleSets: $"{MediaAttachmentDtoValidator.DefaultRuleSet},{MediaAttachmentDtoValidator.VideoFileRuleSet}");                      
-                        //todo potentially convert video here. May be move this to interface with implementation with handler so i dont have to do switch.
-                    }
-                                
-                    var uploadResult = await _storageService.UploadFileAsync
-                        (_domainSettings.UploadSettings.BucketName,
-                        attachmentDto.FilePath, 
-                        localFilePath);
+                        else if (mediaType == MediaTypes.Video)
+                        {
+                            attachmentDto.FilePath = $"{ _domainSettings.UploadSettings.VideosFolderName }/{ uniqueFileName}";
+                            await _validator.ValidateOrThrowAsync(attachmentDto, ruleSets: $"{MediaAttachmentDtoValidator.DefaultRuleSet},{MediaAttachmentDtoValidator.VideoFileRuleSet}");
+                            //todo potentially convert video here. May be move this to interface with implementation with handler so i dont have to do switch.
+                        }
+                        else if (mediaType == MediaTypes.Audio)
+                        {
+                            attachmentDto.FilePath = $"{ _domainSettings.UploadSettings.AudiosFolderName }/{ uniqueFileName}";
+                            await _validator.ValidateOrThrowAsync(attachmentDto, ruleSets: $"{MediaAttachmentDtoValidator.DefaultRuleSet},{MediaAttachmentDtoValidator.AudioFileRuleSet}");
+                        }
 
-                    if (uploadResult.IsFailure)
-                    {
-                        _logger.LogError("Failure in storage service");
-                        return Result.Fail<MediaAttachmentDto>("Failure in storage service while uploading file");
-                    }
+                        var uploadResult = await _storageService.UploadFileAsync
+                            (_domainSettings.UploadSettings.BucketName,
+                            attachmentDto.FilePath,
+                            localFilePath);
 
-                    DeleteFileFromPath(localFilePath);
-            
-                    return Result.Ok(attachmentDto);
+                        if (uploadResult.IsFailure)
+                        {
+                            _logger.LogError("Failure in storage service");
+                            return Result.Fail<MediaAttachmentDto>("Failure in storage service while uploading file");
+                        }
+
+                        DeleteFileFromPath(localFilePath);
+
+                        return Result.Ok(attachmentDto);
+                    }
                 }
+                catch (Exception ex)
+                {
+                    DeleteFileFromPath(localFilePath); // cleanup
+                    throw ex;
+                }        
             }
 
             return Result.Fail<MediaAttachmentDto>("Error in uploading file");
