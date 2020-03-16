@@ -7,5 +7,6 @@ namespace Donde.Augmentor.Core.Repositories.Interfaces.RepositoryInterfaces
     public interface IAudioRepository
     {
         IQueryable<Audio> GetAudios();
+        Task<Audio> CreateAudioAsync(Audio entity);
     }
 }
