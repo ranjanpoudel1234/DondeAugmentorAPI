@@ -8,6 +8,7 @@ namespace Donde.Augmentor.Core.Domain.Enum
     {
         Image = 0,
         Video = 1,
-        Audio = 2
+        Audio = 2,
+        Logo
     }
 }

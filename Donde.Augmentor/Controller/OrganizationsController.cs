@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Donde.Augmentor.Core.Domain.Enum;
 using Donde.Augmentor.Core.Domain.Models;
 using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces;
+using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces.IFileService;
+using Donde.Augmentor.Web.Attributes;
 using Donde.Augmentor.Web.ViewModels;
 using Microsoft.AspNet.OData;
 using Microsoft.AspNet.OData.Query;
@@ -10,8 +13,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace Donde.Augmentor.Web.Controller
@@ -19,20 +24,25 @@ namespace Donde.Augmentor.Web.Controller
     [ApiVersion("1.0")]
     [ODataRoutePrefix("organizations")]
     [Authorize]
-    public class OrganizationsController : ODataController
+    public class OrganizationsController : BaseController
     {
         private readonly IOrganizationService _organizationService;
         private readonly IMapper _mapper;
         private readonly ILogger<OrganizationsController> _logger;
+        private readonly IFileProcessingService _fileProcessingService;
 
-        public OrganizationsController(IOrganizationService organizationService, IMapper mapper, ILogger<OrganizationsController> logger)
+        public OrganizationsController(IOrganizationService organizationService, 
+            IMapper mapper, 
+            ILogger<OrganizationsController> logger,
+            IFileProcessingService fileProcessingService)
         {
             _organizationService = organizationService;
             _mapper = mapper;
             _logger = logger;
+            _fileProcessingService = fileProcessingService;
         }
 
-        [HttpGet("api/v1/organizationsGeocoded")]
+        [HttpGet("api/v1/organizationsGeocoded")] //not in use right now
         [AllowAnonymous]
         public async Task<IActionResult> GetOrganizationsGeocoded(double latitude, double longitude, int radiusInMeters)
         {
@@ -73,9 +83,24 @@ namespace Donde.Augmentor.Web.Controller
             return Ok(result);
         }
 
+        //[ODataRoute]
+        //[HttpPost]
+        //public async Task<IActionResult> Post([FromBody] OrganizationViewModel organizationViewModel)
+        //{
+        //    var organization = _mapper.Map<Organization>(organizationViewModel);
+
+        //    var result = await _organizationService.CreateOrganizationAsync(organization);
+
+        //    var organizationViewModelResult = _mapper.Map<OrganizationViewModel>(result);
+
+        //    return Ok(organizationViewModelResult);
+        //}
+
+        //todo put organization with validation on lat/long and org type.
+        // then test.
         [ODataRoute]
-        [HttpPost]
-        public async Task<IActionResult> Post([FromBody] OrganizationViewModel organizationViewModel)
+        [HttpPut]
+        public async Task<IActionResult> Put([FromBody] OrganizationViewModel organizationViewModel)
         {
             var organization = _mapper.Map<Organization>(organizationViewModel);
 
@@ -84,6 +109,29 @@ namespace Donde.Augmentor.Web.Controller
             var organizationViewModelResult = _mapper.Map<OrganizationViewModel>(result);
 
             return Ok(organizationViewModelResult);
+        }
+
+        [ODataRoute]
+        [HttpPost]
+        [DisableFormValueModelBinding]
+        [RequestSizeLimit(15728640)] // 15 mb
+        public async Task<IActionResult> Upload()
+        {
+            var fileUploadResult = await _fileProcessingService.UploadMediaAsync(Request, MediaTypes.Logo);
+
+            if (fileUploadResult.IsFailure)
+            {
+                _logger.LogError($"Error on file Upload {JsonConvert.SerializeObject(fileUploadResult)}");
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+
+            var organization = _mapper.Map<Organization>(fileUploadResult.Value);
+
+            var addedOrganization = await _organizationService.CreateOrganizationAsync(organization);
+
+            var organizationViewModel = _mapper.Map<OrganizationViewModel>(addedOrganization);
+
+            return Created(organizationViewModel);
         }
     }
 }
