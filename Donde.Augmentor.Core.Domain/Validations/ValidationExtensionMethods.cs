@@ -1,5 +1,6 @@
 ﻿using Donde.Augmentor.Core.Domain.CustomExceptions;
 using FluentValidation;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Donde.Augmentor.Core.Domain.Validations
@@ -12,7 +13,9 @@ namespace Donde.Augmentor.Core.Domain.Validations
 
             if (!result.IsValid)
             {
-                throw new HttpBadRequestException(result.ToString());
+                var errorMessage = result.Errors.ToDictionary(x => x.PropertyName, x => x.ErrorMessage);
+                var errorMessageConcatenated = string.Join(";", errorMessage.Select(x => x.Key + "|" + x.Value).ToArray());
+                throw new HttpBadRequestException(errorMessageConcatenated);
             }
         }
     }

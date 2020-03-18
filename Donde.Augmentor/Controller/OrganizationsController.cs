@@ -106,7 +106,7 @@ namespace Donde.Augmentor.Web.Controller
         {       
             var organization = _mapper.Map<Organization>(organizationViewModel);
 
-            var result = await _organizationService.UpdateOrganizationAsync(organization);
+            var result = await _organizationService.UpdateOrganizationAsync(organizationId, organization);
 
             var organizationViewModelResult = _mapper.Map<OrganizationViewModel>(result);
 
