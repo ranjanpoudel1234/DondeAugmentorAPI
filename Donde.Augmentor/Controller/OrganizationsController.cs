@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Donde.Augmentor.Core.Domain.CustomExceptions;
 using Donde.Augmentor.Core.Domain.Enum;
 using Donde.Augmentor.Core.Domain.Models;
 using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces;
@@ -14,6 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -98,13 +100,13 @@ namespace Donde.Augmentor.Web.Controller
 
         //todo put organization with validation on lat/long and org type.
         // then test.
-        [ODataRoute]
+        [ODataRoute("({organizationId})")]
         [HttpPut]
-        public async Task<IActionResult> Put([FromBody] OrganizationViewModel organizationViewModel)
-        {
+        public async Task<IActionResult> Put(Guid organizationId, [FromBody] OrganizationViewModel organizationViewModel)
+        {       
             var organization = _mapper.Map<Organization>(organizationViewModel);
 
-            var result = await _organizationService.CreateOrganizationAsync(organization);
+            var result = await _organizationService.UpdateOrganizationAsync(organization);
 
             var organizationViewModelResult = _mapper.Map<OrganizationViewModel>(result);
 
