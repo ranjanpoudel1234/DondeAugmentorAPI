@@ -13,7 +13,7 @@ namespace Donde.Augmentor.Web.AutoMapperProfiles
                 .ForMember(x => x.Id, opts => opts.MapFrom(src => SequentialGuidGenerator.GenerateComb()))
                 .ForMember(x => x.AddedDate, opts => opts.Ignore())
                 .ForMember(x => x.UpdatedDate, opts => opts.Ignore())
-                .ForMember(x => x.IsActive, opts => opts.Ignore())
+                .ForMember(x => x.IsDeleted, opts => opts.Ignore())
                 .ForMember(x => x.Audio, opts => opts.Ignore())
                 .ForMember(x => x.Video, opts => opts.Ignore())
                 .ForMember(x => x.Avatar, opts => opts.Ignore())

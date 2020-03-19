@@ -55,7 +55,7 @@ namespace Donde.Augmentor.Infrastructure.Repositories
                                      OrganizationId = augmentObject.OrganizationId,
                                      AddedDate = augmentObject.AddedDate,
                                      UpdatedDate = augmentObject.UpdatedDate,
-                                     IsActive = augmentObject.IsActive,
+                                     IsDeleted = augmentObject.IsDeleted,
                                      Type = augmentObject.Type,
                                      MediaType = augmentObjectMedia.MediaType,
                                      ImageName = augmentImage.Name,
@@ -75,6 +75,7 @@ namespace Donde.Augmentor.Infrastructure.Repositories
             return augmentObjects;
         }
 
+        //todo check if filter applies here for isDeletion
         public async Task<IEnumerable<GeographicalAugmentObjectDto>> GetGeographicalAugmentObjectsByRadius(Guid organizationId, double latitude, double longitude, int radiusInMeters)
         {
             string objectsByDistanceQuery = $@"with AugmentObjectWithDistance as (
@@ -88,7 +89,7 @@ namespace Donde.Augmentor.Infrastructure.Repositories
                         aO.""OrganizationId"",
                         aO.""AddedDate"",
                         aO.""UpdatedDate"",
-                        aO.""IsActive"",
+                        aO.""IsDeleted"",
                         aoMedia.""MediaType"" as MediaType,
                         ai.""Name"" as ImageName,
                         ai.""Url"" as ImageUrl,
@@ -119,7 +120,8 @@ namespace Donde.Augmentor.Infrastructure.Repositories
                             ""Videos"" v on v.""Id"" = aomedia.""VideoId""
 )
 select* from AugmentObjectWithDistance d
- where d.""Type"" = {(int) AugmentObjectTypes.Geographical} and d.Distance < @RadiusInMeters and d.""OrganizationId"" = @OrganizationId
+ where d.""Type"" = {(int) AugmentObjectTypes.Geographical} 
+and d.Distance < @RadiusInMeters and d.""OrganizationId"" = @OrganizationId
  order by d.Distance";
                  
             var connection = _dbContext.Database.GetDbConnection();

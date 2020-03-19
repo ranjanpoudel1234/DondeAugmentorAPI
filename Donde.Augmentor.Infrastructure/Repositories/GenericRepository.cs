@@ -45,7 +45,7 @@ namespace Donde.Augmentor.Infrastructure.Repositories
 
         public async Task<TEntity> CreateAsync<TEntity>(TEntity entity) where TEntity : class, IDondeModel, IAuditFieldsModel
         {
-            entity.IsActive = true;
+            entity.IsDeleted = false;
             entity.AddedDate = DateTime.UtcNow;
 
             SetAuditPropertiesOnChildCollectionsOrThrow(entity);
@@ -87,7 +87,7 @@ namespace Donde.Augmentor.Infrastructure.Repositories
 
                     foreach (var eachChild in childObjectsCasted)
                     {
-                        eachChild.IsActive = true;
+                        eachChild.IsDeleted = false;
                         eachChild.AddedDate = DateTime.UtcNow;                
                     }
                 }
@@ -100,7 +100,8 @@ namespace Donde.Augmentor.Infrastructure.Repositories
             var nestedCollectionsPropertyInfo = entity.GetType()
                 .GetProperties(BindingFlags.Public | BindingFlags.Instance)
                 .Where(x =>
-                    x.PropertyType.IsGenericType && x.PropertyType.GetGenericTypeDefinition().GetInterfaces().Contains(typeof(IEnumerable)));
+                    x.PropertyType.IsGenericType && 
+                    x.PropertyType.GetGenericTypeDefinition().GetInterfaces().Contains(typeof(IEnumerable)));
 
             return nestedCollectionsPropertyInfo;
         }

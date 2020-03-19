@@ -23,12 +23,12 @@ namespace Donde.Augmentor.Web.AutoMapperProfiles
                 .ForMember(x => x.Type, opts => opts.Ignore())
                 .ForMember(x => x.AddedDate, opts => opts.Ignore())
                 .ForMember(x => x.UpdatedDate, opts => opts.Ignore())
-                .ForMember(x => x.IsActive, opts => opts.Ignore());
+                .ForMember(x => x.IsDeleted, opts => opts.Ignore());
 
             CreateMap<OrganizationViewModel, Organization>()
                  .ForMember(x => x.AddedDate, opts => opts.Ignore())
                 .ForMember(x => x.UpdatedDate, opts => opts.Ignore())
-                .ForMember(x => x.IsActive, opts => opts.Ignore());
+                .ForMember(x => x.IsDeleted, opts => opts.Ignore());
 
             CreateMap<Organization, OrganizationViewModel>();
         }

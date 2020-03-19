@@ -1,6 +1,11 @@
-﻿using Donde.Augmentor.Core.Domain.Models;
+﻿using Donde.Augmentor.Core.Domain.Interfaces;
+using Donde.Augmentor.Core.Domain.Models;
 using Donde.Augmentor.Core.Domain.Models.Identity;
 using Microsoft.EntityFrameworkCore;
+using Remotion.Linq.Parsing.ExpressionVisitors;
+using System;
+using System.Linq;
+using System.Linq.Expressions;
 
 namespace Donde.Augmentor.Infrastructure.Database
 {
@@ -27,46 +32,24 @@ namespace Donde.Augmentor.Infrastructure.Database
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
 			ApplyIndexes(modelBuilder);
-		}
+            modelBuilder.ApplyGlobalFilters<IAuditFieldsModel>(model => !((IAuditFieldsModel)model).IsDeleted);
 
-		private void ApplyIndexes(ModelBuilder modelBuilder)
+        }
+
+        private void ApplyIndexes(ModelBuilder modelBuilder)
 		{		
-			modelBuilder.Entity<Organization>()
-				.HasIndex(x => x.Id)
-				.IsUnique();
-
-			modelBuilder.Entity<Avatar>()
-			   .HasIndex(x => x.Id)
-			   .IsUnique();
-
-			modelBuilder.Entity<Audio>()
-			   .HasIndex(x => x.Id)
-			   .IsUnique();
-
-			modelBuilder.Entity<AugmentImage>()
-			   .HasIndex(x => x.Id)
-			   .IsUnique();
-
-			modelBuilder.Entity<AugmentObject>()
-			   .HasIndex(x => x.Id)
-			   .IsUnique();
-
 			modelBuilder.Entity<AugmentObjectMedia>()
-			 .HasIndex(x => x.Id)
-			 .IsUnique();
-
-			modelBuilder.Entity<AugmentObjectMedia>()
-	   .HasIndex(u => u.AugmentObjectId)
-	   .IsUnique();
+	       .HasIndex(u => u.AugmentObjectId)
+	       .IsUnique();
 		}
 
-		/// <summary>
-		///This method allows the CLI to call to the context and get a provider configured. This is overriden for EF CLI.
-		///When using startup.cs and specifying a provider there,
-		/// this value would not be used.
-		/// </summary>
-		/// <param name="optionsBuilder"></param>
-		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        /// <summary>
+        ///This method allows the CLI to call to the context and get a provider configured. This is overriden for EF CLI.
+        ///When using startup.cs and specifying a provider there,
+        /// this value would not be used.
+        /// </summary>
+        /// <param name="optionsBuilder"></param>
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
 			if (!optionsBuilder.IsConfigured) optionsBuilder.UseNpgsql(@"Server=localhost;Port=5432;Database=Donde_Augmentor;Username=donde_postgress;Password=D0ND3p0stgr3s");
 		}
