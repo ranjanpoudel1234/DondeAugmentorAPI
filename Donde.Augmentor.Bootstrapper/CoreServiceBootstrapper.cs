@@ -1,4 +1,5 @@
 ﻿using Donde.Augmentor.Core.Domain.Validations;
+using Donde.Augmentor.Core.Services.Validations;
 using FluentValidation;
 using SimpleInjector;
 using System;
@@ -24,6 +25,7 @@ namespace Donde.Augmentor.Bootstrapper
 
             //any fluent validators can be registered here.
             simpleInjectorContainer.Register(typeof(IValidator<>), typeof(MediaAttachmentDtoValidator).Assembly, Lifestyle.Scoped);
+            simpleInjectorContainer.Register(typeof(IValidator<>), typeof(OrganizationValidator).Assembly, Lifestyle.Scoped);
         }
 
         protected static Func<Assembly> GetServiceInterfaceAssembly { get; } = () => Assembly.Load("Donde.Augmentor.Core.Service.Interfaces");

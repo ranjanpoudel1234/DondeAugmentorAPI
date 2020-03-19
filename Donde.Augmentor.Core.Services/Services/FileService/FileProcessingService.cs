@@ -85,9 +85,12 @@ namespace Donde.Augmentor.Core.Services.Services.FileService
                             MimeType = _fileStreamContentReaderService.MimeType
                         };
 
-                        if (mediaType == MediaTypes.Image)
+                        if (mediaType == MediaTypes.Image || mediaType == MediaTypes.Logo)
                         {
-                            attachmentDto.FilePath = $"{ _domainSettings.UploadSettings.ImageFolderName }/{ uniqueFileName}";
+                            attachmentDto.FilePath = mediaType == MediaTypes.Image ? 
+                                $"{ _domainSettings.UploadSettings.ImageFolderName }/{ uniqueFileName}" 
+                                : $"{ _domainSettings.UploadSettings.LogosFolderName }/{ uniqueFileName}";
+
                             await _validator.ValidateOrThrowAsync(attachmentDto, ruleSets: $"{MediaAttachmentDtoValidator.DefaultRuleSet},{MediaAttachmentDtoValidator.ImageFileRuleSet}");
 
                             if (!ResizeImage(localFilePath))

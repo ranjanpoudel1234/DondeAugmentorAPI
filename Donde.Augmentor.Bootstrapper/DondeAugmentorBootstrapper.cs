@@ -27,7 +27,7 @@ namespace Donde.Augmentor.Bootstrapper
             var assembliesToBootstrapFrom = new List<Assembly>
             {
                 webAssembly,
-                Assembly.Load("Donde.Augmentor.Core.Services")
+                Assembly.Load("Donde.Augmentor.Core.Domain")
             };
 
             var profiles = assembliesToBootstrapFrom.SelectMany(x => x.GetTypes())
