@@ -22,7 +22,7 @@ namespace Donde.Augmentor.Web.ViewModels
 
         public DateTime AddedDate { get; set; }
         public DateTime UpdatedDate { get; set; }
-        public bool IsActive { get; set; }
+        public bool IsDeleted { get; set; }
         public AugmentObjectMediaTypes MediaType { get; set; }
         public Guid? AvatarId { get; set; }
         public string AvatarName { get; set; }
@@ -42,6 +42,5 @@ namespace Donde.Augmentor.Web.ViewModels
         public List<AugmentObjectMediaViewModel> AugmentObjectMedias { get; set; }
 
         public List<AugmentObjectLocationViewModel> AugmentObjectLocations { get; set; }
-
     }
 }

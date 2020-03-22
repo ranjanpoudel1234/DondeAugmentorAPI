@@ -3,15 +3,17 @@ using System;
 using Donde.Augmentor.Infrastructure.Database.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Donde.Augmentor.Infrastructure.Migrations.DondeIdentity
 {
     [DbContext(typeof(DondeIdentityContext))]
-    partial class DondeIdentityContextModelSnapshot : ModelSnapshot
+    [Migration("20200322122306_RenameIsActiveToIsDeletedOnUser")]
+    partial class RenameIsActiveToIsDeletedOnUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
