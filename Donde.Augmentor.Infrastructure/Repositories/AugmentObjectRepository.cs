@@ -39,6 +39,8 @@ namespace Donde.Augmentor.Infrastructure.Repositories
             // BUT POST MVP
             var augmentObjects = from augmentObject in _dbContext.AugmentObjects
                                  join augmentObjectMedia in _dbContext.AugmentObjectMedias on augmentObject.Id equals augmentObjectMedia.AugmentObjectId
+                                 join location in _dbContext.AugmentObjectLocations on augmentObject.Id equals location.AugmentObjectId into augmentObjectLocation
+                                 from location in augmentObjectLocation.DefaultIfEmpty()
                                  join augmentImage in _dbContext.AugmentImages on augmentObject.AugmentImageId equals augmentImage.Id 
                                  join audio in _dbContext.Audios on augmentObjectMedia.AudioId equals audio.Id into augmentObjectAudio
                                  from audio in augmentObjectAudio.DefaultIfEmpty()
@@ -69,14 +71,16 @@ namespace Donde.Augmentor.Infrastructure.Repositories
                                      AudioUrl = audio == null ? null : audio.Url,
                                      VideoId = augmentObjectMedia.VideoId,
                                      VideoName = video == null ? null : video.Name,
-                                     VideoUrl = video == null ? null : video.Url                                                                                          
+                                     VideoUrl = video == null ? null : video.Url,
+                                     Latitude = location.Latitude,
+                                     Longitude = location.Longitude
                                  };
 
             return augmentObjects;
         }
 
         //todo check if filter applies here for isDeletion
-        public async Task<IEnumerable<GeographicalAugmentObjectDto>> GetGeographicalAugmentObjectsByRadius(Guid organizationId, double latitude, double longitude, int radiusInMeters)
+        public async Task<IEnumerable<AugmentObjectDto>> GetGeographicalAugmentObjectsByRadius(Guid organizationId, double latitude, double longitude, int radiusInMeters)
         {
             string objectsByDistanceQuery = $@"with AugmentObjectWithDistance as (
  SELECT 
@@ -128,7 +132,7 @@ and d.""OrganizationId"" = @OrganizationId
                  
             var connection = _dbContext.Database.GetDbConnection();
 
-            var result = await connection.QueryAsync<GeographicalAugmentObjectDto>
+            var result = await connection.QueryAsync<AugmentObjectDto>
             (
                 objectsByDistanceQuery,
                 new

@@ -15,10 +15,6 @@ namespace Donde.Augmentor.Web.AutoMapperProfiles
                .ForMember(x => x.AvatarConfigurationString, opts => opts.MapFrom(src => src.AvatarConfiguration))
                .ForMember(x => x.AvatarConfiguration, opts => opts.Ignore());
 
-            CreateMap<GeographicalAugmentObjectDto, GeographicalAugmentObjectsViewModel>()
-              .ForMember(x => x.AvatarConfigurationString, opts => opts.MapFrom(src => src.AvatarConfiguration))
-              .ForMember(x => x.AvatarConfiguration, opts => opts.Ignore());
-
             CreateMap<AugmentObjectPostViewModel, AugmentObject>()
                 .ForMember(x => x.Id, opts => opts.MapFrom(src => SequentialGuidGenerator.GenerateComb()))
                 .ForMember(x => x.AddedDate, opts => opts.Ignore())
@@ -30,7 +26,7 @@ namespace Donde.Augmentor.Web.AutoMapperProfiles
                 .ForMember(x => x.AugmentObjectLocations, opts => opts.Ignore());
 
             // after post return
-            CreateMap<AugmentObject, GeographicalAugmentObjectsViewModel>()
+            CreateMap<AugmentObject, AugmentObjectViewModel>()
                .ForMember(x => x.MediaType, opts => opts.Ignore())
                .ForMember(x => x.Distance, opts => opts.Ignore())
                .ForMember(x => x.Latitude, opts => opts.Ignore())
