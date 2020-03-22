@@ -23,12 +23,9 @@ namespace Donde.Augmentor.Core.Domain.Dto
 
         public string ImageName { get; set; }
         public string ImageUrl { get; set; }
-    }
 
-    public class GeographicalAugmentObjectDto: AugmentObjectDto
-    {
-        public double Distance { get; set; }
-        public double Latitude { get; set; }
-        public double Longitude { get; set; }
+        public double? Distance { get; set; }
+        public double? Latitude { get; set; }
+        public double? Longitude { get; set; }
     }
 }

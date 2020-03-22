@@ -75,7 +75,7 @@ namespace Donde.Augmentor.Web.Controller
 
             var result = await _augmentObjectService.GetGeographicalAugmentObjectsByRadius(organizationId, latitude, longitude, radiusInMeters);
 
-            var mappedResult = _mapper.Map<List<GeographicalAugmentObjectsViewModel>>(result);
+            var mappedResult = _mapper.Map<List<AugmentObjectViewModel>>(result);
 
             MapAvatarConfiguration(mappedResult);
 
@@ -90,6 +90,7 @@ namespace Donde.Augmentor.Web.Controller
 
         [ODataRoute]
         [HttpPost]
+        [IgnoreJsonIgnore]
         ///Improvement, there could be two different post endpoint, one geographical, one regular returning 
         ///respective viewModels that match their GET counterparts instead of sending back Geographical each time.
         public async Task<IActionResult> Post([FromBody] AugmentObjectPostViewModel augmentObjectPostViewModel)
@@ -109,7 +110,7 @@ namespace Donde.Augmentor.Web.Controller
             }
            
             var result = await _augmentObjectService.CreateAugmentObjectAsync(augmentObject);
-            var addedAugmentObjectViewModel = _mapper.Map<GeographicalAugmentObjectsViewModel>(result);
+            var addedAugmentObjectViewModel = _mapper.Map<AugmentObjectViewModel>(result);
 
             return Ok(addedAugmentObjectViewModel);
         }

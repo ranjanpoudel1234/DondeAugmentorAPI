@@ -3,7 +3,6 @@ using Donde.Augmentor.Core.Domain.Dto;
 using Donde.Augmentor.Core.Domain.Models;
 using Donde.Augmentor.Core.Repositories.Interfaces.RepositoryInterfaces;
 using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -47,7 +46,9 @@ namespace Donde.Augmentor.Core.Services.Services
                VideoName = augmentObject.VideoName == null ? null : augmentObject.VideoName,
                VideoUrl = GetPathWithRootLocationOrNull(augmentObject.VideoUrl),
                ImageName = augmentObject.ImageName,
-               ImageUrl = GetPathWithRootLocationOrNull(augmentObject.ImageUrl)         
+               ImageUrl = GetPathWithRootLocationOrNull(augmentObject.ImageUrl),
+               Latitude = augmentObject.Latitude,
+               Longitude = augmentObject.Longitude
            });
 
             return augmentObjects;
@@ -66,11 +67,11 @@ namespace Donde.Augmentor.Core.Services.Services
             return await _augmentObjectRepository.CreateAugmentObjectAsync(entity);
         }
 
-        public async Task<IEnumerable<GeographicalAugmentObjectDto>> GetGeographicalAugmentObjectsByRadius(Guid organizationId, double latitude, double longitude, int radiusInMeters)
+        public async Task<IEnumerable<AugmentObjectDto>> GetGeographicalAugmentObjectsByRadius(Guid organizationId, double latitude, double longitude, int radiusInMeters)
         {
             var geographicalAugmentObjects = await _augmentObjectRepository.GetGeographicalAugmentObjectsByRadius(organizationId, latitude, longitude, radiusInMeters);
 
-            var augmentObjects = geographicalAugmentObjects.Select(augmentObject => new GeographicalAugmentObjectDto
+            var augmentObjects = geographicalAugmentObjects.Select(augmentObject => new AugmentObjectDto
             {
                 Id = augmentObject.Id,
                 AugmentImageId = augmentObject.AugmentImageId,

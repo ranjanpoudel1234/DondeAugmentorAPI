@@ -41,7 +41,7 @@ namespace Donde.Augmentor.Web.Test.Controllers
         {
             var fakeService = A.Fake<IAugmentObjectService>();
             A.CallTo(() => fakeService.GetGeographicalAugmentObjectsByRadius(A<Guid>._, A<double>._, A<double>._, A<int>._))
-                .Returns(Task.FromResult(A.CollectionOfDummy<GeographicalAugmentObjectDto>(10).AsEnumerable()));
+                .Returns(Task.FromResult(A.CollectionOfDummy<AugmentObjectDto>(10).AsEnumerable()));
 
             return fakeService;
         }
