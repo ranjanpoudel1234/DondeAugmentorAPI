@@ -40,7 +40,7 @@ namespace Donde.Augmentor.Infrastructure.Repositories
                         st_distance(ST_Transform(CONCAT('SRID=4326;POINT(',""Longitude"",' ', ""Latitude"",')')::geometry, 3857), ST_Transform('SRID=4326;POINT({longitude} {latitude})':: geometry, 3857)) as Distance,
                         org.""Id"",                     
                         org.""Name"",
-                        org.""IsActive"",
+                        org.""IsDeleted"",
                         org.""Code"",
                         org.""EmailAddress"",
                         org.""Latitude"",
@@ -52,9 +52,10 @@ namespace Donde.Augmentor.Infrastructure.Repositories
                     SELECT 
                         *
                     FROM 
-                        OrganizationWithDistance
+                        OrganizationWithDistance organization
                     WHERE
-                        Distance < @RadiusInMeters
+                        organization.Distance < @RadiusInMeters
+                        and organization.""IsDeleted"" = false
                     ORDER BY
                         Distance";
 

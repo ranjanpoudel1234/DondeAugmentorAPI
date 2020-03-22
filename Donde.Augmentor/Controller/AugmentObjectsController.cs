@@ -16,6 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static Donde.Augmentor.Web.Attributes.IgnoreJsonIgnore;
 
 namespace Donde.Augmentor.Web.Controller
 {
@@ -36,6 +37,7 @@ namespace Donde.Augmentor.Web.Controller
         [ODataRoute]
         [HttpGet]
         [AllowAnonymous]
+        [IgnoreJsonIgnore]
         public async Task<IActionResult> Get(ODataQueryOptions<AugmentObjectViewModel> odataOptions)
         {
             var result = new List<AugmentObjectViewModel>();

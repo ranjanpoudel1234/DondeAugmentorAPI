@@ -55,7 +55,7 @@ namespace Donde.Augmentor.Infrastructure.Repositories
                                      OrganizationId = augmentObject.OrganizationId,
                                      AddedDate = augmentObject.AddedDate,
                                      UpdatedDate = augmentObject.UpdatedDate,
-                                     IsActive = augmentObject.IsActive,
+                                     IsDeleted = augmentObject.IsDeleted,
                                      Type = augmentObject.Type,
                                      MediaType = augmentObjectMedia.MediaType,
                                      ImageName = augmentImage.Name,
@@ -75,6 +75,7 @@ namespace Donde.Augmentor.Infrastructure.Repositories
             return augmentObjects;
         }
 
+        //todo check if filter applies here for isDeletion
         public async Task<IEnumerable<GeographicalAugmentObjectDto>> GetGeographicalAugmentObjectsByRadius(Guid organizationId, double latitude, double longitude, int radiusInMeters)
         {
             string objectsByDistanceQuery = $@"with AugmentObjectWithDistance as (
@@ -88,7 +89,7 @@ namespace Donde.Augmentor.Infrastructure.Repositories
                         aO.""OrganizationId"",
                         aO.""AddedDate"",
                         aO.""UpdatedDate"",
-                        aO.""IsActive"",
+                        aO.""IsDeleted"",
                         aoMedia.""MediaType"" as MediaType,
                         ai.""Name"" as ImageName,
                         ai.""Url"" as ImageUrl,
@@ -119,7 +120,10 @@ namespace Donde.Augmentor.Infrastructure.Repositories
                             ""Videos"" v on v.""Id"" = aomedia.""VideoId""
 )
 select* from AugmentObjectWithDistance d
- where d.""Type"" = {(int) AugmentObjectTypes.Geographical} and d.Distance < @RadiusInMeters and d.""OrganizationId"" = @OrganizationId
+ where d.""IsDeleted"" = false
+and d.""Type"" = {(int) AugmentObjectTypes.Geographical} 
+and d.Distance < @RadiusInMeters 
+and d.""OrganizationId"" = @OrganizationId
  order by d.Distance";
                  
             var connection = _dbContext.Database.GetDbConnection();
@@ -138,51 +142,51 @@ select* from AugmentObjectWithDistance d
 
             return result;
         }
-//        with AugmentObjectWithDistance as (
-//         SELECT
-//                             st_distance(ST_Transform(CONCAT('SRID=4326;POINT(',aoLocation."Longitude",' ', aoLocation."Latitude",')')::geometry, 3857), ST_Transform('SRID=4326;POINT(-90.054006 30.459780)':: geometry, 3857)) as Distance,
-//                        aO."Id",                     
-//                        aO."AugmentImageId",
-//                        aO."Type" as AugmentObjectType,
-//                        aO."Title",
-//                        aO."Description",                   
-//                        aO."OrganizationId",
-//                        aO."AddedDate",
-//                        aO."UpdatedDate",
-//                        aO."IsActive",
-//                        aoMedia."MediaType" as MediaType,
-//                        ai."Name" as ImageName,
-//                        ai."Url" as ImageUrl,
-//                        aoMedia."AvatarId",
-//                        av."Name" as AvatarName,
-//                        av."Url" as AvatarUrl,
-//                        aoMedia."AudioId",
-//                        au."Name" as "AudioName",
-//                        au."Url" as "AudioUrl",
-//                        aoMedia."VideoId",
-//                        v."Name" as "VideoName",
-//                        v."Url" as "VideoUrl",
-//                        aoLocation."Latitude" as "Latitude",
-//                        aoLocation."Longitude" as "Longitude"
-                     
-                                        
-//                        from "AugmentObjects" ao
-//                        join
-//                        	"AugmentObjectLocations" aoLocation on aoLocation."AugmentObjectId" = ao."Id"
-//                        join 
-//                        	"AugmentImages" ai on ai."Id" = ao."AugmentImageId"
-//                        join
-//                        	"AugmentObjectMedias" aoMedia on aoMedia."AugmentObjectId" = ao."Id"
-//                        left join
-//                        	"Audios" au on au."Id" = aoMedia."AudioId"
-//                        left join
-//                        	"Avatars" av on av."Id" = aoMedia."AvatarId"
-//                        left join
-//                        	"Videos" v on v."Id" = aomedia."VideoId"        
-//)
-//select* from AugmentObjectWithDistance d
-// where d.AugmentObjectType = 1 and d.Distance< 5000 and d."OrganizationId" = 'c60054bb-53b3-4d26-98af-aac001399956' 
-// order by d.Distance
+        //        with AugmentObjectWithDistance as (
+        //         SELECT
+        //                             st_distance(ST_Transform(CONCAT('SRID=4326;POINT(',aoLocation."Longitude",' ', aoLocation."Latitude",')')::geometry, 3857), ST_Transform('SRID=4326;POINT(-90.054006 30.459780)':: geometry, 3857)) as Distance,
+        //                        aO."Id",                     
+        //                        aO."AugmentImageId",
+        //                        aO."Type" as AugmentObjectType,
+        //                        aO."Title",
+        //                        aO."Description",                   
+        //                        aO."OrganizationId",
+        //                        aO."AddedDate",
+        //                        aO."UpdatedDate",
+        //                        aO."IsDeleted",
+        //                        aoMedia."MediaType" as MediaType,
+        //                        ai."Name" as ImageName,
+        //                        ai."Url" as ImageUrl,
+        //                        aoMedia."AvatarId",
+        //                        av."Name" as AvatarName,
+        //                        av."Url" as AvatarUrl,
+        //                        aoMedia."AudioId",
+        //                        au."Name" as "AudioName",
+        //                        au."Url" as "AudioUrl",
+        //                        aoMedia."VideoId",
+        //                        v."Name" as "VideoName",
+        //                        v."Url" as "VideoUrl",
+        //                        aoLocation."Latitude" as "Latitude",
+        //                        aoLocation."Longitude" as "Longitude"
+
+
+        //                        from "AugmentObjects" ao
+        //                        join
+        //                        	"AugmentObjectLocations" aoLocation on aoLocation."AugmentObjectId" = ao."Id"
+        //                        join 
+        //                        	"AugmentImages" ai on ai."Id" = ao."AugmentImageId"
+        //                        join
+        //                        	"AugmentObjectMedias" aoMedia on aoMedia."AugmentObjectId" = ao."Id"
+        //                        left join
+        //                        	"Audios" au on au."Id" = aoMedia."AudioId"
+        //                        left join
+        //                        	"Avatars" av on av."Id" = aoMedia."AvatarId"
+        //                        left join
+        //                        	"Videos" v on v."Id" = aomedia."VideoId"        
+        //)
+        //select* from AugmentObjectWithDistance d
+        // where  where d.IsDeleted = false and d.AugmentObjectType = 1 and d.Distance< 5000 and d."OrganizationId" = 'c60054bb-53b3-4d26-98af-aac001399956' 
+        // order by d.Distance
 
         //CREATE EXTENSION postgis; 
     }

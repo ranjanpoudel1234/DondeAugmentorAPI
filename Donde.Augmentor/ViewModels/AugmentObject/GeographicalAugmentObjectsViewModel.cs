@@ -22,8 +22,14 @@ namespace Donde.Augmentor.Web.ViewModels
 
         public DateTime AddedDate { get; set; }
         public DateTime UpdatedDate { get; set; }
-        public bool IsActive { get; set; }
+        public bool IsDeleted { get; set; }
+
+        //hydration
         public AugmentObjectMediaTypes MediaType { get; set; }
+        public List<AugmentObjectMediaViewModel> AugmentObjectMedias { get; set; }
+
+        public List<AugmentObjectLocationViewModel> AugmentObjectLocations { get; set; }
+
         public Guid? AvatarId { get; set; }
         public string AvatarName { get; set; }
         public string AvatarUrl { get; set; }
@@ -39,12 +45,8 @@ namespace Donde.Augmentor.Web.ViewModels
         public string ImageName { get; set; }
         public string ImageUrl { get; set; }
 
-        public List<AugmentObjectMediaViewModel> AugmentObjectMedias { get; set; }
-
-        public List<AugmentObjectLocationViewModel> AugmentObjectLocations { get; set; }
-
-        public double Distance { get; set; }
-        public double Latitude { get; set; }
-        public double Longitude { get; set; }
+        public double? Distance { get; set; }
+        public double? Latitude { get; set; }
+        public double? Longitude { get; set; }
     }
 }

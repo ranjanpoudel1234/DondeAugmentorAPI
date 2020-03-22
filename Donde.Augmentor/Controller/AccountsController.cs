@@ -58,6 +58,12 @@ namespace Donde.Augmentor.Web.Controller
             if (userIdClaim != null)
             {
                 var currentLoggedInUser = await _userManager.FindByIdAsync(userIdClaim.Value);
+
+                if (currentLoggedInUser.IsDeleted)
+                {
+                    throw new HttpNotFoundException(ErrorMessages.ObjectNotFound);
+                }
+
                 return Ok(currentLoggedInUser);
             }
 
