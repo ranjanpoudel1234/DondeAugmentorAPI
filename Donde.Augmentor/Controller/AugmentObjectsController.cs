@@ -3,6 +3,7 @@ using AutoMapper.QueryableExtensions;
 using Donde.Augmentor.Core.Domain.CustomExceptions;
 using Donde.Augmentor.Core.Domain.Models;
 using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces;
+using Donde.Augmentor.Web.OData;
 using Donde.Augmentor.Web.ViewModels;
 using Donde.Augmentor.Web.ViewModels.AugmentObject;
 using Microsoft.AspNet.OData;
@@ -37,7 +38,7 @@ namespace Donde.Augmentor.Web.Controller
         [ODataRoute]
         [HttpGet]
         [AllowAnonymous]
-        [IgnoreJsonIgnore]
+        [IgnoreJsonIgnore] // to get the child collections
         public async Task<IActionResult> Get(ODataQueryOptions<AugmentObjectViewModel> odataOptions)
         {
             var result = new List<AugmentObjectViewModel>();
@@ -57,7 +58,7 @@ namespace Donde.Augmentor.Web.Controller
 
             MapAvatarConfiguration(result);
 
-            return Ok(result);
+            return Ok(result.ToODataCollectionResponse(Request));
         }
 
         [HttpGet("api/v1/organizations/{organizationId}/geographicalAugmentObjects")]
