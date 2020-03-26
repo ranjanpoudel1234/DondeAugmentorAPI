@@ -15,9 +15,29 @@ namespace Donde.Augmentor.Web.Test
             {
                 Position = new AvatarPosition
                 {
-                    PositionX = 2,
-                    PositionY = -10,
-                    PositionZ = -300
+                    PositionX = 0,
+                    PositionY = -7,
+                    PositionZ = 0
+                },
+                Scale = new AvatarScale
+                {
+                    ScaleX = 0.022,
+                    ScaleY = 0.022,
+                    ScaleZ = 0.022
+                },
+                Animation = new AvatarAnimation
+                {
+                    Name="Armature|ArmatureAction.001",
+                    Run = true,
+                    Loop = true,
+                    Delay = 0,
+                    Duration = 0
+                },
+                Rotation = new AvatarRotation
+                {
+                    RotationX = 0,
+                    RotationY = 0,
+                    RotationZ = 0
                 }
             };
 
