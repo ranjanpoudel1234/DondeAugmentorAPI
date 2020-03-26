@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Donde.Augmentor.Core.Domain;
 using Donde.Augmentor.Core.Domain.CustomExceptions;
 using Donde.Augmentor.Core.Domain.Enum;
 using Donde.Augmentor.Core.Domain.Models;
@@ -32,16 +33,19 @@ namespace Donde.Augmentor.Web.Controller
         private readonly IMapper _mapper;
         private readonly ILogger<OrganizationsController> _logger;
         private readonly IFileProcessingService _fileProcessingService;
+        public readonly DomainSettings _domainSettings;
 
         public OrganizationsController(IOrganizationService organizationService, 
             IMapper mapper, 
             ILogger<OrganizationsController> logger,
-            IFileProcessingService fileProcessingService)
+            IFileProcessingService fileProcessingService,
+            DomainSettings domainSettings)
         {
             _organizationService = organizationService;
             _mapper = mapper;
             _logger = logger;
             _fileProcessingService = fileProcessingService;
+            _domainSettings = domainSettings;
         }
 
         [HttpGet("api/v1/organizationsGeocoded")] //not in use right now
@@ -82,24 +86,19 @@ namespace Donde.Augmentor.Web.Controller
                 result = await organizationsViewModels.ToListAsync();
             }
 
+            result.ForEach(x => x.LogoUrl = GetPathWithRootLocationOrNull(x.LogoUrl));
+
             return Ok(result);
         }
 
-        //[ODataRoute]
-        //[HttpPost]
-        //public async Task<IActionResult> Post([FromBody] OrganizationViewModel organizationViewModel)
-        //{
-        //    var organization = _mapper.Map<Organization>(organizationViewModel);
+        private string GetPathWithRootLocationOrNull(string url)
+        {
+            if (url == null) return null;
 
-        //    var result = await _organizationService.CreateOrganizationAsync(organization);
+            return $"{_domainSettings.GeneralSettings.StorageBasePath}{url}";
+        }
 
-        //    var organizationViewModelResult = _mapper.Map<OrganizationViewModel>(result);
 
-        //    return Ok(organizationViewModelResult);
-        //}
-
-        //todo put organization with validation on lat/long and org type.
-        // then test.
         [ODataRoute("({organizationId})")]
         [HttpPut]
         public async Task<IActionResult> Put(Guid organizationId, [FromBody] OrganizationViewModel organizationViewModel)
