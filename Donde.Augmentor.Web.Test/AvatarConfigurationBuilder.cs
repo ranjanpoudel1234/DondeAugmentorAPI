@@ -30,8 +30,8 @@ namespace Donde.Augmentor.Web.Test
                     Name="Armature|ArmatureAction.001",
                     Run = true,
                     Loop = true,
-                    Delay = 0,
-                    Duration = 0
+                    Delay = 1000,
+                    Duration = 8000//in milliseconds, can make it fast and slow.
                 },
                 Rotation = new AvatarRotation
                 {

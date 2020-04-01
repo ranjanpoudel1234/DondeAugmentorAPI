@@ -72,7 +72,7 @@ namespace Donde.Augmentor.Web.Controller
             }
 
             if (radiusInMeters == 0)
-                radiusInMeters = 5000;// hardcoded for now.
+                radiusInMeters = 50000;// hardcoded for now.
 
             var result = await _augmentObjectService.GetGeographicalAugmentObjectsByRadius(organizationId, latitude, longitude, radiusInMeters);
 
