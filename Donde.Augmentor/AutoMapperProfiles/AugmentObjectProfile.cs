@@ -28,6 +28,7 @@ namespace Donde.Augmentor.Web.AutoMapperProfiles
             // after post return
             CreateMap<AugmentObject, AugmentObjectViewModel>()
                .ForMember(x => x.MediaType, opts => opts.Ignore())
+               .ForMember(x => x.MediaId, opts => opts.Ignore())
                .ForMember(x => x.Distance, opts => opts.Ignore())
                .ForMember(x => x.Latitude, opts => opts.Ignore())
                .ForMember(x => x.Longitude, opts => opts.Ignore())

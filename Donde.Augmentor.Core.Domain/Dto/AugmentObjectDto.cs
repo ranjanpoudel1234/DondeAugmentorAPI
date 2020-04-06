@@ -10,6 +10,7 @@ namespace Donde.Augmentor.Core.Domain.Dto
     public class AugmentObjectDto : AugmentObject
     {
         public AugmentObjectMediaTypes MediaType { get; set; }
+        public Guid MediaId { get; set; }
         public Guid? AvatarId { get; set; }
         public string AvatarName { get; set; }
         public string AvatarUrl { get; set; }

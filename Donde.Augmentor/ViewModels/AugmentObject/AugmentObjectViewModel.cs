@@ -13,6 +13,11 @@ namespace Donde.Augmentor.Web.ViewModels
     /// Get should load augmentObjectLocations and augmentObjectMedias with hydration as talked above.
     /// Post should load all the hydrated properties.
     /// 
+    /// MIGHT ADD V2 ENDPOINTS WITH BETTER PAYLOAD WITH MULTIPLE SUPPORT(and payload consitency 
+    /// between GETALL and POST, also NetTopologyUse potentially) AND JUST USE THAT/UPDATE IN WEB.
+    /// CAUSE OVERARCHITECTURE IS ALSO A THING. So overly worrying about this might hurt more
+    /// than helping in future.
+    /// 
     /// Not that important IMO:
     /// AvatarId, name, url, ImagerId, name, url, VideoId, name, url should MAY BE(odata filter) all move under AugmentObjectMedias(this requires mobile change,
     /// this also requires changing that query to not join at first).
@@ -36,6 +41,7 @@ namespace Donde.Augmentor.Web.ViewModels
         public DateTime UpdatedDate { get; set; }
         public bool IsDeleted { get; set; }
         public AugmentObjectMediaTypes MediaType { get; set; }
+        public Guid MediaId { get; set; }
         public Guid? AvatarId { get; set; }
         public string AvatarName { get; set; }
         public string AvatarUrl { get; set; }
