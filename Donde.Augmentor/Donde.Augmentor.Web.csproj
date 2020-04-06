@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Controller\Metric\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 

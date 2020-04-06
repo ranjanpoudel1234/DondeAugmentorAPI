@@ -9,6 +9,7 @@ namespace Donde.Augmentor.Web.Controller
     public class BaseController : ODataController
     {
         private const string DONDE_AUGMENTOR_ORGANIZATION_ID = "DONDE-AUGMENTOR-ORGANIZATION-ID";
+        private const string HEADER_AUTHORIZATION_ID = "HEADER-AUTHORIZATION-ID";
 
         public Guid GetCurrentOrganizationIdOrThrow()
         {
@@ -27,6 +28,16 @@ namespace Donde.Augmentor.Web.Controller
             else
             {
                 throw new HttpBadRequestException("Current OrganizationId Not Found");
+            }
+        }
+
+        public void AuthorizeByHeader()
+        {
+            var headerAuthValue = HttpContext.Request?.Headers[HEADER_AUTHORIZATION_ID];
+
+            if (!headerAuthValue.HasValue || !headerAuthValue.Value.Equals("U/GeVksbUOZ0CwFyPCigiEa5E40zHmav/LLYC8LoiimGZ8DUwBYc8M/H/eGFAgqluBQcT0/gHcN6NUPDD88xIg=="))
+            {
+                throw new HttpUnauthorizedException("Not Authorized");
             }
         }
     }
