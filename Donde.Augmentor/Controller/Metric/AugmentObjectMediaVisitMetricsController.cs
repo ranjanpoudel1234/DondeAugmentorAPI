@@ -1,4 +1,6 @@
-﻿using Donde.Augmentor.Core.Domain.Models.Metrics;
+﻿using AutoMapper;
+using Donde.Augmentor.Core.Domain.Models.Metrics;
+using Donde.Augmentor.Core.Repositories.Interfaces.RepositoryInterfaces.Metric;
 using Microsoft.AspNet.OData.Routing;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,12 +11,17 @@ namespace Donde.Augmentor.Web.Controller.Metric
     [ApiVersion("1.0")]
     [ODataRoutePrefix("augmentObjectMediaVisitMetrics")]
     [Authorize]
-    public class AugmentObjectMediaVisitMetricsController
+    public class AugmentObjectMediaVisitMetricsController : BaseController
     {
-        private readonly IAugmentObject
-        public AugmentObjectMediaVisitMetricsController()
-        {
+        private readonly IAugmentObjectMediaVisitMetricService _augmentObjectMediaVisitMetricService;
+        private readonly IMapper _mapper;
 
+        public AugmentObjectMediaVisitMetricsController(
+            IAugmentObjectMediaVisitMetricService augmentObjectMediaVisitMetricService,
+            IMapper mapper)
+        {
+            _augmentObjectMediaVisitMetricService = augmentObjectMediaVisitMetricService;
+            _mapper = mapper;
         }
 
         [ODataRoute]
@@ -22,9 +29,14 @@ namespace Donde.Augmentor.Web.Controller.Metric
         [AllowAnonymous]
         public async Task<IActionResult> Post([FromBody] AugmentObjectMediaVisitMetricViewModel augmentObjectMediaVisitMetricViewModel)
         {
-            AuthorizeByHeader();
+            AuthorizeTemporariLyByHeaderOrThrow();
 
-          // authorize with some const header value.
+            var mediaVisitModel = _mapper.Map<AugmentObjectMediaVisitMetric>(augmentObjectMediaVisitMetricViewModel);
+
+            var result = await _augmentObjectMediaVisitMetricService.CreateAugmentObjectMediaVisitMetricAsync(mediaVisitModel);
+
+            return Created(_mapper.Map<AugmentObjectMediaVisitMetricViewModel>(result));
+          
         }
     }
 }
