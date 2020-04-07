@@ -2,7 +2,7 @@
 using Donde.Augmentor.Core.Repositories.Interfaces.RepositoryInterfaces.Metric;
 using System.Threading.Tasks;
 
-namespace Donde.Augmentor.Core.Services.Services.Metric
+namespace Donde.Augmentor.Core.Services.Services.MetricService
 {
     public class AugmentObjectMediaVisitMetricService : IAugmentObjectMediaVisitMetricService
     {

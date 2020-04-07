@@ -1,10 +1,7 @@
 ﻿using AutoMapper;
-using Donde.Augmentor.Core.Domain.Models;
+using Donde.Augmentor.Core.Domain.Helpers;
 using Donde.Augmentor.Core.Domain.Models.Metrics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Donde.Augmentor.Web.ViewModels;
 
 namespace Donde.Augmentor.Web.AutoMapperProfiles.Metric
 {
@@ -13,6 +10,7 @@ namespace Donde.Augmentor.Web.AutoMapperProfiles.Metric
         public AugmentObjectMediaVisitMetricProfile()
         {
             CreateMap<AugmentObjectMediaVisitMetricViewModel, AugmentObjectMediaVisitMetric>()
+                .ForMember(x => x.Id, opts => opts.MapFrom(src => SequentialGuidGenerator.GenerateComb()))
                 .ForMember(x => x.AugmentObject, opts => opts.Ignore())
                 .ForMember(x => x.AugmentObjectMedia, opts => opts.Ignore())
                 .ForMember(x => x.AddedDate, opts => opts.Ignore())

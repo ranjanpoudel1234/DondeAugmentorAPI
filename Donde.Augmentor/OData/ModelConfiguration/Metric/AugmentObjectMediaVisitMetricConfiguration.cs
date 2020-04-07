@@ -1,4 +1,5 @@
 ﻿using Donde.Augmentor.Core.Domain.Models.Metrics;
+using Donde.Augmentor.Web.ViewModels;
 using Microsoft.AspNet.OData.Builder;
 using Microsoft.AspNetCore.Mvc;
 

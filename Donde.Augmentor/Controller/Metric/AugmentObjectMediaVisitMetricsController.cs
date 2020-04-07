@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Donde.Augmentor.Core.Domain.Models.Metrics;
 using Donde.Augmentor.Core.Repositories.Interfaces.RepositoryInterfaces.Metric;
+using Donde.Augmentor.Web.ViewModels;
 using Microsoft.AspNet.OData.Routing;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -35,8 +36,7 @@ namespace Donde.Augmentor.Web.Controller.Metric
 
             var result = await _augmentObjectMediaVisitMetricService.CreateAugmentObjectMediaVisitMetricAsync(mediaVisitModel);
 
-            return Created(_mapper.Map<AugmentObjectMediaVisitMetricViewModel>(result));
-          
+            return Created(_mapper.Map<AugmentObjectMediaVisitMetricViewModel>(result));       
         }
     }
 }

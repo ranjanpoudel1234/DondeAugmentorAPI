@@ -36,6 +36,7 @@ namespace Donde.Augmentor.Web.Controller
         // This can change if we have actual user registration later, hence keeping it simple for now.
         // app will make request with that info and client info to get the token,
         // check token expiration and make api requests. Unnecessary overhead for now.
+        // ANOTHER OPTION IS TO USE HMAC AUTHENTICATION. But that might collide with existing Authentication.
         public void AuthorizeTemporariLyByHeaderOrThrow()
         {
             var headerAuthValue = HttpContext.Request?.Headers[METRIC_ACCESS_ID];

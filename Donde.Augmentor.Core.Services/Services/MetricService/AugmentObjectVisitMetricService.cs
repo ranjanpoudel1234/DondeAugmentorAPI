@@ -2,7 +2,7 @@
 using Donde.Augmentor.Core.Domain.Models.Metrics;
 using Donde.Augmentor.Core.Repositories.Interfaces.RepositoryInterfaces.Metric;
 
-namespace Donde.Augmentor.Core.Services.Services.Metric
+namespace Donde.Augmentor.Core.Services.Services.MetricService
 {
     public class AugmentObjectVisitMetricService : IAugmentObjectVisitMetricService
     {

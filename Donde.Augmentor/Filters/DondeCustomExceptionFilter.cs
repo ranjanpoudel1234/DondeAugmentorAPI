@@ -28,6 +28,9 @@ namespace Donde.Augmentor.Web.Filters
                 case UnauthorizedAccessException _:
                     context.Result = ProcessException(context, HttpStatusCode.Unauthorized);
                     break;
+                case HttpUnauthorizedException _:
+                    context.Result = ProcessException(context, HttpStatusCode.Unauthorized);
+                    break;
                 case HttpBadRequestException _:
                     context.Result = ProcessException(context, HttpStatusCode.BadRequest, exceptionType.Message ?? ErrorMessages.BadRequest);
                     break;

@@ -3,7 +3,7 @@ using Donde.Augmentor.Core.Repositories.Interfaces.RepositoryInterfaces.Metric;
 using Donde.Augmentor.Infrastructure.Database;
 using System.Threading.Tasks;
 
-namespace Donde.Augmentor.Infrastructure.Repositories.Metrics
+namespace Donde.Augmentor.Infrastructure.Repositories.MetricRepository
 {
     public class AugmentObjectVisitMetricRepository : GenericRepository, IAugmentObjectVisitMetricRepository
     {

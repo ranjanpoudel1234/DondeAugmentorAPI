@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Donde.Augmentor.Core.Domain.Models.Metrics
+namespace Donde.Augmentor.Web.ViewModels
 {
     public class AugmentObjectVisitMetricViewModel
     {

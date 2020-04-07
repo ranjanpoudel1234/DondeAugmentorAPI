@@ -1,14 +1,14 @@
 ﻿using System;
 
-namespace Donde.Augmentor.Core.Domain.Models.Metrics
+namespace Donde.Augmentor.Web.ViewModels
 {
     public class AugmentObjectMediaVisitMetricViewModel
     {
         public Guid Id {get;set;}
         public Guid AugmentObjectId { get; set; }
         public Guid AugmentObjectMediaId { get; set; }
-        string DeviceUniqueId { get; set; }
-        string DeviceName { get; set; }
-        string DeviceId { get; set; }
+        public string DeviceUniqueId { get; set; }
+        public string DeviceName { get; set; }
+        public string DeviceId { get; set; }
     }
 }
