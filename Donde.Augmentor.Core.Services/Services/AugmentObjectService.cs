@@ -23,42 +23,9 @@ namespace Donde.Augmentor.Core.Services.Services
 
         public IQueryable<AugmentObjectDto> GetAugmentObjects()
         {
-           var augmentObjects = _augmentObjectRepository.GetAugmentObjects().Select(augmentObject => new AugmentObjectDto
-           {
-               Id = augmentObject.Id,
-               AugmentImageId = augmentObject.AugmentImageId,
-               Title = augmentObject.Title,
-               Description = augmentObject.Description,
-               OrganizationId = augmentObject.OrganizationId,
-               AddedDate = augmentObject.AddedDate,
-               UpdatedDate = augmentObject.UpdatedDate,
-               IsDeleted = augmentObject.IsDeleted,
-               Type = augmentObject.Type,
-               MediaType = augmentObject.MediaType,
-               AvatarId = augmentObject.AvatarId,
-               AvatarName = augmentObject.AvatarName == null ? null : augmentObject.AvatarName,
-               AvatarUrl = GetPathWithRootLocationOrNull(augmentObject.AvatarUrl),
-               AvatarConfiguration = augmentObject.AvatarConfiguration,          
-               AudioId = augmentObject.AudioId,
-               AudioName = augmentObject.AudioName == null ? null : augmentObject.AudioName,
-               AudioUrl = GetPathWithRootLocationOrNull(augmentObject.AudioUrl),
-               VideoId = augmentObject.VideoId,
-               VideoName = augmentObject.VideoName == null ? null : augmentObject.VideoName,
-               VideoUrl = GetPathWithRootLocationOrNull(augmentObject.VideoUrl),
-               ImageName = augmentObject.ImageName,
-               ImageUrl = GetPathWithRootLocationOrNull(augmentObject.ImageUrl),
-               Latitude = augmentObject.Latitude,
-               Longitude = augmentObject.Longitude
-           });
+           var augmentObjects = _augmentObjectRepository.GetAugmentObjects().Select(augmentObject => GetAugmentObjectMapWithUpdatedUrls(augmentObject));
 
             return augmentObjects;
-        }
-
-        private string GetPathWithRootLocationOrNull(string url)
-        {
-            if (url == null) return null;
-
-            return $"{_domainSettings.GeneralSettings.StorageBasePath}{url}";
         }
 
         public async Task<AugmentObject> CreateAugmentObjectAsync(AugmentObject entity)
@@ -71,7 +38,26 @@ namespace Donde.Augmentor.Core.Services.Services
         {
             var geographicalAugmentObjects = await _augmentObjectRepository.GetGeographicalAugmentObjectsByRadius(organizationId, latitude, longitude, radiusInMeters);
 
-            var augmentObjects = geographicalAugmentObjects.Select(augmentObject => new AugmentObjectDto
+            var augmentObjects = geographicalAugmentObjects.Select(augmentObject => GetAugmentObjectMapWithUpdatedUrls(augmentObject));
+
+            return augmentObjects;
+        }
+
+        public async Task<AugmentObject> UpdateAugmentObjectAsync(Guid id, AugmentObject entity)
+        {
+            return await _augmentObjectRepository.UpdateAugmentObjectAsync(id, entity);
+        }
+
+        private string GetPathWithRootLocationOrNull(string url)
+        {
+            if (url == null) return null;
+
+            return $"{_domainSettings.GeneralSettings.StorageBasePath}{url}";
+        }
+
+        private AugmentObjectDto GetAugmentObjectMapWithUpdatedUrls(AugmentObjectDto augmentObject)
+        {
+            return new AugmentObjectDto
             {
                 Id = augmentObject.Id,
                 AugmentImageId = augmentObject.AugmentImageId,
@@ -83,6 +69,7 @@ namespace Donde.Augmentor.Core.Services.Services
                 IsDeleted = augmentObject.IsDeleted,
                 Type = augmentObject.Type,
                 MediaType = augmentObject.MediaType,
+                MediaId = augmentObject.MediaId,
                 AvatarId = augmentObject.AvatarId,
                 AvatarName = augmentObject.AvatarName == null ? null : augmentObject.AvatarName,
                 AvatarUrl = GetPathWithRootLocationOrNull(augmentObject.AvatarUrl),
@@ -98,14 +85,7 @@ namespace Donde.Augmentor.Core.Services.Services
                 Distance = augmentObject.Distance,
                 Latitude = augmentObject.Latitude,
                 Longitude = augmentObject.Longitude
-            });
-
-            return augmentObjects;
-        }
-
-        public async Task<AugmentObject> UpdateAugmentObjectAsync(Guid id, AugmentObject entity)
-        {
-            return await _augmentObjectRepository.UpdateAugmentObjectAsync(id, entity);
+            };
         }
     }
 }

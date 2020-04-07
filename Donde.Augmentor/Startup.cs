@@ -43,7 +43,6 @@ namespace Donde.Augmentor.Web
 
         public IConfigurationRoot Configuration { get; }
         private IHostingEnvironment CurrentEnvironment { get; }
-        private ILogger<Startup> logger;
         private Container container = new Container();
         private AppSetting AppSettings { get; set; }
         private DomainSettings DomainSettings { get; set; }

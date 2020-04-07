@@ -20,7 +20,8 @@ namespace Donde.Augmentor.Bootstrapper
                 new List<string>
                 {
                     "Donde.Augmentor.Core.Services.Services",
-                    "Donde.Augmentor.Core.Services.Services.FileService"
+                    "Donde.Augmentor.Core.Services.Services.FileService",
+                     "Donde.Augmentor.Core.Services.Services.MetricService"
                 });
 
             //any fluent validators can be registered here.

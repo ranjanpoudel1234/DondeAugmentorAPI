@@ -18,13 +18,12 @@ namespace Donde.Augmentor.Bootstrapper
             RegisterInfrastructureInstancesByNamespace(simpleInjectorContainer,
                 new List<Assembly>
                 {
-                   // GetInfrastructureInterfaceAssembly(),
                     GetInfrastructureAssembly()
                 },
                  new List<string>
                  {
-                   // "Donde.Augmentor.Core.Repositories.Interfaces.RepositoryInterfaces",
-                    "Donde.Augmentor.Infrastructure.Repositories"
+                    "Donde.Augmentor.Infrastructure.Repositories",
+                    "Donde.Augmentor.Infrastructure.Repositories.MetricRepository"
                  }
             );
 

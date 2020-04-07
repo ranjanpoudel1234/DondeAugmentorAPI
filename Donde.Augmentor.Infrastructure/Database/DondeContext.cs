@@ -1,6 +1,7 @@
 ﻿using Donde.Augmentor.Core.Domain.Interfaces;
 using Donde.Augmentor.Core.Domain.Models;
 using Donde.Augmentor.Core.Domain.Models.Identity;
+using Donde.Augmentor.Core.Domain.Models.Metrics;
 using Microsoft.EntityFrameworkCore;
 using Remotion.Linq.Parsing.ExpressionVisitors;
 using System;
@@ -28,8 +29,10 @@ namespace Donde.Augmentor.Infrastructure.Database
 		public DbSet<AugmentObject> AugmentObjects { get; set; }
 		public DbSet<AugmentObjectMedia> AugmentObjectMedias { get; set; }
 		public DbSet<AugmentObjectLocation> AugmentObjectLocations { get; set; }
+        public DbSet<AugmentObjectVisitMetric> AugmentObjectVisitMetrics { get; set; }
+        public DbSet<AugmentObjectMediaVisitMetric> AugmentObjectMediaVisitMetrics { get; set; }
 
-		protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
 			ApplyIndexes(modelBuilder);
             modelBuilder.ApplyGlobalFilters<IAuditFieldsModel>(model => !((IAuditFieldsModel)model).IsDeleted);
