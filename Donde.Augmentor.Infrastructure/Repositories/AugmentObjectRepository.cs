@@ -96,7 +96,7 @@ namespace Donde.Augmentor.Infrastructure.Repositories
                         aO.""UpdatedDate"",
                         aO.""IsDeleted"",
                         aoMedia.""MediaType"" as MediaType,
-                        aoMedia.""Id"" as MediaTypeId,
+                        aoMedia.""Id"" as MediaId,
                         ai.""Name"" as ImageName,
                         ai.""Url"" as ImageUrl,
                         aoMedia.""AvatarId"" as AvatarId,
