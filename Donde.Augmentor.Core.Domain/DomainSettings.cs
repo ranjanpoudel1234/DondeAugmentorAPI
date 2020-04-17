@@ -18,6 +18,7 @@
         public string AudiosFolderName { get; set; }
         public string LogosFolderName { get; set; }
         public int UploadPartSizeInMB { get; set; }
+        public string OriginalImageSubFolderName { get; set; }
     }
 
     public class MediaSettings

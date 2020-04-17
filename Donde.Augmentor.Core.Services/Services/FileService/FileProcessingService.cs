@@ -93,6 +93,12 @@ namespace Donde.Augmentor.Core.Services.Services.FileService
 
                             await _validator.ValidateOrThrowAsync(attachmentDto, ruleSets: $"{MediaAttachmentDtoValidator.DefaultRuleSet},{MediaAttachmentDtoValidator.ImageFileRuleSet}");
 
+                            var originalUploadResult = await UploadOriginalFileAsync(mediaType, uniqueFileName, localFilePath);
+                            if (originalUploadResult.IsFailure)
+                            {
+                                return Result.Fail<MediaAttachmentDto>("Failure in uploading original image");
+                            }
+
                             if (!ResizeImage(localFilePath))
                             {
                                 return Result.Fail<MediaAttachmentDto>("Could not resize image file");
@@ -134,6 +140,20 @@ namespace Donde.Augmentor.Core.Services.Services.FileService
             }
 
             return Result.Fail<MediaAttachmentDto>("Error in uploading file");
+        }
+
+        private async Task<Result<bool>> UploadOriginalFileAsync(MediaTypes mediaType, string uniqueFileName, string localFilePath)
+        {
+            var originalFileRemotePath = mediaType == MediaTypes.Image ?
+                               $"{ _domainSettings.UploadSettings.ImageFolderName }/{_domainSettings.UploadSettings.OriginalImageSubFolderName}/{ uniqueFileName}"
+                               : $"{ _domainSettings.UploadSettings.LogosFolderName }/{_domainSettings.UploadSettings.OriginalImageSubFolderName}/{ uniqueFileName}";
+
+            var uploadResult = await _storageService.UploadFileAsync
+                           (_domainSettings.UploadSettings.BucketName,
+                           originalFileRemotePath,
+                           localFilePath);
+
+            return uploadResult;
         }
 
         private bool ResizeImage(string filePath)
@@ -193,10 +213,8 @@ namespace Donde.Augmentor.Core.Services.Services.FileService
             }
             catch (Exception ex)
             {
-
                 _logger.LogError("CreateFileLocallyAndReturnPathAsync: Exception {@Exception}", ex);
                 throw ex;
-                // todo throw some invalid exception here.
             }
 
             return filePath;
