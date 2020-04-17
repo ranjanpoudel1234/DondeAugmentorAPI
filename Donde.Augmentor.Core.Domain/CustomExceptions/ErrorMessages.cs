@@ -5,5 +5,6 @@
         public const string ObjectNotFound = "Object not found";
         public const string BadRequest = "Bad Request Made";
         public const string UnAuthorized = "Not Authorized";
+        public const string IdsMisMatch = "Ids do not match";
     }
 }

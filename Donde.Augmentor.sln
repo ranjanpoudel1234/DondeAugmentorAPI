@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27703.2026
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29215.179
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Donde.Augmentor.Web", "Donde.Augmentor\Donde.Augmentor.Web.csproj", "{15257D00-68BE-455E-A8A1-B99FEC348ACD}"
 EndProject
@@ -35,6 +35,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DatabaseSeed", "DatabaseSee
 	ProjectSection(SolutionItems) = preProject
 		SeedDataAll.sql = SeedDataAll.sql
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Donde.Augmentor.Domain.Test", "Donde.Augmentor.Domain.Test\Donde.Augmentor.Domain.Test.csproj", "{1946C606-F499-41DD-B32B-17DECE14317E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -78,6 +80,10 @@ Global
 		{721F2A74-CE75-4366-B1B1-4139D51E7177}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{721F2A74-CE75-4366-B1B1-4139D51E7177}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{721F2A74-CE75-4366-B1B1-4139D51E7177}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1946C606-F499-41DD-B32B-17DECE14317E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1946C606-F499-41DD-B32B-17DECE14317E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1946C606-F499-41DD-B32B-17DECE14317E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1946C606-F499-41DD-B32B-17DECE14317E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -92,6 +98,7 @@ Global
 		{20001E46-1D8C-4FFC-BA4B-38B8A8809513} = {B6BD0C3E-1107-4ADE-BA4B-8DA6912297D0}
 		{721F2A74-CE75-4366-B1B1-4139D51E7177} = {B6BD0C3E-1107-4ADE-BA4B-8DA6912297D0}
 		{2B83B991-DEB9-43F5-8715-72C2EA8DD768} = {38DF1BB5-6102-4FAE-B7DC-257DC57E1F76}
+		{1946C606-F499-41DD-B32B-17DECE14317E} = {B6BD0C3E-1107-4ADE-BA4B-8DA6912297D0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {353F65B0-7398-44E5-ABC0-CF64CCCE2CCF}

@@ -7,6 +7,8 @@ namespace Donde.Augmentor.Core.Domain.Enum
     public enum MediaTypes
     {
         Image = 0,
-        Video = 1
+        Video = 1,
+        Audio = 2,
+        Logo
     }
 }

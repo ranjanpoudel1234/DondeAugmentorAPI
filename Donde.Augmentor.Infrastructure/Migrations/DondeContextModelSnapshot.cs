@@ -26,7 +26,7 @@ namespace Donde.Augmentor.Infrastructure.Migrations
 
                     b.Property<DateTime>("AddedDate");
 
-                    b.Property<bool>("IsActive");
+                    b.Property<bool>("IsDeleted");
 
                     b.Property<string>("MimeType");
 
@@ -39,9 +39,6 @@ namespace Donde.Augmentor.Infrastructure.Migrations
                     b.Property<string>("Url");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Id")
-                        .IsUnique();
 
                     b.HasIndex("OrganizationId");
 
@@ -55,7 +52,7 @@ namespace Donde.Augmentor.Infrastructure.Migrations
 
                     b.Property<DateTime>("AddedDate");
 
-                    b.Property<bool>("IsActive");
+                    b.Property<bool>("IsDeleted");
 
                     b.Property<string>("MimeType");
 
@@ -68,9 +65,6 @@ namespace Donde.Augmentor.Infrastructure.Migrations
                     b.Property<string>("Url");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Id")
-                        .IsUnique();
 
                     b.HasIndex("OrganizationId");
 
@@ -88,7 +82,7 @@ namespace Donde.Augmentor.Infrastructure.Migrations
 
                     b.Property<string>("Description");
 
-                    b.Property<bool>("IsActive");
+                    b.Property<bool>("IsDeleted");
 
                     b.Property<Guid>("OrganizationId");
 
@@ -101,9 +95,6 @@ namespace Donde.Augmentor.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AugmentImageId");
-
-                    b.HasIndex("Id")
-                        .IsUnique();
 
                     b.HasIndex("OrganizationId");
 
@@ -119,7 +110,7 @@ namespace Donde.Augmentor.Infrastructure.Migrations
 
                     b.Property<Guid>("AugmentObjectId");
 
-                    b.Property<bool>("IsActive");
+                    b.Property<bool>("IsDeleted");
 
                     b.Property<double>("Latitude");
 
@@ -147,7 +138,7 @@ namespace Donde.Augmentor.Infrastructure.Migrations
 
                     b.Property<Guid?>("AvatarId");
 
-                    b.Property<bool>("IsActive");
+                    b.Property<bool>("IsDeleted");
 
                     b.Property<int>("MediaType");
 
@@ -164,9 +155,6 @@ namespace Donde.Augmentor.Infrastructure.Migrations
 
                     b.HasIndex("AvatarId");
 
-                    b.HasIndex("Id")
-                        .IsUnique();
-
                     b.HasIndex("VideoId");
 
                     b.ToTable("AugmentObjectMedias");
@@ -179,7 +167,10 @@ namespace Donde.Augmentor.Infrastructure.Migrations
 
                     b.Property<DateTime>("AddedDate");
 
-                    b.Property<bool>("IsActive");
+                    b.Property<string>("AvatarConfiguration")
+                        .HasColumnType("jsonb");
+
+                    b.Property<bool>("IsDeleted");
 
                     b.Property<string>("MimeType");
 
@@ -187,18 +178,75 @@ namespace Donde.Augmentor.Infrastructure.Migrations
 
                     b.Property<Guid>("OrganizationId");
 
+                    b.Property<string>("TextureFileName");
+
+                    b.Property<string>("TextureFileUrl");
+
                     b.Property<DateTime>("UpdatedDate");
 
                     b.Property<string>("Url");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Id")
-                        .IsUnique();
-
                     b.HasIndex("OrganizationId");
 
                     b.ToTable("Avatars");
+                });
+
+            modelBuilder.Entity("Donde.Augmentor.Core.Domain.Models.Metrics.AugmentObjectMediaVisitMetric", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("AddedDate");
+
+                    b.Property<Guid>("AugmentObjectId");
+
+                    b.Property<Guid>("AugmentObjectMediaId");
+
+                    b.Property<string>("DeviceId");
+
+                    b.Property<string>("DeviceName");
+
+                    b.Property<string>("DeviceUniqueId");
+
+                    b.Property<bool>("IsDeleted");
+
+                    b.Property<DateTime>("UpdatedDate");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AugmentObjectId");
+
+                    b.HasIndex("AugmentObjectMediaId");
+
+                    b.ToTable("AugmentObjectMediaVisitMetrics");
+                });
+
+            modelBuilder.Entity("Donde.Augmentor.Core.Domain.Models.Metrics.AugmentObjectVisitMetric", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("AddedDate");
+
+                    b.Property<Guid>("AugmentObjectId");
+
+                    b.Property<string>("DeviceId");
+
+                    b.Property<string>("DeviceName");
+
+                    b.Property<string>("DeviceUniqueId");
+
+                    b.Property<bool>("IsDeleted");
+
+                    b.Property<DateTime>("UpdatedDate");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AugmentObjectId");
+
+                    b.ToTable("AugmentObjectVisitMetrics");
                 });
 
             modelBuilder.Entity("Donde.Augmentor.Core.Domain.Models.Organization", b =>
@@ -214,7 +262,7 @@ namespace Donde.Augmentor.Infrastructure.Migrations
 
                     b.Property<string>("EmailAddress");
 
-                    b.Property<bool>("IsActive");
+                    b.Property<bool>("IsDeleted");
 
                     b.Property<double>("Latitude");
 
@@ -234,39 +282,7 @@ namespace Donde.Augmentor.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Id")
-                        .IsUnique();
-
                     b.ToTable("Organizations");
-                });
-
-            modelBuilder.Entity("Donde.Augmentor.Core.Domain.Models.User", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<DateTime>("AddedDate");
-
-                    b.Property<string>("Email");
-
-                    b.Property<bool>("IsActive");
-
-                    b.Property<string>("Name");
-
-                    b.Property<Guid>("OrganizationId");
-
-                    b.Property<string>("Password");
-
-                    b.Property<string>("Phone");
-
-                    b.Property<DateTime>("UpdatedDate");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Id")
-                        .IsUnique();
-
-                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Donde.Augmentor.Core.Domain.Models.Video", b =>
@@ -276,7 +292,7 @@ namespace Donde.Augmentor.Infrastructure.Migrations
 
                     b.Property<DateTime>("AddedDate");
 
-                    b.Property<bool>("IsActive");
+                    b.Property<bool>("IsDeleted");
 
                     b.Property<string>("MimeType");
 
@@ -357,6 +373,27 @@ namespace Donde.Augmentor.Infrastructure.Migrations
                     b.HasOne("Donde.Augmentor.Core.Domain.Models.Organization", "Organization")
                         .WithMany()
                         .HasForeignKey("OrganizationId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Donde.Augmentor.Core.Domain.Models.Metrics.AugmentObjectMediaVisitMetric", b =>
+                {
+                    b.HasOne("Donde.Augmentor.Core.Domain.Models.AugmentObject", "AugmentObject")
+                        .WithMany()
+                        .HasForeignKey("AugmentObjectId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Donde.Augmentor.Core.Domain.Models.AugmentObjectMedia", "AugmentObjectMedia")
+                        .WithMany()
+                        .HasForeignKey("AugmentObjectMediaId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Donde.Augmentor.Core.Domain.Models.Metrics.AugmentObjectVisitMetric", b =>
+                {
+                    b.HasOne("Donde.Augmentor.Core.Domain.Models.AugmentObject", "AugmentObject")
+                        .WithMany()
+                        .HasForeignKey("AugmentObjectId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

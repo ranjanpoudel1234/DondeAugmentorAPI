@@ -1,4 +1,5 @@
 ﻿using Donde.Augmentor.Core.Domain.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,5 +12,6 @@ namespace Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces
         IQueryable<Organization> GetOrganizations();
 
         Task<Organization> CreateOrganizationAsync(Organization entity);
+        Task<Organization> UpdateOrganizationAsync(Guid entityId, Organization entity);
     }
 }
