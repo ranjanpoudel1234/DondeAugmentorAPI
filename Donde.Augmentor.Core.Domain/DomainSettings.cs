@@ -15,7 +15,10 @@
         public string BucketName { get; set; }
         public string ImageFolderName { get; set; }
         public string VideosFolderName { get; set; }
+        public string AudiosFolderName { get; set; }
+        public string LogosFolderName { get; set; }
         public int UploadPartSizeInMB { get; set; }
+        public string OriginalImageSubFolderName { get; set; }
     }
 
     public class MediaSettings

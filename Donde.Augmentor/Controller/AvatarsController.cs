@@ -11,11 +11,13 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Donde.Augmentor.Web.Controller
 {
     [ApiVersion("1.0")]
     [ODataRoutePrefix("avatars")]
+    [Authorize]
     public class AvatarsController : ODataController
     {
         private readonly IAvatarService _avatarService;
@@ -31,6 +33,7 @@ namespace Donde.Augmentor.Web.Controller
 
         [ODataRoute]
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> Get(ODataQueryOptions<AvatarViewModel> odataOptions)
         {
             var result = new List<AvatarViewModel>();

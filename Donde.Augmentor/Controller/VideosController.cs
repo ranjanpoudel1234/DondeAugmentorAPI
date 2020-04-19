@@ -6,6 +6,7 @@ using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces.IFileService;
 using Donde.Augmentor.Web.Attributes;
 using Donde.Augmentor.Web.ViewModels;
 using Microsoft.AspNet.OData.Routing;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
@@ -18,6 +19,7 @@ namespace Donde.Augmentor.Web.Controller
 
     [ApiVersion("1.0")]
     [ODataRoutePrefix("videos")]
+    [Authorize]
     public class VideosController : BaseController
     {
         private readonly IVideoService _videoService;

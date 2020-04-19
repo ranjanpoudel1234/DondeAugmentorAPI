@@ -10,9 +10,11 @@ namespace Donde.Augmentor.Core.Domain.Dto
     public class AugmentObjectDto : AugmentObject
     {
         public AugmentObjectMediaTypes MediaType { get; set; }
+        public Guid MediaId { get; set; }
         public Guid? AvatarId { get; set; }
         public string AvatarName { get; set; }
         public string AvatarUrl { get; set; }
+        public string AvatarConfiguration { get; set; }
         public Guid? AudioId { get; set; }
         public string AudioName { get; set; }
         public string AudioUrl { get; set; }
@@ -22,12 +24,9 @@ namespace Donde.Augmentor.Core.Domain.Dto
 
         public string ImageName { get; set; }
         public string ImageUrl { get; set; }
-    }
 
-    public class GeographicalAugmentObjectDto: AugmentObjectDto
-    {
-        public double Distance { get; set; }
-        public double Latitude { get; set; }
-        public double Longitude { get; set; }
+        public double? Distance { get; set; }
+        public double? Latitude { get; set; }
+        public double? Longitude { get; set; }
     }
 }

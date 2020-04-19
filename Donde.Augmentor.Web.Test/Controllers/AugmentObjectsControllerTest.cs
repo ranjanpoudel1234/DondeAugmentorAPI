@@ -23,7 +23,7 @@ namespace Donde.Augmentor.Web.Test.Controllers
         {
             var augmentObjectController = GetDefaultAugmentObjectController();
 
-            var result = await augmentObjectController.GetAugmentObjectGeocoded(A.Dummy<Guid>(), A.Dummy<double>(), A.Dummy<double>(), A.Dummy<int>());
+            var result = await augmentObjectController.GetAugmentObjectGeocoded(A.Dummy<Guid>(),32,34, A.Dummy<int>());
 
             var okResult = result as OkObjectResult;
 
@@ -41,7 +41,7 @@ namespace Donde.Augmentor.Web.Test.Controllers
         {
             var fakeService = A.Fake<IAugmentObjectService>();
             A.CallTo(() => fakeService.GetGeographicalAugmentObjectsByRadius(A<Guid>._, A<double>._, A<double>._, A<int>._))
-                .Returns(Task.FromResult(A.CollectionOfDummy<GeographicalAugmentObjectDto>(10).AsEnumerable()));
+                .Returns(Task.FromResult(A.CollectionOfDummy<AugmentObjectDto>(10).AsEnumerable()));
 
             return fakeService;
         }

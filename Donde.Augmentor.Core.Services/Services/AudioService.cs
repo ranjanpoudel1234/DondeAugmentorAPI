@@ -2,6 +2,7 @@
 using Donde.Augmentor.Core.Repositories.Interfaces.RepositoryInterfaces;
 using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Donde.Augmentor.Core.Services.Services
 {
@@ -17,6 +18,12 @@ namespace Donde.Augmentor.Core.Services.Services
         public IQueryable<Audio> GetAudios()
         {
             return _audioRepository.GetAudios();           
+        }
+
+
+        public Task<Audio> AddAudioAsync(Audio audio)
+        {
+            return _audioRepository.CreateAudioAsync(audio);
         }
     }
 }

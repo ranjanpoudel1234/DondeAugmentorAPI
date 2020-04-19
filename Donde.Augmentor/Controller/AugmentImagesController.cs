@@ -9,6 +9,7 @@ using Donde.Augmentor.Web.ViewModels;
 using Microsoft.AspNet.OData;
 using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNet.OData.Routing;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
@@ -26,6 +27,7 @@ namespace Donde.Augmentor.Web.Controller
 {
     [ApiVersion("1.0")]
     [ODataRoutePrefix("augmentImages")]
+    [Authorize]
     public class AugmentImagesController : BaseController
     {
         private readonly IAugmentImageService _augmentImageservice;
@@ -51,6 +53,7 @@ namespace Donde.Augmentor.Web.Controller
 
         [ODataRoute]
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> Get(ODataQueryOptions<AugmentImageViewModel> odataOptions)
         {
             var result = new List<AugmentImageViewModel>();
