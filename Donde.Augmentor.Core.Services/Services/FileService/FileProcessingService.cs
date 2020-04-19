@@ -96,11 +96,13 @@ namespace Donde.Augmentor.Core.Services.Services.FileService
                             var originalUploadResult = await UploadOriginalFileAsync(mediaType, uniqueFileName, localFilePath);
                             if (originalUploadResult.IsFailure)
                             {
+                                DeleteFileFromPath(localFilePath);
                                 return Result.Fail<MediaAttachmentDto>("Failure in uploading original image");
                             }
 
                             if (!ResizeImage(localFilePath))
                             {
+                                DeleteFileFromPath(localFilePath);
                                 return Result.Fail<MediaAttachmentDto>("Could not resize image file");
                             }
                         }
@@ -123,6 +125,7 @@ namespace Donde.Augmentor.Core.Services.Services.FileService
 
                         if (uploadResult.IsFailure)
                         {
+                            DeleteFileFromPath(localFilePath);
                             _logger.LogError("Failure in storage service");
                             return Result.Fail<MediaAttachmentDto>("Failure in storage service while uploading file");
                         }
