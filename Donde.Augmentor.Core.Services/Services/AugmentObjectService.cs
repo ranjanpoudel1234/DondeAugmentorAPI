@@ -48,11 +48,15 @@ namespace Donde.Augmentor.Core.Services.Services
             return await _augmentObjectRepository.UpdateAugmentObjectAsync(id, entity);
         }
 
-        private string GetPathWithRootLocationOrNull(string url)
+        private string GetPathWithRootLocationOrNull(string url, bool getOriginal = false)
         {
             if (url == null) return null;
 
+            if (!getOriginal)
             return $"{_domainSettings.GeneralSettings.StorageBasePath}{url}";
+
+            var urlSplit = url.Split("/");
+            return $"{_domainSettings.GeneralSettings.StorageBasePath}{urlSplit[0]}/{_domainSettings.UploadSettings.OriginalImageSubFolderName}/{urlSplit[1]}";
         }
 
         private AugmentObjectDto GetAugmentObjectMapWithUpdatedUrls(AugmentObjectDto augmentObject)
@@ -82,6 +86,7 @@ namespace Donde.Augmentor.Core.Services.Services
                 VideoUrl = GetPathWithRootLocationOrNull(augmentObject.VideoUrl),
                 ImageName = augmentObject.ImageName,
                 ImageUrl = GetPathWithRootLocationOrNull(augmentObject.ImageUrl),
+                OriginalSizeImageUrl = GetPathWithRootLocationOrNull(augmentObject.ImageUrl, getOriginal: true),
                 Distance = augmentObject.Distance,
                 Latitude = augmentObject.Latitude,
                 Longitude = augmentObject.Longitude
