@@ -31,6 +31,7 @@ namespace Donde.Augmentor.Web.ViewModels.AugmentObject
 
          string ImageName { get; set; }
          string ImageUrl { get; set; }
+         string OriginalSizeImageUrl { get; set; }
 
          List<AugmentObjectMediaViewModel> AugmentObjectMedias { get; set; }
 

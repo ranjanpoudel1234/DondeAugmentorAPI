@@ -42,6 +42,7 @@ namespace Donde.Augmentor.Web.AutoMapperProfiles
                .ForMember(x => x.AudioUrl, opts => opts.Ignore())
                .ForMember(x => x.ImageName, opts => opts.Ignore())
                .ForMember(x => x.ImageUrl, opts => opts.Ignore())
+               .ForMember(x => x.OriginalSizeImageUrl, opts => opts.Ignore())
                .ForMember(x => x.VideoId, opts => opts.Ignore())
                .ForMember(x => x.VideoName, opts => opts.Ignore())
                .ForMember(x => x.VideoUrl, opts => opts.Ignore());
