@@ -1,35 +1,43 @@
 ﻿using Amazon.S3;
 using Donde.Augmentor.Bootstrapper;
 using Donde.Augmentor.Core.Domain;
+using Donde.Augmentor.Infrastructure.Database.Identity;
 using Donde.Augmentor.Web.AwsEnvironmentConfiguration;
 using Donde.Augmentor.Web.Cors;
 using Donde.Augmentor.Web.Filters;
+using Donde.Augmentor.Web.Identity;
 using Donde.Augmentor.Web.OData;
+using IdentityServer4.AccessTokenValidation;
+using IdentityServer4.Models;
 using Microsoft.AspNet.OData.Builder;
+using Microsoft.AspNet.OData.Formatter;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.Controllers;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.Mvc.ViewComponents;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.PlatformAbstractions;
+using Microsoft.Net.Http.Headers;
+using Microsoft.OpenApi.Models;
 using NLog;
 using NLog.Extensions.Logging;
 using SimpleInjector;
 using SimpleInjector.Integration.AspNetCore.Mvc;
 using SimpleInjector.Lifestyles;
-using System.Reflection;
-using Microsoft.EntityFrameworkCore;
-using System;
-using Donde.Augmentor.Infrastructure.Database.Identity;
-using Microsoft.EntityFrameworkCore.Diagnostics;
-using Donde.Augmentor.Web.Identity;
+using Swashbuckle.Swagger;
 using System.Collections.Generic;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using System.Threading.Tasks;
-using IdentityServer4.AccessTokenValidation;
-using IdentityServer4.Models;
+using System.IO;
+using System.Linq;
+using System.Reflection;
 
 namespace Donde.Augmentor.Web
 {
@@ -66,7 +74,6 @@ namespace Donde.Augmentor.Web
 
             services.AddDondeIdentityServer(IsLocalEnvironment, Clients, IdentitySignInKeyCredentialSettings);
            
-
             services.AddAuthorization();
             services.AddAuthentication(options =>
             {
@@ -92,17 +99,70 @@ namespace Donde.Augmentor.Web
                 o.AssumeDefaultVersionWhenUnspecified = true;
             });
 
-            services.AddDondeOData(Configuration);
-
             services.AddMvc(
                config =>
                {
                    config.Filters.Add(typeof(DondeCustomExceptionFilter));
-               });
+
+                   foreach (var outputFormatter in
+config.OutputFormatters.OfType<ODataOutputFormatter>().Where(_ =>
+_.SupportedMediaTypes.Count == 0))
+                   {
+                       outputFormatter.SupportedMediaTypes.Add(new
+   MediaTypeHeaderValue("application/prs.odatatestxx-odata"));
+                   }
+                   foreach (var inputFormatter in
+   config.InputFormatters.OfType<ODataInputFormatter>().Where(_ =>
+   _.SupportedMediaTypes.Count == 0))
+                   {
+                       inputFormatter.SupportedMediaTypes.Add(new
+   MediaTypeHeaderValue("application/prs.odatatestxx-odata"));
+                   }
+               }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddDefaultAWSOptions(Configuration.GetAWSOptions());
             services.AddAWSService<IAmazonS3>();
 
+            services.AddDondeOData(Configuration);
+
+            //services.AddSwaggerGen(a =>
+            //{
+            //    var provider = services.BuildServiceProvider().GetRequiredService<IApiVersionDescriptionProvider>();
+
+            //    foreach (var description in provider.ApiVersionDescriptions)
+            //    {
+            //        var info = new Microsoft.OpenApi.Models.OpenApiInfo
+            //        {
+            //            Title = "My API Title",
+            //            Version = description.ApiVersion.ToString(),
+            //            Description = "My API Description"
+            //        };
+
+            //        if (description.IsDeprecated)
+            //            info.Description += " NOTE: This API has been deprecated";
+
+            //        a.SwaggerDoc(description.GroupName, info);
+            //    }
+
+            //    //a.ParameterFilter<SwaggerDefaultValues>();
+
+            //    var filePath = Path.Combine(PlatformServices.Default.Application.ApplicationBasePath, $"{PlatformServices.Default.Application.ApplicationName}.xml");
+            //    a.IncludeXmlComments(filePath);
+
+            //    a.DescribeAllEnumsAsStrings();
+            //});
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "Swagger Sample",
+                    Version = "v1",
+                    // You can also set Description, Contact, License, TOS...
+                });
+
+             
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -117,6 +177,24 @@ namespace Donde.Augmentor.Web
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger();
+
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
+            // specifying the Swagger JSON endpoint.
+            //app.UseSwaggerUI(c =>
+            //{
+            //    // build a swagger endpoint for each discovered API version
+            //    foreach (var description in versionDescriptionProvider.ApiVersionDescriptions)
+            //    {
+            //        c.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json", description.GroupName);
+            //    }
+            //});
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Swagger Sample");
+            });
 
             app.UseIdentityServer();
 
@@ -195,7 +273,7 @@ namespace Donde.Augmentor.Web
             loggerFactory.CreateLogger<Program>().LogInformation($"Donde_Augmentor: ConnectionString: {connectionString} and EnvironmentName: {CurrentEnvironment.EnvironmentName}");
         }
 
-        public void ReconfigureNLogRulesBasedOnEnvironment()
+        private void ReconfigureNLogRulesBasedOnEnvironment()
         {
             var logLevelsToDisable = Configuration.GetLogLevelsToDisable();
             if (!IsLocalEnvironment)
@@ -207,6 +285,21 @@ namespace Donde.Augmentor.Web
             }
  
             LogManager.ReconfigExistingLoggers();
+        }
+
+        private static void SetOutputFormatters(IServiceCollection services)
+        {
+            services.AddMvcCore(options =>
+            {
+                IEnumerable<ODataOutputFormatter> outputFormatters =
+                    options.OutputFormatters.OfType<ODataOutputFormatter>()
+                        .Where(foramtter => foramtter.SupportedMediaTypes.Count == 0);
+
+                foreach (var outputFormatter in outputFormatters)
+                {
+                    outputFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/odata"));
+                }
+            });
         }
     }
 }

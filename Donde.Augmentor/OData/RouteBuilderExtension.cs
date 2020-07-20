@@ -17,6 +17,8 @@ namespace Donde.Augmentor.Web.OData
             builder.Select().Filter().OrderBy().MaxTop(ODataConstants.MaximumTopAllowed).Count();
             builder.MapVersionedODataRoutes("odata", "api/v{apiVersion}", modelBuilder.GetEdmModels());
 
+            builder.EnableDependencyInjection();
+
             return builder;
         }
     }
