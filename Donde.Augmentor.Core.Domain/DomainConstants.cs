@@ -10,6 +10,7 @@ namespace Donde.Augmentor.Core.Domain
             public const string INVALID_VIDEO_FILE_TYPE = "INVALID_VIDEO_FILE_TYPE";
             public const string INVALID_AUDIO_FILE_TYPE = "INVALID_AUDIO_FILE_TYPE";
             public const string PROPERTY_EMPTY = "PROPERTY_EMPTY";
+            public const string INVALID_VALUE = "INVALID_VALUE";
         }
 
         public class ValidMediaExtensions

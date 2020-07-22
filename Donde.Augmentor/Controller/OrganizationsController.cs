@@ -24,7 +24,7 @@ using System.Threading.Tasks;
 
 namespace Donde.Augmentor.Web.Controller
 {
-    [ApiVersion("1.0")]
+    [ApiVersion("1.0", Deprecated = true)]
     [ODataRoutePrefix("organizations")]
     [Authorize]
     public class OrganizationsController : BaseController
@@ -99,44 +99,44 @@ namespace Donde.Augmentor.Web.Controller
         }
 
 
-        [ODataRoute("({organizationId})")]
-        [HttpPut]
-        public async Task<IActionResult> Put(Guid organizationId, [FromBody] OrganizationViewModel organizationViewModel)
-        {       
-            if(organizationId != organizationViewModel.Id)
-            {
-                throw new HttpBadRequestException(ErrorMessages.IdsMisMatch);
-            }
-            var organization = _mapper.Map<Organization>(organizationViewModel);
+        //[ODataRoute("({organizationId})")]
+        //[HttpPut]
+        //public async Task<IActionResult> Put(Guid organizationId, [FromBody] OrganizationViewModel organizationViewModel)
+        //{       
+        //    if(organizationId != organizationViewModel.Id)
+        //    {
+        //        throw new HttpBadRequestException(ErrorMessages.IdsMisMatch);
+        //    }
+        //    var organization = _mapper.Map<Organization>(organizationViewModel);
 
-            var result = await _organizationService.UpdateOrganizationAsync(organizationId, organization);
+        //    var result = await _organizationService.UpdateOrganizationAsync(organizationId, organization);
 
-            var organizationViewModelResult = _mapper.Map<OrganizationViewModel>(result);
+        //    var organizationViewModelResult = _mapper.Map<OrganizationViewModel>(result);
 
-            return Ok(organizationViewModelResult);
-        }
+        //    return Ok(organizationViewModelResult);
+        //}
 
-        [ODataRoute]
-        [HttpPost]
-        [DisableFormValueModelBinding]
-        [RequestSizeLimit(15728640)] // 15 mb
-        public async Task<IActionResult> Upload()
-        {
-            var fileUploadResult = await _fileProcessingService.UploadMediaAsync(Request, MediaTypes.Logo);
+        //[ODataRoute]
+        //[HttpPost]
+        //[DisableFormValueModelBinding]
+        //[RequestSizeLimit(15728640)] // 15 mb
+        //public async Task<IActionResult> Upload()
+        //{
+        //    var fileUploadResult = await _fileProcessingService.UploadMediaAsync(Request, MediaTypes.Logo);
 
-            if (fileUploadResult.IsFailure)
-            {
-                _logger.LogError($"Error on file Upload {JsonConvert.SerializeObject(fileUploadResult)}");
-                return StatusCode((int)HttpStatusCode.InternalServerError);
-            }
+        //    if (fileUploadResult.IsFailure)
+        //    {
+        //        _logger.LogError($"Error on file Upload {JsonConvert.SerializeObject(fileUploadResult)}");
+        //        return StatusCode((int)HttpStatusCode.InternalServerError);
+        //    }
 
-            var organization = _mapper.Map<Organization>(fileUploadResult.Value);
+        //    var organization = _mapper.Map<Organization>(fileUploadResult.Value);
 
-            var addedOrganization = await _organizationService.CreateOrganizationAsync(organization);
+        //    var addedOrganization = await _organizationService.CreateOrganizationAsync(organization);
 
-            var organizationViewModel = _mapper.Map<OrganizationViewModel>(addedOrganization);
+        //    var organizationViewModel = _mapper.Map<OrganizationViewModel>(addedOrganization);
 
-            return Created(organizationViewModel);
-        }
+        //    return Created(organizationViewModel);
+        //}
     }
 }

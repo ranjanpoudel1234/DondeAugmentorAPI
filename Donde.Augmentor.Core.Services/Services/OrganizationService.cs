@@ -4,7 +4,6 @@ using Donde.Augmentor.Core.Domain.Models;
 using Donde.Augmentor.Core.Domain.Validations;
 using Donde.Augmentor.Core.Repositories.Interfaces.RepositoryInterfaces;
 using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces;
-using Donde.Augmentor.Core.Services.Validations;
 using FluentValidation;
 using System;
 using System.Collections.Generic;

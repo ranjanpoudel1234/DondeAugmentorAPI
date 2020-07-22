@@ -15,7 +15,6 @@ namespace Donde.Augmentor.Core.Domain.Models
         public string City { get; set; }
         public string State { get; set; }
         public string Zip { get; set; }
-        public string EmailAddress { get; set; }
         public string LogoName { get; set; }
         public string LogoUrl { get; set; }
         public string LogoMimeType { get; set; }
