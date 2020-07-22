@@ -22,7 +22,8 @@ namespace Donde.Augmentor.Infrastructure.Database
 
 		}
 		public DbSet<Organization> Organizations { get; set; }
-		public DbSet<Avatar> Avatars { get; set; }
+        public DbSet<Site> Sites { get; set; }
+        public DbSet<Avatar> Avatars { get; set; }
 		public DbSet<Audio> Audios { get; set; }
 		public DbSet<Video> Videos { get; set; }
 		public DbSet<AugmentImage> AugmentImages { get; set; }

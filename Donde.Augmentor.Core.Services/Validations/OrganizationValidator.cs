@@ -18,9 +18,12 @@ namespace Donde.Augmentor.Core.Services.Validations
             RuleSet(OrganizationUpdateRuleSet, () =>
             {
                 RuleFor(x => x.Name).NotEmpty().WithMessage(DondeErrorMessages.PROPERTY_EMPTY);
-                RuleFor(x => x.Latitude).NotEmpty().WithMessage(DondeErrorMessages.PROPERTY_EMPTY);
-                RuleFor(x => x.Longitude).NotEmpty().WithMessage(DondeErrorMessages.PROPERTY_EMPTY);
-                RuleFor(x => x.Address).NotEmpty().WithMessage(DondeErrorMessages.PROPERTY_EMPTY);
+                //RuleFor(x => x.Latitude).NotEmpty().WithMessage(DondeErrorMessages.PROPERTY_EMPTY);
+                //RuleFor(x => x.Longitude).NotEmpty().WithMessage(DondeErrorMessages.PROPERTY_EMPTY);
+                //RuleFor(x => x.StreetAddress1).NotEmpty().WithMessage(DondeErrorMessages.PROPERTY_EMPTY);
+                //RuleFor(x => x.City).NotEmpty().WithMessage(DondeErrorMessages.PROPERTY_EMPTY);
+                //RuleFor(x => x.State).NotEmpty().WithMessage(DondeErrorMessages.PROPERTY_EMPTY);
+                //RuleFor(x => x.Zip).NotEmpty().WithMessage(DondeErrorMessages.PROPERTY_EMPTY);
             });
         }
     }

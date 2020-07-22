@@ -3,6 +3,7 @@ using Donde.Augmentor.Core.Domain.Dto;
 using Donde.Augmentor.Core.Domain.Helpers;
 using Donde.Augmentor.Core.Domain.Models;
 using Donde.Augmentor.Web.ViewModels;
+using System.Linq;
 
 namespace Donde.Augmentor.Web.AutoMapperProfiles
 {
@@ -14,11 +15,13 @@ namespace Donde.Augmentor.Web.AutoMapperProfiles
                 .ForMember(x => x.LogoName, opts => opts.MapFrom(src => src.FileName))
                 .ForMember(x => x.LogoUrl, opts => opts.MapFrom(src => src.FilePath))
                 .ForMember(x => x.LogoMimeType, opts => opts.MapFrom(src => src.MimeType))
-                .ForMember(x => x.Latitude, opts => opts.Ignore())
-                .ForMember(x => x.Longitude, opts => opts.Ignore())
                 .ForMember(x => x.Name, opts => opts.Ignore())
-                .ForMember(x => x.Code, opts => opts.Ignore())
-                .ForMember(x => x.Address, opts => opts.Ignore())
+                .ForMember(x => x.ShortName, opts => opts.Ignore())
+                .ForMember(x => x.StreetAddress1, opts => opts.Ignore())
+                .ForMember(x => x.StreetAddress2, opts => opts.Ignore())
+                .ForMember(x => x.City, opts => opts.Ignore())
+                .ForMember(x => x.State, opts => opts.Ignore())
+                .ForMember(x => x.Zip, opts => opts.Ignore())
                 .ForMember(x => x.EmailAddress, opts => opts.Ignore())
                 .ForMember(x => x.Type, opts => opts.Ignore())
                 .ForMember(x => x.AddedDate, opts => opts.Ignore())
@@ -30,7 +33,10 @@ namespace Donde.Augmentor.Web.AutoMapperProfiles
                 .ForMember(x => x.UpdatedDate, opts => opts.Ignore())
                 .ForMember(x => x.IsDeleted, opts => opts.Ignore());
 
-            CreateMap<Organization, OrganizationViewModel>();
+            CreateMap<Organization, OrganizationViewModel>()
+                .ForMember(x => x.Latitude, opts => opts.MapFrom(src => src.Sites.SingleOrDefault(x => x.Type == Core.Domain.Enum.SiteTypes.Main).Latitude))
+                .ForMember(x => x.Longitude, opts => opts.MapFrom(src => src.Sites.SingleOrDefault(x => x.Type == Core.Domain.Enum.SiteTypes.Main).Longitude))
+                .ForMember(x => x.Address, opts => opts.MapFrom(src => $"{src.StreetAddress1}, {src.City}, {src.State} {src.Zip}"));
         }
     }
 }
