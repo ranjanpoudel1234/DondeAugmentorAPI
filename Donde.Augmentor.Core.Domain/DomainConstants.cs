@@ -20,5 +20,17 @@ namespace Donde.Augmentor.Core.Domain
 
             public static List<string> VALID_AUDIO_EXTENSIONS = new List<string> { ".mp3", ".wav" };
         }
+
+        public class Roles
+        {
+            public const string SUPER_ADMINADMINISTRATOR = "SUPER ADMINISTRATOR";
+            public const string SCHOOL_ADMINADMINISTRATOR = "SCHOOL ADMINISTRATOR";
+        }
+
+        public class PermissionResources
+        {
+            public const string Users = "Users";
+            public const string Organizations = "Organizations";
+        }
     }
 }
