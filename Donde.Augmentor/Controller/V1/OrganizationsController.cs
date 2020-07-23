@@ -1,28 +1,20 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Donde.Augmentor.Core.Domain;
-using Donde.Augmentor.Core.Domain.CustomExceptions;
-using Donde.Augmentor.Core.Domain.Enum;
-using Donde.Augmentor.Core.Domain.Models;
 using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces;
 using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces.IFileService;
-using Donde.Augmentor.Web.Attributes;
-using Donde.Augmentor.Web.ViewModels;
-using Microsoft.AspNet.OData;
+using Donde.Augmentor.Web.ViewModels.V1;
 using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNet.OData.Routing;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 
-namespace Donde.Augmentor.Web.Controller
+namespace Donde.Augmentor.Web.Controller.V1
 {
     [ApiVersion("1.0", Deprecated = true)]
     [ODataRoutePrefix("organizations")]

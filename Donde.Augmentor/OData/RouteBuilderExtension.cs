@@ -15,7 +15,7 @@ namespace Donde.Augmentor.Web.OData
             modelBuilder.ModelBuilderFactory = () => new ODataConventionModelBuilder().EnableLowerCamelCase();
         
             builder.Select().Filter().OrderBy().MaxTop(ODataConstants.MaximumTopAllowed).Count();
-            builder.MapVersionedODataRoutes("odata", "api/v{apiVersion}", modelBuilder.GetEdmModels());
+            builder.MapVersionedODataRoutes("odata", "api/v{version:apiVersion}", modelBuilder.GetEdmModels());
 
             return builder;
         }

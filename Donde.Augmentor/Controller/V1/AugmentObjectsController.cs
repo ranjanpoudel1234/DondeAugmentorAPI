@@ -19,7 +19,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using static Donde.Augmentor.Web.Attributes.IgnoreJsonIgnore;
 
-namespace Donde.Augmentor.Web.Controller
+namespace Donde.Augmentor.Web.Controller.V1
 {
     [ApiVersion("1.0")]
     [ODataRoutePrefix("augmentObjects")]

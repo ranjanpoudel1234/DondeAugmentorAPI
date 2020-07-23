@@ -2,6 +2,7 @@
 using Donde.Augmentor.Core.Domain.Models;
 using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces;
 using Donde.Augmentor.Web.ViewModels.V2.Organization;
+using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNet.OData.Routing;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -23,8 +24,35 @@ namespace Donde.Augmentor.Web.Controller.V2
             _mapper = mapper;       
         }
 
-        [ODataRoute("({organizationId})")]
-        [HttpPut]
+        [ODataRoute]
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> Get(ODataQueryOptions<OrganizationViewModel> odataOptions)
+        {
+            //var result = new List<OrganizationViewModel>();
+
+            //var organizationQueryable = _organizationService.GetOrganizations();
+
+            //var projectedOrganizations = organizationQueryable.ProjectTo<OrganizationViewModel>(_mapper.ConfigurationProvider);
+
+            //var appliedResults = odataOptions.ApplyTo(projectedOrganizations);
+
+            //var organizationsViewModels = appliedResults as IQueryable<OrganizationViewModel>;
+
+            //if (organizationsViewModels != null)
+            //{
+            //    result = await organizationsViewModels.ToListAsync();
+            //}
+
+            //result.ForEach(x => x.LogoUrl = GetPathWithRootLocationOrNull(x.LogoUrl));
+
+            //return Ok(result);
+
+            return null;
+        }
+
+        [ODataRoute]
+        [HttpPost]
         public async Task<IActionResult> Post([FromBody] OrganizationViewModel organizationViewModel)
         {         
             var organization = _mapper.Map<Organization>(organizationViewModel);
