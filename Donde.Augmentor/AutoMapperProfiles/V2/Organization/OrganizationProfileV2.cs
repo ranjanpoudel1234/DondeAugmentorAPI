@@ -28,7 +28,6 @@ namespace Donde.Augmentor.Web.AutoMapperProfiles.V2.Organization
                 .ForMember(x => x.Address, opts => opts.MapFrom(src => src))
                 .ForMember(x => x.Logo, opts => opts.MapFrom(src => src));
 
-
             CreateMap<Core.Domain.Models.Organization, AddressViewModel>()
                 .ForMember(x => x.StreetAddress1, opts => opts.MapFrom(src => src.StreetAddress1))
                 .ForMember(x => x.StreetAddress2, opts => opts.MapFrom(src => src.StreetAddress2))
