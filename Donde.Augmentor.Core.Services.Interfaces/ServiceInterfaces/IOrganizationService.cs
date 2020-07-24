@@ -13,5 +13,6 @@ namespace Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces
         Task<Organization> GetOrganizationByIdAsync(Guid organizationId);
         Task<Organization> CreateOrganizationAsync(Organization entity);
         Task<Organization> UpdateOrganizationAsync(Guid entityId, Organization entity);
+        Task<Organization> DeleteOrganizationAsync(Guid entityId);
     }
 }

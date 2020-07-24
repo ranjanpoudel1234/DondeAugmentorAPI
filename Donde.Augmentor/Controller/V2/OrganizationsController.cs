@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Donde.Augmentor.Core.Domain;
+using Donde.Augmentor.Core.Domain.CustomExceptions;
 using Donde.Augmentor.Core.Domain.Models;
 using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces;
 using Donde.Augmentor.Web.OData;
@@ -10,6 +11,7 @@ using Microsoft.AspNet.OData.Routing;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -74,6 +76,42 @@ namespace Donde.Augmentor.Web.Controller.V2
             organizationViewModelResult.Logo.Url = GetPathWithRootLocationOrNull(organizationViewModelResult.Logo.Url);
 
             return StatusCode((int)HttpStatusCode.Created, organizationViewModelResult);
+        }
+
+
+        [ODataRoute("({organizationId})")]
+        [HttpPut]
+        public async Task<IActionResult> Put(Guid organizationId, [FromBody] OrganizationViewModel organizationViewModel)
+        {
+            if (organizationId != organizationViewModel.Id)
+            {
+                throw new HttpBadRequestException(ErrorMessages.IdsMisMatch);
+            }
+
+            var existingOrganization = await _organizationService.GetOrganizationByIdAsync(organizationId);
+            if (existingOrganization == null)
+            {
+                throw new HttpNotFoundException(ErrorMessages.ObjectNotFound);
+            }
+
+            var organization = _mapper.Map(organizationViewModel, existingOrganization);
+
+            var result = await _organizationService.UpdateOrganizationAsync(organizationId, organization);
+
+            var organizationViewModelResult = _mapper.Map<OrganizationViewModel>(result);
+
+            organizationViewModelResult.Logo.Url = GetPathWithRootLocationOrNull(organizationViewModelResult.Logo.Url);
+
+            return Ok(organizationViewModelResult);
+        }
+
+        [ODataRoute("({organizationId})")]
+        [HttpDelete]
+        public async Task<IActionResult> Delete(Guid organizationId)
+        {
+            await _organizationService.DeleteOrganizationAsync(organizationId);
+
+            return NoContent();
         }
 
         private string GetPathWithRootLocationOrNull(string relativeUrl)

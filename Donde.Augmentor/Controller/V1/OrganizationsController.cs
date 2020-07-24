@@ -88,23 +88,5 @@ namespace Donde.Augmentor.Web.Controller.V1
 
             return $"{_domainSettings.GeneralSettings.StorageBasePath}{url}";
         }
-
-
-        //[ODataRoute("({organizationId})")]
-        //[HttpPut]
-        //public async Task<IActionResult> Put(Guid organizationId, [FromBody] OrganizationViewModel organizationViewModel)
-        //{       
-        //    if(organizationId != organizationViewModel.Id)
-        //    {
-        //        throw new HttpBadRequestException(ErrorMessages.IdsMisMatch);
-        //    }
-        //    var organization = _mapper.Map<Organization>(organizationViewModel);
-
-        //    var result = await _organizationService.UpdateOrganizationAsync(organizationId, organization);
-
-        //    var organizationViewModelResult = _mapper.Map<OrganizationViewModel>(result);
-
-        //    return Ok(organizationViewModelResult);
-        //}
     }
 }
