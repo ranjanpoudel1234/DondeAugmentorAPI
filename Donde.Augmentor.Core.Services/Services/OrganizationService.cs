@@ -34,6 +34,11 @@ namespace Donde.Augmentor.Core.Services.Services
             return _organizationRepository.GetOrganizations();
         }
 
+        public Task<Organization> GetOrganizationByIdAsync(Guid organizationId)
+        {
+            return _organizationRepository.GetOrganizationByIdAsync(organizationId);
+        }
+
         public async Task<Organization> CreateOrganizationAsync(Organization entity)
         {
             await _validator.ValidateOrThrowAsync(entity, ruleSets: $"{OrganizationValidator.DefaultRuleSet}");

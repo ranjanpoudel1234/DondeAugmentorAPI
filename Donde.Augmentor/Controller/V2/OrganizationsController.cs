@@ -3,6 +3,7 @@ using AutoMapper.QueryableExtensions;
 using Donde.Augmentor.Core.Domain;
 using Donde.Augmentor.Core.Domain.Models;
 using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces;
+using Donde.Augmentor.Web.OData;
 using Donde.Augmentor.Web.ViewModels.V2.Organization;
 using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNet.OData.Routing;
@@ -11,12 +12,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
+using static Donde.Augmentor.Web.Attributes.IgnoreJsonIgnore;
 
 namespace Donde.Augmentor.Web.Controller.V2
 {
     [ApiVersion("2.0")]
-    [ODataRoutePrefix("organizations")]
+    [ODataRoutePrefix(ODataConstants.OrganizationRoute)]
     [Authorize]
     public class OrganizationsController : BaseController
     {
@@ -58,22 +61,26 @@ namespace Donde.Augmentor.Web.Controller.V2
    
         [ODataRoute]
         [HttpPost]
+        [IgnoreJsonIgnore]
         public async Task<IActionResult> Post([FromBody] OrganizationViewModel organizationViewModel)
-        {         
+        {       
+            //todo Add authorization check here after user/role etc is added.
             var organization = _mapper.Map<Organization>(organizationViewModel);
 
             var result = await _organizationService.CreateOrganizationAsync(organization);
 
             var organizationViewModelResult = _mapper.Map<OrganizationViewModel>(result);
 
-            return Ok(organizationViewModelResult);
+            organizationViewModelResult.Logo.Url = GetPathWithRootLocationOrNull(organizationViewModelResult.Logo.Url);
+
+            return StatusCode((int)HttpStatusCode.Created, organizationViewModelResult);
         }
 
-        private string GetPathWithRootLocationOrNull(string url)
+        private string GetPathWithRootLocationOrNull(string relativeUrl)
         {
-            if (url == null) return null;
+            if (relativeUrl == null) return null;
 
-            return $"{_domainSettings.GeneralSettings.StorageBasePath}{url}";
+            return $"{_domainSettings.GeneralSettings.StorageBasePath}{relativeUrl}";
         }
     }
 }

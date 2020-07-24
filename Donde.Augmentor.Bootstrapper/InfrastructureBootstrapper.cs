@@ -47,7 +47,8 @@ namespace Donde.Augmentor.Bootstrapper
             else if(environmentName.Equals("Vagrant"))
             {
                 dbContextOptions.UseNpgsql(connectionString, npgSqlBuilder => npgSqlBuilder.MigrationsAssembly(GetInfrastructureAssembly().FullName))
-                       .UseLoggerFactory(loggerFactory);
+                       .UseLoggerFactory(loggerFactory)
+                       .ConfigureWarnings(warnings => warnings.Throw(RelationalEventId.QueryClientEvaluationWarning));
             }
             else
             {

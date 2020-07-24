@@ -1,6 +1,5 @@
 ﻿using Donde.Augmentor.Core.Domain.Enum;
 using System;
-using System.Collections.Generic;
 
 namespace Donde.Augmentor.Web.ViewModels.V2.Organization
 {
@@ -11,7 +10,7 @@ namespace Donde.Augmentor.Web.ViewModels.V2.Organization
         public string ShortName { get; set; }
         public DateTime CreatedDateUtc { get; set; }
         public AddressViewModel Address { get; set; }
-        public OrganizationLogoViewModel Logo { get; set; }
+        public OrganizationLogoMetadataViewModel Logo { get; set; }
         public OrganizationTypes Type { get; set; }
     }
 }

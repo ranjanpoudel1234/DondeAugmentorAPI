@@ -57,7 +57,6 @@ namespace Donde.Augmentor.Web.Controller.V1
             return Ok(mappedResult);
         }
 
-
         [ODataRoute]
         [HttpGet]
         [AllowAnonymous]
@@ -106,29 +105,6 @@ namespace Donde.Augmentor.Web.Controller.V1
         //    var organizationViewModelResult = _mapper.Map<OrganizationViewModel>(result);
 
         //    return Ok(organizationViewModelResult);
-        //}
-
-        //[ODataRoute]
-        //[HttpPost]
-        //[DisableFormValueModelBinding]
-        //[RequestSizeLimit(15728640)] // 15 mb
-        //public async Task<IActionResult> Upload()
-        //{
-        //    var fileUploadResult = await _fileProcessingService.UploadMediaAsync(Request, MediaTypes.Logo);
-
-        //    if (fileUploadResult.IsFailure)
-        //    {
-        //        _logger.LogError($"Error on file Upload {JsonConvert.SerializeObject(fileUploadResult)}");
-        //        return StatusCode((int)HttpStatusCode.InternalServerError);
-        //    }
-
-        //    var organization = _mapper.Map<Organization>(fileUploadResult.Value);
-
-        //    var addedOrganization = await _organizationService.CreateOrganizationAsync(organization);
-
-        //    var organizationViewModel = _mapper.Map<OrganizationViewModel>(addedOrganization);
-
-        //    return Created(organizationViewModel);
         //}
     }
 }

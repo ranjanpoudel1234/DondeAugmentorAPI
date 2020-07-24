@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Donde.Augmentor.Core.Domain.Dto;
 using Donde.Augmentor.Core.Domain.Helpers;
 using Donde.Augmentor.Web.ViewModels.V2.Organization;
 
@@ -35,10 +36,28 @@ namespace Donde.Augmentor.Web.AutoMapperProfiles.V2.Organization
                 .ForMember(x => x.State, opts => opts.MapFrom(src => src.State))
                 .ForMember(x => x.Zip, opts => opts.MapFrom(src => src.Zip));
 
-            CreateMap<Core.Domain.Models.Organization, OrganizationLogoViewModel>()
+            CreateMap<Core.Domain.Models.Organization, OrganizationLogoMetadataViewModel>()
               .ForMember(x => x.Name, opts => opts.MapFrom(src => src.LogoName))
               .ForMember(x => x.Url, opts => opts.MapFrom(src => src.LogoUrl))
               .ForMember(x => x.MimeType, opts => opts.MapFrom(src => src.LogoMimeType));
+
+            CreateMap<MediaAttachmentDto, Core.Domain.Models.Organization>()
+                .ForMember(x => x.LogoName, opts => opts.MapFrom(src => src.FileName))
+                .ForMember(x => x.LogoUrl, opts => opts.MapFrom(src => src.FilePath))
+                .ForMember(x => x.LogoMimeType, opts => opts.MapFrom(src => src.MimeType))
+                .ForMember(x => x.Id, opts => opts.Ignore())
+                .ForMember(x => x.Name, opts => opts.Ignore())
+                .ForMember(x => x.ShortName, opts => opts.Ignore())
+                .ForMember(x => x.StreetAddress1, opts => opts.Ignore())
+                .ForMember(x => x.StreetAddress2, opts => opts.Ignore())
+                .ForMember(x => x.City, opts => opts.Ignore())
+                .ForMember(x => x.State, opts => opts.Ignore())
+                .ForMember(x => x.Zip, opts => opts.Ignore())
+                .ForMember(x => x.Type, opts => opts.Ignore())
+                .ForMember(x => x.Sites, opts => opts.Ignore())
+                .ForMember(x => x.AddedDate, opts => opts.Ignore())
+                .ForMember(x => x.UpdatedDate, opts => opts.Ignore())
+                .ForMember(x => x.IsDeleted, opts => opts.Ignore());
         }
     }
 }
