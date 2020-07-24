@@ -5,5 +5,6 @@
         public const int MaximumTopAllowed = 100;
         public const string OrganizationRoute = "organizations";
         public const string OrganizationLogoRoute = "organizationLogos";
+        public const string SitesRoute = "sites";
     }
 }

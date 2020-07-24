@@ -39,7 +39,7 @@ namespace Donde.Augmentor.Web.Controller.V2
         [ODataRoute]
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> Get(ODataQueryOptions<OrganizationViewModel> odataOptions)
+        public async Task<IActionResult> GetAll(ODataQueryOptions<OrganizationViewModel> odataOptions)
         {
             var result = new List<OrganizationViewModel>();
 
