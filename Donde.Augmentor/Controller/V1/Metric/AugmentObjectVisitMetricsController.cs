@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
-namespace Donde.Augmentor.Web.Controller.Metric
+namespace Donde.Augmentor.Web.Controller.V1.Metric
 {
     [ApiVersion("1.0")]
     [ODataRoutePrefix("augmentObjectVisitMetrics")]

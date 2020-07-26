@@ -1,6 +1,7 @@
 ﻿using Donde.Augmentor.Core.Domain.Enum;
 using Donde.Augmentor.Core.Domain.Interfaces;
 using System;
+using System.Collections.Generic;
 
 namespace Donde.Augmentor.Core.Domain.Models
 {
@@ -8,11 +9,12 @@ namespace Donde.Augmentor.Core.Domain.Models
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
-        public double Latitude { get; set; }
-        public double Longitude { get; set; }
-        public string Code { get; set; }
-        public string Address { get; set; }
-        public string EmailAddress { get; set; }
+        public string ShortName { get; set; }
+        public string StreetAddress1 { get; set; }
+        public string StreetAddress2 { get; set; }
+        public string City { get; set; }
+        public string State { get; set; }
+        public string Zip { get; set; }
         public string LogoName { get; set; }
         public string LogoUrl { get; set; }
         public string LogoMimeType { get; set; }
@@ -21,5 +23,7 @@ namespace Donde.Augmentor.Core.Domain.Models
         public DateTime AddedDate { get; set; }
         public DateTime UpdatedDate { get; set; }
         public bool IsDeleted { get; set; }
+
+        public List<Site> Sites { get; set; }
     }
 }
