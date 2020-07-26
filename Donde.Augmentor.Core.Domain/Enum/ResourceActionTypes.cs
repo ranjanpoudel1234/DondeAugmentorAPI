@@ -1,6 +1,6 @@
 ﻿namespace Donde.Augmentor.Core.Domain.Enum
 {
-    public enum ResourceOperations
+    public enum ResourceActionTypes
     {      
         Create = 0,
         Read = 1,
