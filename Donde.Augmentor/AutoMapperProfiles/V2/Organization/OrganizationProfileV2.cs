@@ -20,6 +20,7 @@ namespace Donde.Augmentor.Web.AutoMapperProfiles.V2.Organization
                 .ForMember(x => x.LogoName, opts => opts.Ignore())
                 .ForMember(x => x.LogoMimeType, opts => opts.Ignore())
                 .ForMember(x => x.Sites, opts => opts.Ignore())
+                .ForMember(x => x.Users, opts => opts.Ignore())
                 .ForMember(x => x.AddedDate, opts => opts.Ignore())
                 .ForMember(x => x.UpdatedDate, opts => opts.Ignore())
                 .ForMember(x => x.IsDeleted, opts => opts.Ignore());
@@ -55,6 +56,7 @@ namespace Donde.Augmentor.Web.AutoMapperProfiles.V2.Organization
                 .ForMember(x => x.Zip, opts => opts.Ignore())
                 .ForMember(x => x.Type, opts => opts.Ignore())
                 .ForMember(x => x.Sites, opts => opts.Ignore())
+                .ForMember(x => x.Users, opts => opts.Ignore())
                 .ForMember(x => x.AddedDate, opts => opts.Ignore())
                 .ForMember(x => x.UpdatedDate, opts => opts.Ignore())
                 .ForMember(x => x.IsDeleted, opts => opts.Ignore());

@@ -1,4 +1,5 @@
 ﻿using Donde.Augmentor.Core.Domain.Models.Identity;
+using Donde.Augmentor.Infrastructure.Database;
 using Donde.Augmentor.Infrastructure.Database.Identity;
 using IdentityServer4.Models;
 using Microsoft.AspNetCore.Identity;
@@ -16,7 +17,7 @@ namespace Donde.Augmentor.Web.Identity
             SignInKeyCredentialSettings settings)
         {
             services.AddIdentity<User, IdentityRole>()
-               .AddEntityFrameworkStores<DondeIdentityContext>();
+               .AddEntityFrameworkStores<DondeContext>();
 
             var serviceBuilder = services.AddIdentityServer()
                           .AddCertificateFromFile(settings)

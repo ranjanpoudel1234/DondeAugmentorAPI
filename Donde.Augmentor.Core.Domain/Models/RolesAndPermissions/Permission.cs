@@ -8,9 +8,9 @@ namespace Donde.Augmentor.Core.Domain.Models.RolesAndPermissions
     public class Permission : IDondeModel, IAuditFieldsModel
     {
         public Guid Id { get; set; }
-        public string Resource { get; set; }
+        public ResourceTypes Resource { get; set; }
         public string Description { get; set; }
-        public ResourceOperations Operation { get; set; }
+        public ResourceActionTypes ResourceAction { get; set; }
         public DateTime AddedDate { get; set; }
         public DateTime UpdatedDate { get; set; }
         public bool IsDeleted { get; set; }
