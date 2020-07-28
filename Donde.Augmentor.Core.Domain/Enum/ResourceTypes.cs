@@ -1,4 +1,6 @@
-﻿namespace Donde.Augmentor.Core.Domain.Enum
+﻿using System.ComponentModel;
+
+namespace Donde.Augmentor.Core.Domain.Enum
 {
     public enum ResourceTypes
     {

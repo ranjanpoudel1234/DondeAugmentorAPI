@@ -1,5 +1,6 @@
 ﻿using Donde.Augmentor.Infrastructure.Database;
 using Donde.Augmentor.Infrastructure.Database.Identity;
+using Donde.Augmentor.Infrastructure.DataSeeder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Logging;
@@ -28,7 +29,9 @@ namespace Donde.Augmentor.Bootstrapper
             );
 
             var options = BuildDondeContextOptions(environmentName, connectionString, loggerFactory);
-            simpleInjectorContainer.Register(() => { return new DondeContext(options.Options); }, Lifestyle.Scoped);          
+            simpleInjectorContainer.Register(() => { return new DondeContext(options.Options); }, Lifestyle.Scoped);
+
+            DataSeeder.SeedData();
         }
 
         private static DbContextOptionsBuilder<DondeContext> BuildDondeContextOptions(string environmentName, string connectionString, ILoggerFactory loggerFactory)
