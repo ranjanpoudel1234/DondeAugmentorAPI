@@ -460,6 +460,8 @@ namespace Donde.Augmentor.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("RoleId");
+
                     b.HasIndex("UserId");
 
                     b.ToTable("UserRoles");
@@ -749,6 +751,11 @@ namespace Donde.Augmentor.Infrastructure.Migrations
 
             modelBuilder.Entity("Donde.Augmentor.Core.Domain.Models.RolesAndPermissions.UserRole", b =>
                 {
+                    b.HasOne("Donde.Augmentor.Core.Domain.Models.RolesAndPermissions.Role")
+                        .WithMany("Users")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("Donde.Augmentor.Core.Domain.Models.Identity.User")
                         .WithMany("Roles")
                         .HasForeignKey("UserId")

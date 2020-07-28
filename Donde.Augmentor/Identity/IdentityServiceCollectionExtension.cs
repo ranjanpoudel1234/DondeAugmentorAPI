@@ -16,7 +16,7 @@ namespace Donde.Augmentor.Web.Identity
             Client[] clients,
             SignInKeyCredentialSettings settings)
         {
-            services.AddIdentity<User, IdentityRole>()
+            services.AddIdentity<User, IdentityRole<Guid>>()
                .AddEntityFrameworkStores<DondeContext>();
 
             var serviceBuilder = services.AddIdentityServer()

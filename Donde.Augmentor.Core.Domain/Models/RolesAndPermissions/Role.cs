@@ -13,5 +13,6 @@ namespace Donde.Augmentor.Core.Domain.Models.RolesAndPermissions
         public bool IsDeleted { get; set; }
 
         public virtual ICollection<RolePermission> Permissions { get; set; }
+        public virtual ICollection<UserRole> Users { get; set; }
     }
 }
