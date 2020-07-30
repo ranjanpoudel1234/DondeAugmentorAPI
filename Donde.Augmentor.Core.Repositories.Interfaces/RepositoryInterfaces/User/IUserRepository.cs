@@ -1,0 +1,15 @@
+﻿using System.Linq;
+using System.Threading.Tasks;
+
+namespace Donde.Augmentor.Core.Repositories.Interfaces.RepositoryInterfaces.User
+{
+    public interface IUserRepository
+    {
+        IQueryable<Domain.Models.Identity.User> GetAll();
+        Task<Domain.Models.Identity.User> CreateAsync(Domain.Models.Identity.User entity);
+
+        Task<Domain.Models.Identity.User> UpdateAsync(Domain.Models.Identity.User entity);
+
+        Task<Domain.Models.Identity.User> DeleteAsync(Domain.Models.Identity.User entity);
+    }
+}

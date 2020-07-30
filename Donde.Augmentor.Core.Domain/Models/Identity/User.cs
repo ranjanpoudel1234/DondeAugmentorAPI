@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace Donde.Augmentor.Core.Domain.Models.Identity
 {
-    public class User : IdentityUser<Guid>, IAuditFieldsModel
+    public class User : IdentityUser<Guid>, IAuditFieldsModel, IDondeModel
     {
         public string FullName { get; set; }
         public string FirstName { get; set; }
