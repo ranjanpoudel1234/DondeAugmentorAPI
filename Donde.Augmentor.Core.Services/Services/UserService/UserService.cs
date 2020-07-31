@@ -9,6 +9,7 @@ using Donde.Augmentor.Core.Domain.Validations;
 using Donde.Augmentor.Core.Repositories.Interfaces.RepositoryInterfaces.User;
 using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces.User;
 using FluentValidation;
+using Microsoft.AspNetCore.Identity;
 
 namespace Donde.Augmentor.Core.Services.Services.UserService
 {
@@ -17,23 +18,40 @@ namespace Donde.Augmentor.Core.Services.Services.UserService
         private IUserRepository _userRepository;
         private readonly IMapper _mapper;
         private readonly IValidator<User> _validator;
-        public UserService(IUserRepository userRepository, IMapper mapper, IValidator<User> validator)
+        private readonly UserManager<User> _userManager;
+        public UserService(IUserRepository userRepository, IMapper mapper, IValidator<User> validator, UserManager<User> userManager)
         {
             _userRepository = userRepository;
             _mapper = mapper;
             _validator = validator;
+            _userManager = userManager;
         }
 
-        public async Task<User> CreateAsync(User entity)
+        public async Task<User> CreateAsync(User entity, string password)
         {
             entity.Id = SequentialGuidGenerator.GenerateComb();
             await _validator.ValidateOrThrowAsync(entity);
-            return await _userRepository.CreateAsync(entity);
+
+            var result = await _userManager.CreateAsync(entity, password);
+
+            if (!result.Succeeded)
+            {
+                throw new HttpBadRequestException(string.Join(",", result.Errors.Select(x => x.Description)));
+            }
+
+            return entity;
+
+            // return await _userRepository.CreateAsync(entity);
         }
 
         public IQueryable<User> GetAll()
         {
             return _userRepository.GetAll();
+        }
+
+        public Task<User> GetByIdAsync(Guid entityId)
+        {
+            return _userRepository.GetByIdAsync(entityId);
         }
 
         public async Task<User> UpdateAsync(Guid entityId, User entity)

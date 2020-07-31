@@ -26,29 +26,29 @@ namespace Donde.Augmentor.Web.Controller.V1
             _userManager = userManager;  
         }
 
-        [HttpPost]
-        [Route("api/v1/accounts/register")]
-        [AllowAnonymous]
-        public async Task<IActionResult> Register([FromBody]AccountViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+        //[HttpPost]
+        //[Route("api/v1/accounts/register")]
+        //[AllowAnonymous]
+        //public async Task<IActionResult> Register([FromBody]AccountViewModel model)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState);
+        //    }
 
-            var user = new User { UserName = model.Email, FullName = model.FullName, Email = model.Email };
+        //    var user = new User { UserName = model.Email, Email = model.Email };
 
-            var result = await _userManager.CreateAsync(user, model.Password);
+        //    var result = await _userManager.CreateAsync(user, model.Password);
 
-            if (!result.Succeeded) return BadRequest(result.Errors);
+        //    if (!result.Succeeded) return BadRequest(result.Errors);
 
-            await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("userName", user.UserName));
-            await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("name", user.FullName));
-            await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("email", user.Email));
-            await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("role", model.Role));
+        //    await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("userName", user.UserName));
+        //    //await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("name", user.FullName));
+        //    //await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("email", user.Email));
+        //    //await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("role", model.Role));
 
-            return Ok(user); //todo map user back
-        }
+        //    return Ok(user); //todo map user back
+        //}
 
         [Route("api/v1/accounts/userInfo")]
         public async Task<IActionResult> GetUserInfo()

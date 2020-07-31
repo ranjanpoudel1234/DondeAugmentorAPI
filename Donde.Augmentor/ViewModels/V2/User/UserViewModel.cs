@@ -7,7 +7,7 @@ namespace Donde.Augmentor.Web.ViewModels.V2.User
     {
         public Guid Id { get; set; }
         public string UserName { get; set; }
-        public string FullName { get; set; }
+        public string Password { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string MiddleInitial { get; set; }

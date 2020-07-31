@@ -1,13 +1,16 @@
 ﻿using Donde.Augmentor.Core.Domain.Helpers;
 using Donde.Augmentor.Core.Domain.Models.Identity;
 using Donde.Augmentor.Core.Domain.Models.RolesAndPermissions;
+using Donde.Augmentor.Core.Repositories.Interfaces.RepositoryInterfaces.User;
 using Donde.Augmentor.Infrastructure.Database;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Donde.Augmentor.Infrastructure.Repositories.UserRepository
 {
-    public class UserRepository : GenericRepository
+    public class UserRepository : GenericRepository, IUserRepository
     {
         public UserRepository(DondeContext dbContext) : base(dbContext)
         {
@@ -16,7 +19,12 @@ namespace Donde.Augmentor.Infrastructure.Repositories.UserRepository
 
         public IQueryable<User> GetAll()
         {
-            return GetAll<User>();
+            return GetAll<User>().Include(x => x.Organizations);
+        }
+
+        public Task<User> GetByIdAsync(Guid entityId)
+        {
+            return GetByIdAsync<User>(entityId);
         }
 
         public async Task<User> CreateAsync(User entity)
