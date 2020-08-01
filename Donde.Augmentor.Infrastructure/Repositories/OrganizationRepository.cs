@@ -3,6 +3,7 @@ using Donde.Augmentor.Core.Domain.Models;
 using Donde.Augmentor.Core.Repositories.Interfaces.RepositoryInterfaces;
 using Donde.Augmentor.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -29,6 +30,11 @@ namespace Donde.Augmentor.Infrastructure.Repositories
         public IQueryable<Organization> GetOrganizations()
         {
             return GetAll<Organization>();
+        }
+
+        public Task<Organization> GetOrganizationByIdAsync(Guid organizationId)
+        {
+            return GetByIdAsync<Organization>(organizationId);
         }
 
         public async Task<IEnumerable<Organization>> GetClosestOrganizationByRadius(double latitude, double longitude, int radiusInMeters)

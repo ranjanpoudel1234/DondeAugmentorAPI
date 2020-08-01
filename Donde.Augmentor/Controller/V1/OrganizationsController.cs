@@ -1,30 +1,22 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Donde.Augmentor.Core.Domain;
-using Donde.Augmentor.Core.Domain.CustomExceptions;
-using Donde.Augmentor.Core.Domain.Enum;
-using Donde.Augmentor.Core.Domain.Models;
 using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces;
 using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces.IFileService;
-using Donde.Augmentor.Web.Attributes;
-using Donde.Augmentor.Web.ViewModels;
-using Microsoft.AspNet.OData;
+using Donde.Augmentor.Web.ViewModels.V1;
 using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNet.OData.Routing;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 
-namespace Donde.Augmentor.Web.Controller
+namespace Donde.Augmentor.Web.Controller.V1
 {
-    [ApiVersion("1.0")]
+    [ApiVersion("1.0", Deprecated = true)]
     [ODataRoutePrefix("organizations")]
     [Authorize]
     public class OrganizationsController : BaseController
@@ -65,7 +57,6 @@ namespace Donde.Augmentor.Web.Controller
             return Ok(mappedResult);
         }
 
-
         [ODataRoute]
         [HttpGet]
         [AllowAnonymous]
@@ -96,47 +87,6 @@ namespace Donde.Augmentor.Web.Controller
             if (url == null) return null;
 
             return $"{_domainSettings.GeneralSettings.StorageBasePath}{url}";
-        }
-
-
-        [ODataRoute("({organizationId})")]
-        [HttpPut]
-        public async Task<IActionResult> Put(Guid organizationId, [FromBody] OrganizationViewModel organizationViewModel)
-        {       
-            if(organizationId != organizationViewModel.Id)
-            {
-                throw new HttpBadRequestException(ErrorMessages.IdsMisMatch);
-            }
-            var organization = _mapper.Map<Organization>(organizationViewModel);
-
-            var result = await _organizationService.UpdateOrganizationAsync(organizationId, organization);
-
-            var organizationViewModelResult = _mapper.Map<OrganizationViewModel>(result);
-
-            return Ok(organizationViewModelResult);
-        }
-
-        [ODataRoute]
-        [HttpPost]
-        [DisableFormValueModelBinding]
-        [RequestSizeLimit(15728640)] // 15 mb
-        public async Task<IActionResult> Upload()
-        {
-            var fileUploadResult = await _fileProcessingService.UploadMediaAsync(Request, MediaTypes.Logo);
-
-            if (fileUploadResult.IsFailure)
-            {
-                _logger.LogError($"Error on file Upload {JsonConvert.SerializeObject(fileUploadResult)}");
-                return StatusCode((int)HttpStatusCode.InternalServerError);
-            }
-
-            var organization = _mapper.Map<Organization>(fileUploadResult.Value);
-
-            var addedOrganization = await _organizationService.CreateOrganizationAsync(organization);
-
-            var organizationViewModel = _mapper.Map<OrganizationViewModel>(addedOrganization);
-
-            return Created(organizationViewModel);
         }
     }
 }

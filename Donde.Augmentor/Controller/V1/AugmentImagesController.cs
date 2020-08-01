@@ -23,7 +23,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace Donde.Augmentor.Web.Controller
+namespace Donde.Augmentor.Web.Controller.V1
 {
     [ApiVersion("1.0")]
     [ODataRoutePrefix("augmentImages")]

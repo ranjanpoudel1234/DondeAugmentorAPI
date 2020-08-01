@@ -3,15 +3,17 @@ using System;
 using Donde.Augmentor.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Donde.Augmentor.Infrastructure.Migrations
 {
     [DbContext(typeof(DondeContext))]
-    partial class DondeContextModelSnapshot : ModelSnapshot
+    [Migration("20200722142124_RenameCodeToShortNameAndDropNowUnusedColumnsOnOrganization")]
+    partial class RenameCodeToShortNameAndDropNowUnusedColumnsOnOrganization
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -256,7 +258,7 @@ namespace Donde.Augmentor.Infrastructure.Migrations
 
                     b.Property<DateTime>("AddedDate");
 
-                    b.Property<string>("City");
+                    b.Property<string>("EmailAddress");
 
                     b.Property<bool>("IsDeleted");
 
@@ -270,61 +272,13 @@ namespace Donde.Augmentor.Infrastructure.Migrations
 
                     b.Property<string>("ShortName");
 
-                    b.Property<string>("State");
-
-                    b.Property<string>("StreetAddress1");
-
-                    b.Property<string>("StreetAddress2");
-
                     b.Property<int>("Type");
 
                     b.Property<DateTime>("UpdatedDate");
-
-                    b.Property<string>("Zip");
 
                     b.HasKey("Id");
 
                     b.ToTable("Organizations");
-                });
-
-            modelBuilder.Entity("Donde.Augmentor.Core.Domain.Models.Site", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<DateTime>("AddedDate");
-
-                    b.Property<string>("City");
-
-                    b.Property<bool>("IsDeleted");
-
-                    b.Property<double>("Latitude");
-
-                    b.Property<double>("Longitude");
-
-                    b.Property<string>("Name");
-
-                    b.Property<Guid>("OrganizationId");
-
-                    b.Property<string>("ShortName");
-
-                    b.Property<string>("State");
-
-                    b.Property<string>("StreetAddress1");
-
-                    b.Property<string>("StreetAddress2");
-
-                    b.Property<int>("Type");
-
-                    b.Property<DateTime>("UpdatedDate");
-
-                    b.Property<string>("Zip");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("OrganizationId");
-
-                    b.ToTable("Sites");
                 });
 
             modelBuilder.Entity("Donde.Augmentor.Core.Domain.Models.Video", b =>
@@ -436,14 +390,6 @@ namespace Donde.Augmentor.Infrastructure.Migrations
                     b.HasOne("Donde.Augmentor.Core.Domain.Models.AugmentObject", "AugmentObject")
                         .WithMany()
                         .HasForeignKey("AugmentObjectId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Donde.Augmentor.Core.Domain.Models.Site", b =>
-                {
-                    b.HasOne("Donde.Augmentor.Core.Domain.Models.Organization")
-                        .WithMany("Sites")
-                        .HasForeignKey("OrganizationId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

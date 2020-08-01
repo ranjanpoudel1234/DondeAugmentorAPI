@@ -3,15 +3,17 @@ using System;
 using Donde.Augmentor.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Donde.Augmentor.Infrastructure.Migrations
 {
     [DbContext(typeof(DondeContext))]
-    partial class DondeContextModelSnapshot : ModelSnapshot
+    [Migration("20200722142242_AddedSeparateAddressColumnToOrganizationAndAddedSitesTable")]
+    partial class AddedSeparateAddressColumnToOrganizationAndAddedSitesTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -258,6 +260,8 @@ namespace Donde.Augmentor.Infrastructure.Migrations
 
                     b.Property<string>("City");
 
+                    b.Property<string>("EmailAddress");
+
                     b.Property<bool>("IsDeleted");
 
                     b.Property<string>("LogoMimeType");
@@ -324,7 +328,7 @@ namespace Donde.Augmentor.Infrastructure.Migrations
 
                     b.HasIndex("OrganizationId");
 
-                    b.ToTable("Sites");
+                    b.ToTable("Site");
                 });
 
             modelBuilder.Entity("Donde.Augmentor.Core.Domain.Models.Video", b =>

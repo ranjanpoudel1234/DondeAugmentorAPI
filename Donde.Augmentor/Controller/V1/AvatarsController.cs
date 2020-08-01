@@ -13,7 +13,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 
-namespace Donde.Augmentor.Web.Controller
+namespace Donde.Augmentor.Web.Controller.V1
 {
     [ApiVersion("1.0")]
     [ODataRoutePrefix("avatars")]

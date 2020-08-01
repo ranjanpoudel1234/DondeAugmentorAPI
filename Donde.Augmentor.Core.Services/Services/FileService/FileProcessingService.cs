@@ -47,14 +47,14 @@ namespace Donde.Augmentor.Core.Services.Services.FileService
             _validator = validator;
         }
 
-        public async Task<Result<MediaAttachmentDto>> UploadMediaAsync(HttpRequest request, MediaTypes mediaType)
+        public async Task<Result<MediaAttachmentDto>> UploadMediaAsync(HttpRequest request, MediaTypes mediaType, Guid? mediaId = null)
         {
             var fileStreamReadResponse = await _fileStreamContentReaderService.StreamFileAsync(request);
 
             if(!fileStreamReadResponse)
                 return Result.Fail<MediaAttachmentDto>("Empty File Stream");
           
-            var uploadFileResult = await ValidateAndUploadFileAsync(mediaType);
+            var uploadFileResult = await ValidateAndUploadFileAsync(mediaType, mediaId);
             if (uploadFileResult.IsFailure)
             {
                 Result.Fail<MediaAttachmentDto>($"Failure in uploading {nameof(mediaType)}");
@@ -63,14 +63,14 @@ namespace Donde.Augmentor.Core.Services.Services.FileService
             return uploadFileResult;
         }
 
-        private async Task<Result<MediaAttachmentDto>> ValidateAndUploadFileAsync(MediaTypes mediaType)
+        private async Task<Result<MediaAttachmentDto>> ValidateAndUploadFileAsync(MediaTypes mediaType, Guid? mediaId = null)
         {
             _logger.LogError("FileStreamReaderService {@FileStreamContentReaderService}", _fileStreamContentReaderService);
             using (var stream = _fileStreamContentReaderService.Stream)
             {
                 var fileExtension = Path.GetExtension(_fileStreamContentReaderService.FileName);
 
-                var uniqueFileGuid = SequentialGuidGenerator.GenerateComb();
+                var uniqueFileGuid = mediaId ?? SequentialGuidGenerator.GenerateComb();
                 var uniqueFileName = Path.ChangeExtension(uniqueFileGuid.ToString(), fileExtension);
                 var localFilePath = await CreateFileLocallyAndReturnPathAsync(stream, uniqueFileName);
 
