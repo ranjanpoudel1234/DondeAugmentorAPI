@@ -24,7 +24,8 @@ namespace Donde.Augmentor.Bootstrapper
                  new List<string>
                  {
                     "Donde.Augmentor.Infrastructure.Repositories",
-                    "Donde.Augmentor.Infrastructure.Repositories.MetricRepository"
+                    "Donde.Augmentor.Infrastructure.Repositories.MetricRepository",
+                    "Donde.Augmentor.Infrastructure.Repositories.UserRepository"
                  }
             );
 

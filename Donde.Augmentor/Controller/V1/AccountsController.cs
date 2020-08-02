@@ -26,6 +26,8 @@ namespace Donde.Augmentor.Web.Controller.V1
             _userManager = userManager;  
         }
 
+        //// this code will be removed soon.
+        //// Leaving here to help us add superAdmin if needed.
         //[HttpPost]
         //[Route("api/v1/accounts/register")]
         //[AllowAnonymous]
@@ -43,9 +45,6 @@ namespace Donde.Augmentor.Web.Controller.V1
         //    if (!result.Succeeded) return BadRequest(result.Errors);
 
         //    await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("userName", user.UserName));
-        //    //await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("name", user.FullName));
-        //    //await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("email", user.Email));
-        //    //await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("role", model.Role));
 
         //    return Ok(user); //todo map user back
         //}

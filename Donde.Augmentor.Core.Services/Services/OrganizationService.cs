@@ -35,6 +35,11 @@ namespace Donde.Augmentor.Core.Services.Services
             return _organizationRepository.GetOrganizations();
         }
 
+        public IQueryable<Organization> GetOrganizationByIds(List<Guid> organizationIds)
+        {
+            return _organizationRepository.GetOrganizationByIds(organizationIds);
+        }
+
         public Task<Organization> GetOrganizationByIdAsync(Guid organizationId)
         {
             return _organizationRepository.GetOrganizationByIdAsync(organizationId);

@@ -24,18 +24,18 @@ namespace Donde.Augmentor.Infrastructure.Repositories.UserRepository
 
         public Task<User> GetByIdAsync(Guid entityId)
         {
-            return GetByIdAsync<User>(entityId);
+            return GetAll<User>().Include(x => x.Organizations).SingleOrDefaultAsync(x => x.Id == entityId);
+        }
+
+        public async Task<User> GetByIdWithNoTrackingAsync(Guid entityId)
+        {
+            var user = await _dbContext.Users.Include(x => x.Organizations).AsNoTracking().SingleOrDefaultAsync(x => x.Id == entityId);
+            return user;
         }
 
         public async Task<User> CreateAsync(User entity)
         {
             return await CreateAsync(entity);
-        }
-
-        public async Task<User> UpdateAsync(User entity)
-        {
-            await UpdateUserOrganizationsAsync(entity);
-            return await UpdateAsync(entity.Id, entity);
         }
 
         public async Task<User> DeleteAsync(User entity)
@@ -51,12 +51,14 @@ namespace Donde.Augmentor.Infrastructure.Repositories.UserRepository
             return await UpdateAsync(entity.Id, entity);
         }
 
-        private async Task UpdateUserOrganizationsAsync(User entity)
+        public async Task UpdateUserOrganizationsAsync(User entity)
         {
             var updatedUserOrganizationIds = entity.Organizations.Select(x => x.OrganizationId).ToList();
             var existingUserOrganizationIds = _dbContext.UserOrganizations.Where(x => x.UserId == entity.Id && !x.IsDeleted).Select(x => x.OrganizationId).ToList();
 
             var newUserOrganizationIds = updatedUserOrganizationIds.Where(x => !existingUserOrganizationIds.Contains(x));
+
+            entity.Organizations = null; //set it null so EF does not add by default.
 
             foreach (var newOrgId in newUserOrganizationIds)
             {

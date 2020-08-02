@@ -62,6 +62,7 @@ namespace Donde.Augmentor.Web.Controller.V2
         public async Task<IActionResult> Post([FromBody] UserViewModel userViewModel)
         {
             //todo Add authorization check here after user/role etc is added.
+            //global add user permission
             var user = _mapper.Map<User>(userViewModel);
 
             var result = await _userService.CreateAsync(user, userViewModel.Password);
@@ -75,12 +76,14 @@ namespace Donde.Augmentor.Web.Controller.V2
         [HttpPut]
         public async Task<IActionResult> Put(Guid userId, [FromBody] UserViewModel userViewModel)
         {
+            //todo: add global update user permission
+
             if (userId != userViewModel.Id)
             {
                 throw new HttpBadRequestException(ErrorMessages.IdsMisMatch);
             }
 
-            var existingUser = await _userService.GetByIdAsync(userId);
+            var existingUser = await _userService.GetByIdWithNoTrackingAsync(userId);
             if (existingUser == null)
             {
                 throw new HttpNotFoundException(ErrorMessages.ObjectNotFound);

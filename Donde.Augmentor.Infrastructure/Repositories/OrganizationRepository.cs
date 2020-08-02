@@ -37,6 +37,11 @@ namespace Donde.Augmentor.Infrastructure.Repositories
             return GetByIdAsync<Organization>(organizationId);
         }
 
+        public IQueryable<Organization> GetOrganizationByIds(List<Guid> organizationIds)
+        {
+            return GetAll<Organization>().Where(x => organizationIds.Contains(x.Id));
+        }
+
         public async Task<IEnumerable<Organization>> GetClosestOrganizationByRadius(double latitude, double longitude, int radiusInMeters)
         {
             string objectsByDistanceQuery = $@"with OrganizationWithDistance as 

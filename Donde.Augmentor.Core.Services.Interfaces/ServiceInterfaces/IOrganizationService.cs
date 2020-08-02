@@ -10,6 +10,7 @@ namespace Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces
     {
         Task<IEnumerable<Organization>> GetClosestOrganizationByRadius(double latitude, double longitude, int radiusInMeters);
         IQueryable<Organization> GetOrganizations();
+        IQueryable<Organization> GetOrganizationByIds(List<Guid> organizationIds);
         Task<Organization> GetOrganizationByIdAsync(Guid organizationId);
         Task<Organization> CreateOrganizationAsync(Organization entity);
         Task<Organization> UpdateOrganizationAsync(Guid entityId, Organization entity);
