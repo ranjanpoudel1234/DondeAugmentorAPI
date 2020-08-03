@@ -55,7 +55,6 @@ namespace Donde.Augmentor.Infrastructure.DataSeeder
                         existingPermission.Description = permission.Description;
                         existingPermission.UpdatedDate = DateTime.UtcNow;
                     }
-
                 }
             }
 
@@ -88,7 +87,6 @@ namespace Donde.Augmentor.Infrastructure.DataSeeder
 
                 SeedPermissionsForRole(context, role, newRoleId);
             }        
-
         }
 
         private static void SeedPermissionsForRole(DondeContext context, string role, Guid newRoleId)

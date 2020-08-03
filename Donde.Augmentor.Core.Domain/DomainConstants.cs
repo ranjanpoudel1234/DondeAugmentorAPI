@@ -28,11 +28,5 @@ namespace Donde.Augmentor.Core.Domain
             public const string SUPER_ADMINADMINISTRATOR = "SUPER ADMINISTRATOR";
             public const string ORGANIZATION_ADMINADMINISTRATOR = "ORGANIZATION ADMINISTRATOR";
         }
-
-        public class PermissionResources
-        {
-            public const string Users = "Users";
-            public const string Organizations = "Organizations";
-        }
     }
 }

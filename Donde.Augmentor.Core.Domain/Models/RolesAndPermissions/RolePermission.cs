@@ -8,8 +8,6 @@ namespace Donde.Augmentor.Core.Domain.Models.RolesAndPermissions
         public Guid Id { get; set; }
         public Guid RoleId { get; set; }
         public Guid PermissionId { get; set; }
-
-
         public DateTime AddedDate { get; set; }
         public DateTime UpdatedDate { get; set; }
         public bool IsDeleted { get; set; }

@@ -70,7 +70,8 @@ namespace Donde.Augmentor.Core.Services.Services.UserService
 
         public async Task<User> UpdateAsync(Guid entityId, User entity)
         {
-            var existingUser = await _userManager.FindByIdAsync(entityId.ToString());
+            var existingUser = await _userManager.FindByIdAsync(entityId.ToString()); // using this instead of our repo
+            // takes care of Id being tracked issue(when calling userManager.UpdateAsync below)
 
             if (existingUser == null)
             {
