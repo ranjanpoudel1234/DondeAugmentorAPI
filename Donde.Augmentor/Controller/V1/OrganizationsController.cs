@@ -64,7 +64,7 @@ namespace Donde.Augmentor.Web.Controller.V1
         {
             var result = new List<OrganizationViewModel>();
 
-            var organizationQueryable = _organizationService.GetOrganizations();
+            var organizationQueryable = _organizationService.GetOrganizations(includeSites: true);
 
             var projectedOrganizations = organizationQueryable.ProjectTo<OrganizationViewModel>(_mapper.ConfigurationProvider);
 
