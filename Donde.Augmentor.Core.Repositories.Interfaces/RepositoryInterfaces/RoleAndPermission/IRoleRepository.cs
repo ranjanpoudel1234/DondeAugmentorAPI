@@ -5,6 +5,6 @@ namespace Donde.Augmentor.Core.Repositories.Interfaces.RepositoryInterfaces.Role
 {
     public interface IRoleRepository
     {
-        IQueryable<Role> GetAll()
+        IQueryable<Role> GetAll();
     }
 }
