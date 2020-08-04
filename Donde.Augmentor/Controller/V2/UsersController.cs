@@ -43,9 +43,9 @@ namespace Donde.Augmentor.Web.Controller.V2
 
             var organizationQueryable = _userService.GetAll();
 
-            var projectedSites = organizationQueryable.ProjectTo<UserViewModel>(_mapper.ConfigurationProvider);
+            var projectedUsers = organizationQueryable.ProjectTo<UserViewModel>(_mapper.ConfigurationProvider);
 
-            var appliedResults = odataOptions.ApplyTo(projectedSites);
+            var appliedResults = odataOptions.ApplyTo(projectedUsers);
 
             var userViewModels = appliedResults as IQueryable<UserViewModel>;
 

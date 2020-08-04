@@ -21,7 +21,8 @@ namespace Donde.Augmentor.Bootstrapper
                     "Donde.Augmentor.Core.Services.Services",
                     "Donde.Augmentor.Core.Services.Services.FileService",
                     "Donde.Augmentor.Core.Services.Services.MetricService",
-                    "Donde.Augmentor.Core.Services.Services.UserService"
+                    "Donde.Augmentor.Core.Services.Services.UserService",
+                    "Donde.Augmentor.Infrastructure.Repositories.RolesAndPermissionService"
                 });
 
             //any fluent validators can be registered here.;

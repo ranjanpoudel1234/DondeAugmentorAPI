@@ -1,4 +1,4 @@
-﻿using Donde.Augmentor.Web.ViewModels.Account;
+﻿using Donde.Augmentor.Web.ViewModels.V1.Account;
 using Microsoft.AspNet.OData.Builder;
 using Microsoft.AspNetCore.Mvc;
 

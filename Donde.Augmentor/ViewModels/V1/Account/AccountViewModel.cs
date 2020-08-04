@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Donde.Augmentor.Web.ViewModels.Account
+namespace Donde.Augmentor.Web.ViewModels.V1.Account
 {
     public class AccountViewModel
     {

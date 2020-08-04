@@ -1,6 +1,6 @@
 ﻿using Donde.Augmentor.Core.Domain.CustomExceptions;
 using Donde.Augmentor.Core.Domain.Models.Identity;
-using Donde.Augmentor.Web.ViewModels.Account;
+using Donde.Augmentor.Web.ViewModels.V1.Account;
 using Microsoft.AspNet.OData.Routing;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
