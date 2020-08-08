@@ -26,7 +26,7 @@ namespace Donde.Augmentor.Bootstrapper
                     "Donde.Augmentor.Infrastructure.Repositories",
                     "Donde.Augmentor.Infrastructure.Repositories.MetricRepository",
                     "Donde.Augmentor.Infrastructure.Repositories.UserRepository",
-                    "Donde.Augmentor.Infrastructure.Repositories.RolesAndPermissionRepository"
+                    "Donde.Augmentor.Infrastructure.Repositories.RoleAndPermissionRepository"
                  }
             );
 

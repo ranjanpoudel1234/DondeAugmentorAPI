@@ -33,22 +33,18 @@ namespace Donde.Augmentor.Web.Controller.V2
         [AllowAnonymous]
         public async Task<IActionResult> GetAll(ODataQueryOptions<RoleViewModel> odataOptions)
         {
-            var result = new List<RoleViewModel>();
-
             var organizationQueryable = _roleService.GetAll();
 
             var projectedRoles = organizationQueryable.ProjectTo<RoleViewModel>(_mapper.ConfigurationProvider);
 
-            var appliedResults = odataOptions.ApplyTo(projectedRoles);
+            var appliedResults = (IQueryable<dynamic>) odataOptions.ApplyTo(projectedRoles);
 
-            var roleViewModels = appliedResults as IQueryable<RoleViewModel>;
+            var result = await appliedResults.ToListAsync();
 
-            if (roleViewModels != null)
-            {
-                result = await roleViewModels.ToListAsync();
-            }
-
-            return Ok(result);
+            //without dynamic, the child collection will not be loaded. 
+            //when using dynamic, the format of response will be just plain array
+            //to format in Odata style, we call this extension below.
+            return Ok(result.ToODataCollectionResponse(Request));
         }
     }
 }

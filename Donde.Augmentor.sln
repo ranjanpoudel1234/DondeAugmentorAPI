@@ -36,7 +36,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DatabaseSeed", "DatabaseSee
 		SeedDataAll.sql = SeedDataAll.sql
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Donde.Augmentor.Domain.Test", "Donde.Augmentor.Domain.Test\Donde.Augmentor.Domain.Test.csproj", "{1946C606-F499-41DD-B32B-17DECE14317E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Donde.Augmentor.Domain.Test", "Donde.Augmentor.Domain.Test\Donde.Augmentor.Domain.Test.csproj", "{1946C606-F499-41DD-B32B-17DECE14317E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ApiDocumentation", "ApiDocumentation", "{EE1A89C5-BE12-48EC-B889-42BDDD7F83B3}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\Users\User\Desktop\Donde.Augmentor.API - Latest.postman_collection.json = ..\..\Users\User\Desktop\Donde.Augmentor.API - Latest.postman_collection.json
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -99,6 +104,7 @@ Global
 		{721F2A74-CE75-4366-B1B1-4139D51E7177} = {B6BD0C3E-1107-4ADE-BA4B-8DA6912297D0}
 		{2B83B991-DEB9-43F5-8715-72C2EA8DD768} = {38DF1BB5-6102-4FAE-B7DC-257DC57E1F76}
 		{1946C606-F499-41DD-B32B-17DECE14317E} = {B6BD0C3E-1107-4ADE-BA4B-8DA6912297D0}
+		{EE1A89C5-BE12-48EC-B889-42BDDD7F83B3} = {38DF1BB5-6102-4FAE-B7DC-257DC57E1F76}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {353F65B0-7398-44E5-ABC0-CF64CCCE2CCF}

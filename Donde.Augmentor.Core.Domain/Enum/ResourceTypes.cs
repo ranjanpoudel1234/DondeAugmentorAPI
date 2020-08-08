@@ -1,7 +1,9 @@
-﻿using System.ComponentModel;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace Donde.Augmentor.Core.Domain.Enum
 {
+    [JsonConverter(typeof(StringEnumConverter))]
     public enum ResourceTypes
     {
         Users = 0,

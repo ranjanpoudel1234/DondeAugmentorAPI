@@ -1,6 +1,7 @@
 ﻿using Donde.Augmentor.Core.Domain.Models.RolesAndPermissions;
 using Donde.Augmentor.Core.Repositories.Interfaces.RepositoryInterfaces.RoleAndPermission;
 using Donde.Augmentor.Infrastructure.Database;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
 namespace Donde.Augmentor.Infrastructure.Repositories.RoleAndPermissionRepository
@@ -14,7 +15,7 @@ namespace Donde.Augmentor.Infrastructure.Repositories.RoleAndPermissionRepositor
 
         public IQueryable<Role> GetAll()
         {
-            return GetAll<Role>();
+            return GetAll<Role>().Include(role => role.Permissions).ThenInclude(permission => permission.Permission);
         }
     }
 }

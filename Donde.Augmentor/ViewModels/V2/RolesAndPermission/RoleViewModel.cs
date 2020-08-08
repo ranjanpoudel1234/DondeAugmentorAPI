@@ -9,6 +9,6 @@ namespace Donde.Augmentor.Web.ViewModels.V2.RolesAndPermission
         public Guid Id { get; set; }
         public string Name { get; set; }
         public DateTime CreatedDateUtc { get; set; }
-        public List<Permission> Permissions { get; set; }
+        public List<PermissionViewModel> Permissions { get; set; }
     }
 }
