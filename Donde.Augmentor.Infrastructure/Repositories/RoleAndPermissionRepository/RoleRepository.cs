@@ -15,7 +15,7 @@ namespace Donde.Augmentor.Infrastructure.Repositories.RoleAndPermissionRepositor
 
         public IQueryable<Role> GetAll()
         {
-            return GetAll<Role>().Include(role => role.Permissions).ThenInclude(permission => permission.Permission);
+            return GetAll<Role>().Include(role => role.Permissions).ThenInclude(rolePermission => rolePermission.Permission);
         }
     }
 }

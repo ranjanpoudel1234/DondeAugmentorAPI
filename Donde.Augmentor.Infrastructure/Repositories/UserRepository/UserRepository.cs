@@ -19,7 +19,10 @@ namespace Donde.Augmentor.Infrastructure.Repositories.UserRepository
 
         public IQueryable<User> GetAll()
         {
-            return GetAll<User>().Include(x => x.Organizations);
+            return GetAll<User>()
+                .Include(x => x.Organizations)
+                .Include(user => user.Roles)
+                .ThenInclude(userRole => userRole.Role); ;
         }
 
         public Task<User> GetByIdAsync(Guid entityId)

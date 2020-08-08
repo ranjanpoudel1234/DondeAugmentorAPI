@@ -11,5 +11,6 @@ namespace Donde.Augmentor.Core.Domain.Models.RolesAndPermissions
         public DateTime AddedDate { get; set; }
         public DateTime UpdatedDate { get; set; }
         public bool IsDeleted { get; set; }
+        public Role Role { get; set; }
     }
 }
