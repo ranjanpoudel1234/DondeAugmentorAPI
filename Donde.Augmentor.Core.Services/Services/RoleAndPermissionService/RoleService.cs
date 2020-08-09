@@ -21,5 +21,10 @@ namespace Donde.Augmentor.Core.Services.Services.RoleAndPermissionService
         {
             return _roleRepository.GetAll();
         }
+
+        public IQueryable<Role> GetRoleByIds(List<Guid> roleIds)
+        {
+            return _roleRepository.GetRoleByIds(roleIds);
+        }
     }
 }

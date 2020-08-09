@@ -11,6 +11,7 @@ namespace Donde.Augmentor.Core.Repositories.Interfaces.RepositoryInterfaces.User
         Task<Domain.Models.Identity.User> GetByIdWithNoTrackingAsync(Guid entityId);
         Task<Domain.Models.Identity.User> CreateAsync(Domain.Models.Identity.User entity);
         Task UpdateUserOrganizationsAsync(Domain.Models.Identity.User entity);
+        Task UpdateUserRolesAsync(Domain.Models.Identity.User entity);
         Task<Domain.Models.Identity.User> DeleteAsync(Domain.Models.Identity.User entity);
     }
 }

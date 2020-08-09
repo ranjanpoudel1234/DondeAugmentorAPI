@@ -8,6 +8,7 @@ using Donde.Augmentor.Core.Domain.Models.Identity;
 using Donde.Augmentor.Core.Domain.Validations;
 using Donde.Augmentor.Core.Repositories.Interfaces.RepositoryInterfaces.User;
 using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces;
+using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces.RoleAndPermission;
 using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces.User;
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;
@@ -19,38 +20,20 @@ namespace Donde.Augmentor.Core.Services.Services.UserService
     {
         private IUserRepository _userRepository;
         private IOrganizationService _organizationService;
+        private IRoleService _roleService;
         private readonly IMapper _mapper;
         private readonly IValidator<User> _validator;
         private readonly UserManager<User> _userManager;
         public UserService(IUserRepository userRepository, IMapper mapper,
-            IValidator<User> validator, UserManager<User> userManager, IOrganizationService organizationService)
+            IValidator<User> validator, UserManager<User> userManager,
+            IOrganizationService organizationService, IRoleService roleService)
         {
             _userRepository = userRepository;
             _mapper = mapper;
             _validator = validator;
             _userManager = userManager;
             _organizationService = organizationService;
-        }
-
-        public async Task<User> CreateAsync(User entity, string password)
-        {
-            entity.Id = SequentialGuidGenerator.GenerateComb();
-
-            await _validator.ValidateOrThrowAsync(entity);
-            CheckExistenceOfOrganizationsOrThrow(entity);
-
-            //since this creation is not going through our normal pipeline, setting these values here.
-            entity.AddedDate = DateTime.UtcNow;
-            entity.Organizations.ForEach(x => x.AddedDate = DateTime.UtcNow);
-
-            var result = await _userManager.CreateAsync(entity, password);
-
-            if (!result.Succeeded)
-            {
-                throw new HttpBadRequestException(string.Join(",", result.Errors.Select(x => x.Description)));
-            }
-
-            return entity;
+            _roleService = roleService;
         }
 
         public IQueryable<User> GetAll()
@@ -68,6 +51,30 @@ namespace Donde.Augmentor.Core.Services.Services.UserService
             return _userManager.FindByIdAsync(entityId.ToString());
         }
 
+
+        public async Task<User> CreateAsync(User entity, string password)
+        {
+            entity.Id = SequentialGuidGenerator.GenerateComb();
+
+            await _validator.ValidateOrThrowAsync(entity);
+            CheckExistenceOfOrganizationsOrThrow(entity);
+            CheckExistenceOfRolesOrThrow(entity);
+
+            //since this creation is not going through our normal pipeline, setting these values here.
+            entity.AddedDate = DateTime.UtcNow;
+            entity.Organizations.ForEach(x => x.AddedDate = DateTime.UtcNow);
+            entity.Roles.ForEach(x => x.AddedDate = DateTime.UtcNow);
+
+            var result = await _userManager.CreateAsync(entity, password);
+
+            if (!result.Succeeded)
+            {
+                throw new HttpBadRequestException(string.Join(",", result.Errors.Select(x => x.Description)));
+            }
+
+            return entity;
+        }
+
         public async Task<User> UpdateAsync(Guid entityId, User entity)
         {
             var existingUser = await _userManager.FindByIdAsync(entityId.ToString()); // using this instead of our repo
@@ -82,11 +89,14 @@ namespace Donde.Augmentor.Core.Services.Services.UserService
 
             await _validator.ValidateOrThrowAsync(mappedUser);
             CheckExistenceOfOrganizationsOrThrow(mappedUser);
+            CheckExistenceOfRolesOrThrow(mappedUser);
 
             mappedUser.UpdatedDate = DateTime.UtcNow;
             mappedUser.Organizations.ForEach(x => x.UpdatedDate = DateTime.UtcNow);
+            mappedUser.Roles.ForEach(x => x.UpdatedDate = DateTime.UtcNow);
 
             await _userRepository.UpdateUserOrganizationsAsync(mappedUser);
+            await _userRepository.UpdateUserRolesAsync(mappedUser);
             var result = await _userManager.UpdateAsync(mappedUser);
 
             if (!result.Succeeded)
@@ -117,6 +127,17 @@ namespace Donde.Augmentor.Core.Services.Services.UserService
             if (userOrganizationIds.Count != userOrganizationsForIds.Count)
             {
                 throw new HttpBadRequestException(DondeErrorMessages.INVALID_ORGANIZATION_ID);
+            }
+        }
+
+        private void CheckExistenceOfRolesOrThrow(User entity)
+        {
+            var userRoleIds = entity.Roles.Select(x => x.RoleId).ToList();
+            var userRoleForIds = _roleService.GetRoleByIds(userRoleIds).ToList();
+
+            if (userRoleIds.Count != userRoleForIds.Count)
+            {
+                throw new HttpBadRequestException(DondeErrorMessages.INVALID_ROLE_ID);
             }
         }
     }
