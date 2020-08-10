@@ -10,15 +10,15 @@ namespace Donde.Augmentor.Infrastructure.Database.Identity
     /// use any of the CLI commands to create and apply a migration. 
     /// This is done by implementing the IDesignTimeDbContextFactory<TContext> interface within a class in the same project as the DbContext(s).
     /// </summary>
-    class DondeIdentityContextFactory : IDesignTimeDbContextFactory<DondeIdentityContext>
+    class DondeIdentityContextFactory : IDesignTimeDbContextFactory<DondeContext>
     {
-        public DondeIdentityContext CreateDbContext(string[] args)
+        public DondeContext CreateDbContext(string[] args)
         {
-            var dbContextOptionsBuilder = new DbContextOptionsBuilder<DondeIdentityContext>();
+            var dbContextOptionsBuilder = new DbContextOptionsBuilder<DondeContext>();
             dbContextOptionsBuilder.UseNpgsql("Server=localhost;Port=5432;Database=Donde_Augmentor;Username=donde_postgress;Password=D0ND3p0stgr3s",
                 npgSqlBuilder => npgSqlBuilder.MigrationsAssembly(GetInfrastructureAssembly().FullName));
 
-                return new DondeIdentityContext(dbContextOptionsBuilder.Options);
+                return new DondeContext(dbContextOptionsBuilder.Options);
         }
 
         protected static Func<Assembly> GetInfrastructureAssembly { get; } = () => Assembly.Load("Donde.Augmentor.Infrastructure");

@@ -30,9 +30,14 @@ namespace Donde.Augmentor.Core.Services.Services
             return await _organizationRepository.GetClosestOrganizationByRadius(latitude, longitude, radiusInMeters);
         }
 
-        public IQueryable<Organization> GetOrganizations()
+        public IQueryable<Organization> GetOrganizations(bool includeSites = false)
         {
-            return _organizationRepository.GetOrganizations();
+            return _organizationRepository.GetOrganizations(includeSites);
+        }
+
+        public IQueryable<Organization> GetOrganizationByIds(List<Guid> organizationIds)
+        {
+            return _organizationRepository.GetOrganizationByIds(organizationIds);
         }
 
         public Task<Organization> GetOrganizationByIdAsync(Guid organizationId)

@@ -1,5 +1,6 @@
 ﻿using Donde.Augmentor.Infrastructure.Database;
 using Donde.Augmentor.Infrastructure.Database.Identity;
+using Donde.Augmentor.Infrastructure.DataSeeder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Logging;
@@ -23,15 +24,15 @@ namespace Donde.Augmentor.Bootstrapper
                  new List<string>
                  {
                     "Donde.Augmentor.Infrastructure.Repositories",
-                    "Donde.Augmentor.Infrastructure.Repositories.MetricRepository"
+                    "Donde.Augmentor.Infrastructure.Repositories.MetricRepository",
+                    "Donde.Augmentor.Infrastructure.Repositories.UserRepository"
                  }
             );
 
             var options = BuildDondeContextOptions(environmentName, connectionString, loggerFactory);
             simpleInjectorContainer.Register(() => { return new DondeContext(options.Options); }, Lifestyle.Scoped);
 
-            var identityOptions = BuildDondeIdentityContextOptions(environmentName, connectionString, loggerFactory);
-            simpleInjectorContainer.Register(() => { return new DondeIdentityContext(identityOptions.Options); }, Lifestyle.Scoped);
+            DataSeeder.SeedData();
         }
 
         private static DbContextOptionsBuilder<DondeContext> BuildDondeContextOptions(string environmentName, string connectionString, ILoggerFactory loggerFactory)
@@ -63,33 +64,7 @@ namespace Donde.Augmentor.Bootstrapper
             return dbContextOptions;
         }
 
-        private static DbContextOptionsBuilder<DondeIdentityContext> BuildDondeIdentityContextOptions(string environmentName, string connectionString, ILoggerFactory loggerFactory)
-        {
-            var dbIdentityContextOptions = new DbContextOptionsBuilder<DondeIdentityContext>();
-
-            if (environmentName.Equals("Local"))
-            {
-                dbIdentityContextOptions.UseNpgsql(connectionString, npgSqlBuilder => npgSqlBuilder.MigrationsAssembly(GetInfrastructureAssembly().FullName))
-                    .UseLoggerFactory(loggerFactory)
-                    .ConfigureWarnings(warnings => warnings.Throw(RelationalEventId.QueryClientEvaluationWarning));
-            }
-            else if (environmentName.Equals("Vagrant"))
-            {
-                dbIdentityContextOptions.UseNpgsql(connectionString, npgSqlBuilder => npgSqlBuilder.MigrationsAssembly(GetInfrastructureAssembly().FullName))
-                       .UseLoggerFactory(loggerFactory);
-            }
-            else
-            {
-                dbIdentityContextOptions.UseNpgsql(connectionString, npgSqlBuilder => npgSqlBuilder.MigrationsAssembly(GetInfrastructureAssembly().FullName));
-            }
-
-            var dondeContext = new DondeIdentityContext(dbIdentityContextOptions.Options);
-            dondeContext.Database.Migrate();
-
-            // get the data from databuilder and add to the context/database
-            return dbIdentityContextOptions;
-        }
-
+      
         protected static Func<Assembly> GetInfrastructureInterfaceAssembly { get; } = () => Assembly.Load("Donde.Augmentor.Core.Repositories.Interfaces");
         protected static Func<Assembly> GetInfrastructureAssembly { get; } = () => Assembly.Load("Donde.Augmentor.Infrastructure");
     }

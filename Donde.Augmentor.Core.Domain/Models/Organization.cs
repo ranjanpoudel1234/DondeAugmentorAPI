@@ -1,5 +1,6 @@
 ﻿using Donde.Augmentor.Core.Domain.Enum;
 using Donde.Augmentor.Core.Domain.Interfaces;
+using Donde.Augmentor.Core.Domain.Models.RolesAndPermissions;
 using System;
 using System.Collections.Generic;
 
@@ -25,5 +26,6 @@ namespace Donde.Augmentor.Core.Domain.Models
         public bool IsDeleted { get; set; }
 
         public List<Site> Sites { get; set; }
+        public List<UserOrganization> Users { get; set; }
     }
 }

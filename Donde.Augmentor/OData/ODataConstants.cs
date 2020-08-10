@@ -6,5 +6,6 @@
         public const string OrganizationRoute = "organizations";
         public const string OrganizationLogoRoute = "organizationLogos";
         public const string SitesRoute = "sites";
+        public const string UsersRoute = "users";
     }
 }
