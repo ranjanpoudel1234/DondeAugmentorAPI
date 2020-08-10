@@ -63,7 +63,7 @@ namespace Donde.Augmentor.Infrastructure.DataSeeder
 
         private static void SeedRolesAndPermissions(DondeContext context)
         {
-            var rolesToAdd = new List<string> { Roles.ORGANIZATION_ADMINADMINISTRATOR, Roles.SUPER_ADMINADMINISTRATOR };
+            var rolesToAdd = new List<string> { Roles.ORGANIZATION_ADMINISTRATOR, Roles.SUPER_ADMINISTRATOR };
             foreach (var role in rolesToAdd)
             {
                 var newRole = new Role();
@@ -95,7 +95,7 @@ namespace Donde.Augmentor.Infrastructure.DataSeeder
 
             var rolePermissions = new List<RolePermission>();
  
-            if (role == Roles.ORGANIZATION_ADMINADMINISTRATOR)
+            if (role == Roles.ORGANIZATION_ADMINISTRATOR)
             {
                 var permissions = context.Permissions.Where(x => x.Resource == ResourceTypes.Targets && !x.IsDeleted);
                 foreach (var permission in permissions)
@@ -109,7 +109,7 @@ namespace Donde.Augmentor.Infrastructure.DataSeeder
                     });
                 }        
             }
-            else if (role == Roles.SUPER_ADMINADMINISTRATOR)
+            else if (role == Roles.SUPER_ADMINISTRATOR)
             {
                 var permissions = context.Permissions.Where(x => !x.IsDeleted); // all permissions
                 foreach (var permission in permissions)

@@ -30,10 +30,10 @@ namespace Donde.Augmentor.Core.Domain.Validations
             var _usZipRegEx = @"^\d{5}(?:[-\s]\d{4})?$";
             var _caZipRegEx = @"^([ABCEGHJKLMNPRSTVXY]\d[ABCEGHJKLMNPRSTVWXYZ])\ {0,1}(\d[ABCEGHJKLMNPRSTVWXYZ]\d)$";
 
-            var validZipCode = true;
-            if ((!Regex.Match(zipCode, _usZipRegEx).Success) && (!Regex.Match(zipCode, _caZipRegEx).Success))
+            var validZipCode = false;
+            if ((Regex.Match(zipCode, _usZipRegEx).Success) || (Regex.Match(zipCode, _caZipRegEx).Success))
             {
-                validZipCode = false;
+                validZipCode = true;
             }
             return validZipCode;
         }

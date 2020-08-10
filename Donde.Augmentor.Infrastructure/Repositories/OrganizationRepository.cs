@@ -27,8 +27,13 @@ namespace Donde.Augmentor.Infrastructure.Repositories
             return await UpdateAsync(entity.Id, entity);
         }
 
-        public IQueryable<Organization> GetOrganizations()
+        public IQueryable<Organization> GetOrganizations(bool includeSites = false)
         {
+            if (includeSites)
+            {
+                return GetAll<Organization>().Include(x => x.Sites);
+            }
+
             return GetAll<Organization>();
         }
 
