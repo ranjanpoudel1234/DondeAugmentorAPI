@@ -2,6 +2,7 @@
 using Donde.Augmentor.Core.Domain.Dto;
 using Donde.Augmentor.Core.Domain.Models;
 using Donde.Augmentor.Web.ViewModels;
+using Donde.Augmentor.Web.ViewModels.V1;
 
 namespace Donde.Augmentor.Web.AutoMapperProfiles
 {

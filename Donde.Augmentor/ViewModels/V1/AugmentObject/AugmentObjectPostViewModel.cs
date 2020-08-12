@@ -1,9 +1,9 @@
 ﻿using Donde.Augmentor.Core.Domain.Enum;
-using Donde.Augmentor.Web.ViewModels.AugmentObject;
+using Donde.Augmentor.Web.ViewModels.V1.AugmentObject;
 using System;
 using System.Collections.Generic;
 
-namespace Donde.Augmentor.Web.ViewModels
+namespace Donde.Augmentor.Web.ViewModels.V1.AugmentObject
 {
     public class AugmentObjectPostViewModel
     {

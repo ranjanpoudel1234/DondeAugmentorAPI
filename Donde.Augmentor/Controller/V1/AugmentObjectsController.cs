@@ -4,8 +4,8 @@ using Donde.Augmentor.Core.Domain.CustomExceptions;
 using Donde.Augmentor.Core.Domain.Models;
 using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces;
 using Donde.Augmentor.Web.OData;
-using Donde.Augmentor.Web.ViewModels;
-using Donde.Augmentor.Web.ViewModels.AugmentObject;
+using Donde.Augmentor.Web.ViewModels.V1;
+using Donde.Augmentor.Web.ViewModels.V1.AugmentObject;
 using Microsoft.AspNet.OData;
 using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNet.OData.Routing;
@@ -21,7 +21,7 @@ using static Donde.Augmentor.Web.Attributes.IgnoreJsonIgnore;
 
 namespace Donde.Augmentor.Web.Controller.V1
 {
-    [ApiVersion("1.0")]
+    [ApiVersion("1.0", Deprecated = true)]
     [ODataRoutePrefix("augmentObjects")]
     [Authorize]
     public class AugmentObjectsController : ODataController

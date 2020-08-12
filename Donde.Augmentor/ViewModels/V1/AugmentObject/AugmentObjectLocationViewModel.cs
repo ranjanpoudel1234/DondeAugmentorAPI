@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Donde.Augmentor.Web.ViewModels.AugmentObject
+namespace Donde.Augmentor.Web.ViewModels.V1.AugmentObject
 {
     public class AugmentObjectLocationViewModel
     {

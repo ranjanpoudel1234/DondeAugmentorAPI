@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Donde.Augmentor.Web.ViewModels.AugmentObject
+namespace Donde.Augmentor.Web.ViewModels.V1.AugmentObject
 {
     public interface IAugmentObjectViewModel
     {

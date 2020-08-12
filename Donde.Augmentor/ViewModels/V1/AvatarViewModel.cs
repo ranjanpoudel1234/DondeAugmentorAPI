@@ -1,12 +1,12 @@
 ﻿using System;
 
-namespace Donde.Augmentor.Web.ViewModels
+namespace Donde.Augmentor.Web.ViewModels.V1
 {
-    public class AudioViewModel
+    public class AvatarViewModel
     {
         public Guid Id { get; set; }
-
         public string Name { get; set; }
         public string Url { get; set; }
+        public Guid OrganizationId { get; set; }
     }
 }

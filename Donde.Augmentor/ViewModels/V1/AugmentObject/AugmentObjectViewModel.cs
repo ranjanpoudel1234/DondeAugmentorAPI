@@ -1,9 +1,8 @@
 ﻿using Donde.Augmentor.Core.Domain.Enum;
-using Donde.Augmentor.Web.ViewModels.AugmentObject;
 using System;
 using System.Collections.Generic;
 
-namespace Donde.Augmentor.Web.ViewModels
+namespace Donde.Augmentor.Web.ViewModels.V1.AugmentObject
 {
     /// <summary>
     /// Improvement, the get queries do not load augmentObjectMedias and augmentObjectLocations right now.

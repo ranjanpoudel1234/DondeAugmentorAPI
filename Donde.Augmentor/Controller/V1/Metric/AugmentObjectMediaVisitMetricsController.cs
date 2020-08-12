@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
 using Donde.Augmentor.Core.Domain.Models.Metrics;
 using Donde.Augmentor.Core.Repositories.Interfaces.RepositoryInterfaces.Metric;
-using Donde.Augmentor.Web.ViewModels;
+using Donde.Augmentor.Web.ViewModels.V1;
+using Donde.Augmentor.Web.ViewModels.V1.Metric;
 using Microsoft.AspNet.OData.Routing;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

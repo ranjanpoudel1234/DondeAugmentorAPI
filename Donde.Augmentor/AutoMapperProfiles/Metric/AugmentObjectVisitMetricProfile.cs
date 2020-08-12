@@ -2,6 +2,7 @@
 using Donde.Augmentor.Core.Domain.Helpers;
 using Donde.Augmentor.Core.Domain.Models.Metrics;
 using Donde.Augmentor.Web.ViewModels;
+using Donde.Augmentor.Web.ViewModels.V1.Metric;
 
 namespace Donde.Augmentor.Web.AutoMapperProfiles.Metric
 {

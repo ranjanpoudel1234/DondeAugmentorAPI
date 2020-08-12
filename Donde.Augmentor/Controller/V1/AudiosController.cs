@@ -5,7 +5,7 @@ using Donde.Augmentor.Core.Domain.Models;
 using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces;
 using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces.IFileService;
 using Donde.Augmentor.Web.Attributes;
-using Donde.Augmentor.Web.ViewModels;
+using Donde.Augmentor.Web.ViewModels.V1;
 using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNet.OData.Routing;
 using Microsoft.AspNetCore.Authorization;
@@ -81,7 +81,7 @@ namespace Donde.Augmentor.Web.Controller.V1
 
             var addedVideo = await _audioService.AddAudioAsync(audio);
 
-            var addedVideoViewModel = _mapper.Map<VideoViewModel>(addedVideo);
+            var addedVideoViewModel = _mapper.Map<AudioViewModel>(addedVideo);
 
             return Created(addedVideoViewModel);
         }

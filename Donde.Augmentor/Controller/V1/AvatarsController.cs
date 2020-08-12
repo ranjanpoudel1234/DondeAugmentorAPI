@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces;
-using Donde.Augmentor.Web.ViewModels;
+using Donde.Augmentor.Web.ViewModels.V1;
 using Microsoft.AspNet.OData;
 using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNet.OData.Routing;

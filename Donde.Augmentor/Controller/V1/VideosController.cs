@@ -5,6 +5,7 @@ using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces;
 using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces.IFileService;
 using Donde.Augmentor.Web.Attributes;
 using Donde.Augmentor.Web.ViewModels;
+using Donde.Augmentor.Web.ViewModels.V1;
 using Microsoft.AspNet.OData.Routing;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
