@@ -29,6 +29,21 @@ namespace Donde.Augmentor.Infrastructure.Repositories
             return await UpdateAsync(id, entity);
         }
 
+        public IQueryable<AugmentObject> GetAugmentObjectsQueryableWithChildren()
+        {
+            return _dbContext.AugmentObjects
+                .Include(au => au.AugmentImage)
+                .Include(au => au.AugmentObjectMedias)
+                    .ThenInclude(aum => aum.Audio)
+                .Include(au => au.AugmentObjectMedias)
+                    .ThenInclude(aum => aum.Video)
+                .Include(au => au.AugmentObjectMedias)
+                    .ThenInclude(aum => aum.Avatar)
+                .Include(au => au.AugmentObjectLocations)
+                .Include(au => au.Organization)
+                    .ThenInclude(org => org.Avatar);
+        }
+
         public IQueryable<AugmentObjectDto> GetAugmentObjects()
         {
             // todo potentially make a readModel out of this for faster and efficient load.

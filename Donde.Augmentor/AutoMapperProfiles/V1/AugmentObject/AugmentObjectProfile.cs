@@ -6,7 +6,7 @@ using Donde.Augmentor.Web.ViewModels;
 using Donde.Augmentor.Web.ViewModels.V1.AugmentObject;
 using Newtonsoft.Json;
 
-namespace Donde.Augmentor.Web.AutoMapperProfiles
+namespace Donde.Augmentor.Web.AutoMapperProfiles.V1
 {
     public class AugmentObjectProfile : Profile
     {

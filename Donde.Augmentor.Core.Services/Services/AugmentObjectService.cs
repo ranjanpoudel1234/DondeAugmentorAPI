@@ -21,6 +21,11 @@ namespace Donde.Augmentor.Core.Services.Services
             _domainSettings = domainSettings;
         }
 
+        public IQueryable<AugmentObject> GetAugmentObjectsQueryableWithChildren()
+        {
+            return _augmentObjectRepository.GetAugmentObjectsQueryableWithChildren();
+        }
+
         public IQueryable<AugmentObjectDto> GetAugmentObjects()
         {
            var augmentObjects = _augmentObjectRepository.GetAugmentObjects().Select(augmentObject => GetAugmentObjectMapWithUpdatedUrls(augmentObject));

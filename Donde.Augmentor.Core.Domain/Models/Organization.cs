@@ -25,6 +25,7 @@ namespace Donde.Augmentor.Core.Domain.Models
         public DateTime UpdatedDate { get; set; }
         public bool IsDeleted { get; set; }
 
+        public Avatar Avatar { get; set; }
         public List<Site> Sites { get; set; }
         public List<UserOrganization> Users { get; set; }
     }

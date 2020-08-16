@@ -9,6 +9,7 @@ namespace Donde.Augmentor.Core.Repositories.Interfaces.RepositoryInterfaces
 {
     public interface IAugmentObjectRepository
     {
+        IQueryable<AugmentObject> GetAugmentObjectsQueryableWithChildren();
         IQueryable<AugmentObjectDto> GetAugmentObjects();
         Task<IEnumerable<AugmentObjectDto>> GetGeographicalAugmentObjectsByRadius(Guid organizationId, double latitude, double longitude, int radiusInMeters);
         Task<AugmentObject> CreateAugmentObjectAsync(AugmentObject entity);

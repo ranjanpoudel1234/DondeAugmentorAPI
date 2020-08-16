@@ -9,5 +9,7 @@
         public const string UsersRoute = "users";
         public const string RolesRoute = "roles";
         public const string PermissionsRoute = "permissions";
+        public const string AugmentObjectsRoute = "augmentObjects";
+        public const string TargetsRoute = "targets";
     }
 }
