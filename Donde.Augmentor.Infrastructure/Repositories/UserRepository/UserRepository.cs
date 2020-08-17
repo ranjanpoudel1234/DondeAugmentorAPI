@@ -19,12 +19,18 @@ namespace Donde.Augmentor.Infrastructure.Repositories.UserRepository
 
         public IQueryable<User> GetAll()
         {
-            return GetAll<User>().Include(x => x.Organizations);
+            return GetAll<User>()
+                .Include(x => x.Organizations)
+                .Include(user => user.Roles)
+                .ThenInclude(userRole => userRole.Role);
         }
 
         public Task<User> GetByIdAsync(Guid entityId)
         {
-            return GetAll<User>().Include(x => x.Organizations).SingleOrDefaultAsync(x => x.Id == entityId);
+            return GetAll<User>()
+                .Include(x => x.Organizations)
+                .Include(user => user.Roles)
+                .ThenInclude(userRole => userRole.Role).SingleOrDefaultAsync(x => x.Id == entityId);
         }
 
         public async Task<User> GetByIdWithNoTrackingAsync(Guid entityId)
@@ -74,6 +80,32 @@ namespace Donde.Augmentor.Infrastructure.Repositories.UserRepository
                 userOrganization.IsDeleted = true;
 
                 await UpdateAsync<UserOrganization>(userOrganization.Id, userOrganization);
+            }
+        }
+
+        public async Task UpdateUserRolesAsync(User entity)
+        {
+            var updatedUserRoleIds = entity.Roles.Select(x => x.RoleId).ToList();
+            var existingUserRoleIds = _dbContext.UserRoles.Where(x => x.UserId == entity.Id && !x.IsDeleted).Select(x => x.RoleId).ToList();
+
+            var newUserRoleIds = updatedUserRoleIds.Where(x => !existingUserRoleIds.Contains(x));
+
+            entity.Roles = null; //set it null so EF does not add by default.
+
+            foreach (var newRoleId in newUserRoleIds)
+            {
+                var userRole = new UserRole { Id = SequentialGuidGenerator.GenerateComb(), UserId = entity.Id, RoleId = newRoleId };
+
+                await CreateAsync<UserRole>(userRole);
+            }
+
+            var deletedRoleIds = existingUserRoleIds.Where(x => !updatedUserRoleIds.Contains(x));
+            foreach (var deletedRoleId in deletedRoleIds)
+            {
+                var userRole = _dbContext.UserRoles.Single(x => x.UserId == entity.Id && x.RoleId == deletedRoleId && !x.IsDeleted);
+                userRole.IsDeleted = true;
+
+                await UpdateAsync<UserRole>(userRole.Id, userRole);
             }
         }
     }

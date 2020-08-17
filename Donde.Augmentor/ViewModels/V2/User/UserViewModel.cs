@@ -14,6 +14,7 @@ namespace Donde.Augmentor.Web.ViewModels.V2.User
         public string Prefix { get; set; }
         public string Suffix { get; set; }
         public List<Guid> OrganizationIds { get; set; }
+        public List<Guid> RoleIds { get; set; }
 
         public DateTime CreatedDateUtc { get; set; }
         public DateTime UpdatedDateUtc { get; set; }

@@ -7,5 +7,7 @@
         public const string OrganizationLogoRoute = "organizationLogos";
         public const string SitesRoute = "sites";
         public const string UsersRoute = "users";
+        public const string RolesRoute = "roles";
+        public const string PermissionsRoute = "permissions";
     }
 }

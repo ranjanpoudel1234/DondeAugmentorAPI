@@ -11,6 +11,7 @@ namespace Donde.Augmentor.Web.AutoMapperProfiles.V2.User
         {
             CreateMap<Core.Domain.Models.Identity.User, UserViewModel>()
                 .ForMember(x => x.OrganizationIds, opts => opts.MapFrom(src => src.Organizations.Select(x => x.OrganizationId)))
+                .ForMember(x => x.RoleIds, opts => opts.MapFrom(src => src.Roles.Select(x => x.RoleId)))
                 .ForMember(x => x.CreatedDateUtc, opts => opts.MapFrom(src => src.AddedDate))
                 .ForMember(x => x.UpdatedDateUtc, opts => opts.MapFrom(src => src.UpdatedDate))
                 .ForMember(x => x.EmailAddress, opts => opts.MapFrom(src => src.Email))
@@ -18,6 +19,7 @@ namespace Donde.Augmentor.Web.AutoMapperProfiles.V2.User
 
             CreateMap<UserViewModel, Core.Domain.Models.Identity.User>()
               .ForMember(x => x.Organizations, opts => opts.MapFrom(src => src.OrganizationIds.Select(x => new UserOrganization { OrganizationId = x })))
+              .ForMember(x => x.Roles, opts => opts.MapFrom(src => src.RoleIds.Select(x => new UserRole { RoleId = x })))
               .ForMember(x => x.Email, opts => opts.MapFrom(src => src.EmailAddress))
               .ForMember(x => x.FullName, opts => opts.MapFrom(src => $"{src.FirstName} {src.LastName}"))
               .ForMember(x => x.AddedDate, opts => opts.Ignore())
@@ -29,8 +31,8 @@ namespace Donde.Augmentor.Web.AutoMapperProfiles.V2.User
               .ForMember(x => x.ConcurrencyStamp, opts => opts.Ignore())
               .ForMember(x => x.LockoutEnabled, opts => opts.Ignore())
               .ForMember(x => x.LockoutEnd, opts => opts.Ignore())
-              .ForMember(x => x.AccessFailedCount, opts => opts.Ignore())
-              .ForMember(x => x.Roles, opts => opts.Ignore());
+              .ForMember(x => x.AccessFailedCount, opts => opts.Ignore());
+              
         }
     }
 }
