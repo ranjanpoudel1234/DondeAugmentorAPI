@@ -30,10 +30,10 @@ namespace Donde.Augmentor.Bootstrapper
                  }
             );
 
-            var options = BuildDondeContextOptions(environmentName, connectionString, loggerFactory);
+            var options = BuildDondeContextOptions(environmentName, connectionString, loggerFactory);      
             simpleInjectorContainer.Register(() => { return new DondeContext(options.Options); }, Lifestyle.Scoped);
 
-            DataSeeder.SeedData();
+            DataSeeder.SeedData(options.Options);
         }
 
         private static DbContextOptionsBuilder<DondeContext> BuildDondeContextOptions(string environmentName, string connectionString, ILoggerFactory loggerFactory)
