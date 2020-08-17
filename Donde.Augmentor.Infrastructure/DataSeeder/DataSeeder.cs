@@ -7,14 +7,15 @@ using System.Collections.Generic;
 using static Donde.Augmentor.Core.Domain.DomainConstants;
 using System.Linq;
 using Donde.Augmentor.Core.Domain.Extensions;
+using Microsoft.EntityFrameworkCore;
 
 namespace Donde.Augmentor.Infrastructure.DataSeeder
 {
     public static class DataSeeder
     {
-        public static void SeedData()
+        public static void SeedData(DbContextOptions<DondeContext> options)
         {
-            using (var context = new DondeContext())
+            using (var context = new DondeContext(options))// this context has to be passed here
             {
                 context.Database.EnsureCreated();
 
