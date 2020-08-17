@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Donde.Augmentor.Core.Domain;
 using Donde.Augmentor.Core.Domain.Enum;
 using Donde.Augmentor.Core.Domain.Models;
 using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces;
@@ -34,15 +35,12 @@ namespace Donde.Augmentor.Web.Controller.V1
         private readonly IMapper _mapper;
         private readonly ILogger<AugmentImagesController> _logger;
         private readonly IFileProcessingService _fileProcessingService;
-
-        // Get the default form options so that we can use them to set the default limits for
-        // request body data
-        private static readonly FormOptions _defaultFormOptions = new FormOptions();
+        public readonly DomainSettings _domainSettings;
 
         public AugmentImagesController(IAugmentImageService augmentImageservice,
             IMapper mapper, IFileProcessingService fileProcessingService, 
             ILoggerFactory loggerFactory,
-            IHostingEnvironment env)
+            DomainSettings domainSettings)
         {
             _augmentImageservice = augmentImageservice;
             _mapper = mapper;
@@ -71,6 +69,12 @@ namespace Donde.Augmentor.Web.Controller.V1
                 result = await augmentImageViewModels.ToListAsync();
             }
 
+            foreach (var augmentImage in result)
+            {
+                augmentImage.ThumbnailUrl = $"{_domainSettings.GeneralSettings.StorageBasePath}/{_domainSettings.UploadSettings.ImageFolderName}/{augmentImage.FileId}{augmentImage.Extension}";
+                augmentImage.Url = $"{_domainSettings.GeneralSettings.StorageBasePath}/{_domainSettings.UploadSettings.ImageFolderName}/{_domainSettings.UploadSettings.OriginalImageSubFolderName}/{augmentImage.FileId}{augmentImage.Extension}";
+            }
+      
             return Ok(result);
         }
 
@@ -97,6 +101,9 @@ namespace Donde.Augmentor.Web.Controller.V1
             var addedAugmentImage = await _augmentImageservice.AddAugmentImageAsync(augmentImage);
 
             var augmentImageViewModel = _mapper.Map<AugmentImageViewModel>(addedAugmentImage);
+
+            augmentImageViewModel.ThumbnailUrl = $"{_domainSettings.GeneralSettings.StorageBasePath}/{_domainSettings.UploadSettings.ImageFolderName}/{augmentImage.FileId}{augmentImage.Extension}";
+            augmentImageViewModel.Url = $"{_domainSettings.GeneralSettings.StorageBasePath}/{_domainSettings.UploadSettings.ImageFolderName}/{_domainSettings.UploadSettings.OriginalImageSubFolderName}/{augmentImage.FileId}{augmentImage.Extension}";
 
             return Created(augmentImageViewModel);
         }

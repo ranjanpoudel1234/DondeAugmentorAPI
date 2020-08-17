@@ -3,7 +3,7 @@ using Donde.Augmentor.Core.Domain.Helpers;
 using Donde.Augmentor.Core.Domain.Models;
 using Donde.Augmentor.Web.ViewModels.AugmentObject;
 
-namespace Donde.Augmentor.Web.AutoMapperProfiles
+namespace Donde.Augmentor.Web.AutoMapperProfiles.V1.AugmentObject
 {
     public class AugmentObjectMediaProfile : Profile
     {
