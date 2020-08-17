@@ -8,6 +8,8 @@ namespace Donde.Augmentor.Core.Domain.Interfaces
     {
         string Name { get; set; }
         string Url { get; set; }
+        Guid FileId { get; set; }
+        string Extension { get; set; }
         string MimeType { get; set; }
         Guid OrganizationId { get; set; }
     }
