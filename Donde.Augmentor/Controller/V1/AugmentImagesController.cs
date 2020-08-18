@@ -46,6 +46,7 @@ namespace Donde.Augmentor.Web.Controller.V1
             _mapper = mapper;
             _logger = loggerFactory.CreateLogger<AugmentImagesController>();
             _fileProcessingService = fileProcessingService;
+            _domainSettings = domainSettings;
 
         }
 
@@ -71,8 +72,8 @@ namespace Donde.Augmentor.Web.Controller.V1
 
             foreach (var augmentImage in result)
             {
-                augmentImage.ThumbnailUrl = $"{_domainSettings.GeneralSettings.StorageBasePath}/{_domainSettings.UploadSettings.ImageFolderName}/{augmentImage.FileId}{augmentImage.Extension}";
-                augmentImage.Url = $"{_domainSettings.GeneralSettings.StorageBasePath}/{_domainSettings.UploadSettings.ImageFolderName}/{_domainSettings.UploadSettings.OriginalImageSubFolderName}/{augmentImage.FileId}{augmentImage.Extension}";
+                augmentImage.ThumbnailUrl = $"{_domainSettings.GeneralSettings.StorageBasePath}{_domainSettings.UploadSettings.ImageFolderName}/{augmentImage.FileId}{augmentImage.Extension}";
+                augmentImage.Url = $"{_domainSettings.GeneralSettings.StorageBasePath}{_domainSettings.UploadSettings.ImageFolderName}/{_domainSettings.UploadSettings.OriginalImageSubFolderName}/{augmentImage.FileId}{augmentImage.Extension}";
             }
       
             return Ok(result);

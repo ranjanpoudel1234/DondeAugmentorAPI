@@ -59,6 +59,16 @@ namespace Donde.Augmentor.Core.Services.Services
             return $"{_domainSettings.GeneralSettings.StorageBasePath}{urlSplit[0]}/{_domainSettings.UploadSettings.OriginalImageSubFolderName}/{urlSplit[1]}";
         }
 
+        private string GetThumbnailMediaPath(string folderName, Guid fileId, string extension)
+        {
+             return $"{_domainSettings.GeneralSettings.StorageBasePath}{folderName}/{fileId}{extension}";
+        }
+
+        private string GetOriginalMediaPath(string folderName, string originalMediaFolderName, Guid fileId, string extension)
+        {
+            return $"{_domainSettings.GeneralSettings.StorageBasePath}{folderName}/{originalMediaFolderName}/{fileId}{extension}";
+        }
+
         private AugmentObjectDto GetAugmentObjectMapWithUpdatedUrls(AugmentObjectDto augmentObject)
         {
             return new AugmentObjectDto
@@ -85,8 +95,8 @@ namespace Donde.Augmentor.Core.Services.Services
                 VideoName = augmentObject.VideoName == null ? null : augmentObject.VideoName,
                 VideoUrl = GetPathWithRootLocationOrNull(augmentObject.VideoUrl),
                 ImageName = augmentObject.ImageName,
-                ImageUrl = GetPathWithRootLocationOrNull(augmentObject.ImageUrl),
-                OriginalSizeImageUrl = GetPathWithRootLocationOrNull(augmentObject.ImageUrl, getOriginal: true),
+                ImageUrl = GetThumbnailMediaPath(_domainSettings.UploadSettings.ImageFolderName, augmentObject.ImageFileId, augmentObject.ImageFileExtension),
+                OriginalSizeImageUrl = GetOriginalMediaPath(_domainSettings.UploadSettings.ImageFolderName, _domainSettings.UploadSettings.OriginalImageSubFolderName, augmentObject.ImageFileId, augmentObject.ImageFileExtension),
                 Distance = augmentObject.Distance,
                 Latitude = augmentObject.Latitude,
                 Longitude = augmentObject.Longitude
