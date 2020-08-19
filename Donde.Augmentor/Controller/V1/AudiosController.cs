@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Donde.Augmentor.Core.Domain;
 using Donde.Augmentor.Core.Domain.Enum;
 using Donde.Augmentor.Core.Domain.Models;
 using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces;
@@ -28,16 +29,19 @@ namespace Donde.Augmentor.Web.Controller.V1
         private readonly IFileProcessingService _fileProcessingService;
         private readonly IMapper _mapper;
         private readonly ILogger<AudiosController> _logger;
+        public readonly DomainSettings _domainSettings;
 
         public AudiosController(IAudioService audioService, 
             IMapper mapper,
             ILogger<AudiosController> logger,
-            IFileProcessingService fileProcessingService)
+            IFileProcessingService fileProcessingService,
+            DomainSettings domainSettings)
         {
             _audioService = audioService;
             _mapper = mapper;
             _logger = logger;
             _fileProcessingService = fileProcessingService;
+            _domainSettings = domainSettings;
         }
 
         [ODataRoute]
@@ -58,6 +62,12 @@ namespace Donde.Augmentor.Web.Controller.V1
             if (audioViewModels != null)
             {
                 result = await audioViewModels.ToListAsync();
+            }
+
+            foreach (var audio in result)
+            {
+                audio.Url = GetMediaPath(_domainSettings.GeneralSettings.StorageBasePath, _domainSettings.UploadSettings.AudiosFolderName,
+                    audio.FileId, audio.Extension);
             }
 
             return Ok(result);
@@ -82,6 +92,9 @@ namespace Donde.Augmentor.Web.Controller.V1
             var addedVideo = await _audioService.AddAudioAsync(audio);
 
             var addedVideoViewModel = _mapper.Map<VideoViewModel>(addedVideo);
+
+            addedVideoViewModel.Url = GetMediaPath(_domainSettings.GeneralSettings.StorageBasePath, _domainSettings.UploadSettings.AudiosFolderName,
+                addedVideoViewModel.FileId, addedVideoViewModel.Extension);
 
             return Created(addedVideoViewModel);
         }

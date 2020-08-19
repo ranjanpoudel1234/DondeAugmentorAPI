@@ -21,7 +21,8 @@ namespace Donde.Augmentor.Web.AutoMapperProfiles
                 .ForMember(x => x.UpdatedDate, opts => opts.Ignore())
                 .ForMember(x => x.IsDeleted, opts => opts.Ignore());
 
-            CreateMap<Audio, AudioViewModel>();
+            CreateMap<Audio, AudioViewModel>()
+                  .ForMember(x => x.Url, opts => opts.Ignore());
         }
     }
 }

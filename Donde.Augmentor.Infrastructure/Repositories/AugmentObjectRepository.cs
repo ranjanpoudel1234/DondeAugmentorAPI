@@ -74,9 +74,13 @@ namespace Donde.Augmentor.Infrastructure.Repositories
                                      AudioId = augmentObjectMedia.AudioId,
                                      AudioName = audio == null ? null : audio.Name,
                                      AudioUrl = audio == null ? null : audio.Url,
+                                     AudioFileExtension = audio == null ? null : audio.Extension,
+                                     AudioFileId = audio == null ? (Guid?)null : audio.FileId,
                                      VideoId = augmentObjectMedia.VideoId,
                                      VideoName = video == null ? null : video.Name,
                                      VideoUrl = video == null ? null : video.Url,
+                                     VideoFileExtension = video == null ? null : video.Extension,
+                                     VideoFileId = video == null ? (Guid?)null : video.FileId,
                                      Latitude = location.Latitude,
                                      Longitude = location.Longitude
                                  };

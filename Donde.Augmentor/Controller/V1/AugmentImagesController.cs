@@ -72,8 +72,10 @@ namespace Donde.Augmentor.Web.Controller.V1
 
             foreach (var augmentImage in result)
             {
-                augmentImage.ThumbnailUrl = $"{_domainSettings.GeneralSettings.StorageBasePath}{_domainSettings.UploadSettings.ImageFolderName}/{augmentImage.FileId}{augmentImage.Extension}";
-                augmentImage.Url = $"{_domainSettings.GeneralSettings.StorageBasePath}{_domainSettings.UploadSettings.ImageFolderName}/{_domainSettings.UploadSettings.OriginalImageSubFolderName}/{augmentImage.FileId}{augmentImage.Extension}";
+                augmentImage.ThumbnailUrl = GetMediaPath(_domainSettings.GeneralSettings.StorageBasePath, _domainSettings.UploadSettings.ImageFolderName,
+                    augmentImage.FileId, augmentImage.Extension);
+                augmentImage.Url = GetMediaPathWithSubFolder(_domainSettings.GeneralSettings.StorageBasePath, _domainSettings.UploadSettings.ImageFolderName, 
+                    _domainSettings.UploadSettings.OriginalImageSubFolderName, augmentImage.FileId, augmentImage.Extension);
             }
       
             return Ok(result);
@@ -103,8 +105,8 @@ namespace Donde.Augmentor.Web.Controller.V1
 
             var augmentImageViewModel = _mapper.Map<AugmentImageViewModel>(addedAugmentImage);
 
-            augmentImageViewModel.ThumbnailUrl = $"{_domainSettings.GeneralSettings.StorageBasePath}/{_domainSettings.UploadSettings.ImageFolderName}/{augmentImage.FileId}{augmentImage.Extension}";
-            augmentImageViewModel.Url = $"{_domainSettings.GeneralSettings.StorageBasePath}/{_domainSettings.UploadSettings.ImageFolderName}/{_domainSettings.UploadSettings.OriginalImageSubFolderName}/{augmentImage.FileId}{augmentImage.Extension}";
+            augmentImageViewModel.ThumbnailUrl = $"{_domainSettings.GeneralSettings.StorageBasePath}/{_domainSettings.UploadSettings.ImageFolderName}/{augmentImageViewModel.FileId}{augmentImageViewModel.Extension}";
+            augmentImageViewModel.Url = $"{_domainSettings.GeneralSettings.StorageBasePath}/{_domainSettings.UploadSettings.ImageFolderName}/{_domainSettings.UploadSettings.OriginalImageSubFolderName}/{augmentImageViewModel.FileId}{augmentImageViewModel.Extension}";
 
             return Created(augmentImageViewModel);
         }
