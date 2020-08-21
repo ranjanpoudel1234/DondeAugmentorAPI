@@ -70,16 +70,13 @@ namespace Donde.Augmentor.Web.Controller.V2
 
             var organizationViewModel = _mapper.Map<OrganizationViewModel>(updatedOrganization);
 
-            organizationViewModel.Logo.Url = GetPathWithRootLocationOrNull(organizationViewModel.Logo.Url);
+            organizationViewModel.Logo.Url = GetMediaPath(_domainSettings.GeneralSettings.StorageBasePath,
+              _domainSettings.UploadSettings.LogosFolderName, organizationViewModel.Logo.FileId, organizationViewModel.Logo.FileExtension);
+
+            organizationViewModel.Logo.ThumbnailUrl = GetMediaPathWithSubFolder(_domainSettings.GeneralSettings.StorageBasePath,
+           _domainSettings.UploadSettings.LogosFolderName, _domainSettings.UploadSettings.OriginalImageSubFolderName, organizationViewModel.Logo.FileId, organizationViewModel.Logo.FileExtension);
 
             return Created(organizationViewModel);
-        }
-
-        private string GetPathWithRootLocationOrNull(string relativeUrl)
-        {
-            if (relativeUrl == null) return null;
-
-            return $"{_domainSettings.GeneralSettings.StorageBasePath}{relativeUrl}";
         }
     }
 }

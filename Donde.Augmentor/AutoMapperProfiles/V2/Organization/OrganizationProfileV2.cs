@@ -42,8 +42,11 @@ namespace Donde.Augmentor.Web.AutoMapperProfiles.V2.Organization
 
             CreateMap<Core.Domain.Models.Organization, OrganizationLogoMetadataViewModel>()
               .ForMember(x => x.Name, opts => opts.MapFrom(src => src.LogoName))
-              .ForMember(x => x.Url, opts => opts.MapFrom(src => src.LogoUrl))
-              .ForMember(x => x.MimeType, opts => opts.MapFrom(src => src.LogoMimeType));
+              .ForMember(x => x.Url, opts => opts.Ignore())
+              .ForMember(x => x.ThumbnailUrl, opts => opts.Ignore())
+              .ForMember(x => x.MimeType, opts => opts.MapFrom(src => src.LogoMimeType))
+              .ForMember(x => x.FileId, opts => opts.MapFrom(src => src.LogoFileId))
+              .ForMember(x => x.FileExtension, opts => opts.MapFrom(src => src.LogoExtension));
 
             CreateMap<MediaAttachmentDto, Core.Domain.Models.Organization>()
                 .ForMember(x => x.LogoName, opts => opts.MapFrom(src => src.FileName))
