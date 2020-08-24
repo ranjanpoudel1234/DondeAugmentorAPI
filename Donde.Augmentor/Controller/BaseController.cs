@@ -47,13 +47,13 @@ namespace Donde.Augmentor.Web.Controller
             }
         }
 
-        protected string GetMediaPath(string storageBasePath, string folderName, Guid fileId, string extension)
+        protected string GetMediaPath(string storageBasePath, string folderName, Guid? fileId, string extension)
         {
             return $"{storageBasePath}{folderName}/{fileId}{extension}";
         }
 
         protected string GetMediaPathWithSubFolder(string storageBasePath, string folderName, 
-            string mediaSubFolderName, Guid fileId, string extension)
+            string mediaSubFolderName, Guid? fileId, string extension)
         {
             return $"{storageBasePath}{folderName}/{mediaSubFolderName}/{fileId}{extension}";
         }

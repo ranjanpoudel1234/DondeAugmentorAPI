@@ -70,10 +70,10 @@ namespace Donde.Augmentor.Web.Controller.V2
 
             var organizationViewModel = _mapper.Map<OrganizationViewModel>(updatedOrganization);
 
-            organizationViewModel.Logo.Url = GetMediaPath(_domainSettings.GeneralSettings.StorageBasePath,
+            organizationViewModel.Logo.ThumbnailUrl = GetMediaPath(_domainSettings.GeneralSettings.StorageBasePath,
               _domainSettings.UploadSettings.LogosFolderName, organizationViewModel.Logo.FileId, organizationViewModel.Logo.FileExtension);
 
-            organizationViewModel.Logo.ThumbnailUrl = GetMediaPathWithSubFolder(_domainSettings.GeneralSettings.StorageBasePath,
+            organizationViewModel.Logo.Url = GetMediaPathWithSubFolder(_domainSettings.GeneralSettings.StorageBasePath,
            _domainSettings.UploadSettings.LogosFolderName, _domainSettings.UploadSettings.OriginalImageSubFolderName, organizationViewModel.Logo.FileId, organizationViewModel.Logo.FileExtension);
 
             return Created(organizationViewModel);

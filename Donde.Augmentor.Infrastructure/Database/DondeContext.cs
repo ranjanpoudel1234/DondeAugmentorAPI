@@ -6,14 +6,11 @@ using Donde.Augmentor.Core.Domain.Models.RolesAndPermissions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Remotion.Linq.Parsing.ExpressionVisitors;
 using System;
-using System.Linq;
-using System.Linq.Expressions;
 
 namespace Donde.Augmentor.Infrastructure.Database
 {
-	public class DondeContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
+    public class DondeContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
     {
 		public DondeContext()
 		{
