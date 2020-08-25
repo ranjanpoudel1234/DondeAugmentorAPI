@@ -91,7 +91,7 @@ namespace Donde.Augmentor.Web.Controller.V1
 
             var addedVideo = await _audioService.AddAudioAsync(audio);
 
-            var addedVideoViewModel = _mapper.Map<VideoViewModel>(addedVideo);
+            var addedVideoViewModel = _mapper.Map<AudioViewModel>(addedVideo);
 
             addedVideoViewModel.Url = GetMediaPath(_domainSettings.GeneralSettings.StorageBasePath, _domainSettings.UploadSettings.AudiosFolderName,
                 addedVideoViewModel.FileId, addedVideoViewModel.Extension);

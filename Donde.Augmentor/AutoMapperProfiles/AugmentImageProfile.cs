@@ -12,7 +12,6 @@ namespace Donde.Augmentor.Web.AutoMapperProfiles
         {
             CreateMap<MediaAttachmentDto, AugmentImage>()
                 .ForMember(x => x.Name, opts => opts.MapFrom(src => src.FileName))
-                .ForMember(x => x.Url, opts => opts.MapFrom(src => src.FilePath))
                 .ForMember(x => x.FileId, opts => opts.MapFrom(src => src.Id))
                 .ForMember(x => x.Extension, opts => opts.MapFrom(src => Path.GetExtension(src.FilePath)))
                 .ForMember(x => x.OrganizationId, opts => opts.Ignore())

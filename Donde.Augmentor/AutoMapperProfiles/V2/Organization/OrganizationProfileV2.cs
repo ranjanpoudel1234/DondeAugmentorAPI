@@ -17,7 +17,6 @@ namespace Donde.Augmentor.Web.AutoMapperProfiles.V2.Organization
                 .ForMember(x => x.City, opts => opts.MapFrom(x => x.Address.City))
                 .ForMember(x => x.State, opts => opts.MapFrom(x => x.Address.State))
                 .ForMember(x => x.Zip, opts => opts.MapFrom(x => x.Address.Zip))
-                .ForMember(x => x.LogoUrl, opts => opts.Ignore()) //only update from mediaAttachmentDto(see below)
                 .ForMember(x => x.LogoName, opts => opts.Ignore())
                 .ForMember(x => x.LogoMimeType, opts => opts.Ignore())
                 .ForMember(x => x.LogoFileId, opts => opts.Ignore())
@@ -50,7 +49,6 @@ namespace Donde.Augmentor.Web.AutoMapperProfiles.V2.Organization
 
             CreateMap<MediaAttachmentDto, Core.Domain.Models.Organization>()
                 .ForMember(x => x.LogoName, opts => opts.MapFrom(src => src.FileName))
-                .ForMember(x => x.LogoUrl, opts => opts.MapFrom(src => src.FilePath))
                 .ForMember(x => x.LogoMimeType, opts => opts.MapFrom(src => src.MimeType))
                 .ForMember(x => x.LogoFileId, opts => opts.MapFrom(src => src.Id))
                 .ForMember(x => x.LogoExtension, opts => opts.MapFrom(src => Path.GetExtension(src.FilePath)))

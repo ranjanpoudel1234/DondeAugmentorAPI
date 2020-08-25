@@ -17,7 +17,6 @@ namespace Donde.Augmentor.Core.Domain.Models
         public string State { get; set; }
         public string Zip { get; set; }
         public string LogoName { get; set; }
-        public string LogoUrl { get; set; }
         public string LogoMimeType { get; set; }
         public Guid LogoFileId { get; set; }
         public string LogoExtension { get; set; }
