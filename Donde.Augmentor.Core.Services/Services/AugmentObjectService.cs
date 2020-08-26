@@ -49,14 +49,14 @@ namespace Donde.Augmentor.Core.Services.Services
         }
 
 
-        private string GetThumbnailMediaPath(string folderName, Guid? fileId, string extension)
+        private string GetMediaPath(string folderName, Guid? fileId, string extension)
         {
              return $"{_domainSettings.GeneralSettings.StorageBasePath}{folderName}/{fileId}{extension}";
         }
 
-        private string GetOriginalMediaPath(string folderName, string originalMediaFolderName, Guid? fileId, string extension)
+        private string GetMediaPathWithSubFolder(string folderName, string mediaSubFolderName, Guid? fileId, string extension)
         {
-            return $"{_domainSettings.GeneralSettings.StorageBasePath}{folderName}/{originalMediaFolderName}/{fileId}{extension}";
+            return $"{_domainSettings.GeneralSettings.StorageBasePath}{folderName}/{mediaSubFolderName}/{fileId}{extension}";
         }
 
         private AugmentObjectDto GetAugmentObjectMapWithUpdatedUrls(AugmentObjectDto augmentObject)
@@ -76,17 +76,17 @@ namespace Donde.Augmentor.Core.Services.Services
                 MediaId = augmentObject.MediaId,
                 AvatarId = augmentObject.AvatarId,
                 AvatarName = augmentObject.AvatarName == null ? null : augmentObject.AvatarName,
-                AvatarUrl = augmentObject.AvatarFileId.HasValue ? GetThumbnailMediaPath(_domainSettings.UploadSettings.AvatarFolderName, augmentObject.AvatarFileId, augmentObject.AvatarFileExtension) : null,
+                AvatarUrl = augmentObject.AvatarFileId.HasValue ? GetMediaPathWithSubFolder(_domainSettings.UploadSettings.AvatarFolderName, augmentObject.OrganizationId.ToString(), augmentObject.AvatarFileId, augmentObject.AvatarFileExtension) : null,
                 AvatarConfiguration = augmentObject.AvatarConfiguration,
                 AudioId = augmentObject.AudioId,
                 AudioName = augmentObject.AudioName == null ? null : augmentObject.AudioName,
-                AudioUrl = augmentObject.AudioFileId.HasValue ?  GetThumbnailMediaPath(_domainSettings.UploadSettings.AudiosFolderName, augmentObject.AudioFileId, augmentObject.AudioFileExtension) : null,
+                AudioUrl = augmentObject.AudioFileId.HasValue ?  GetMediaPath(_domainSettings.UploadSettings.AudiosFolderName, augmentObject.AudioFileId, augmentObject.AudioFileExtension) : null,
                 VideoId = augmentObject.VideoId,
                 VideoName = augmentObject.VideoName == null ? null : augmentObject.VideoName,
-                VideoUrl = augmentObject.VideoFileId.HasValue ?  GetThumbnailMediaPath(_domainSettings.UploadSettings.VideosFolderName, augmentObject.VideoFileId, augmentObject.VideoFileExtension) : null,
+                VideoUrl = augmentObject.VideoFileId.HasValue ?  GetMediaPath(_domainSettings.UploadSettings.VideosFolderName, augmentObject.VideoFileId, augmentObject.VideoFileExtension) : null,
                 ImageName = augmentObject.ImageName,
-                ImageUrl = GetThumbnailMediaPath(_domainSettings.UploadSettings.ImageFolderName, augmentObject.ImageFileId, augmentObject.ImageFileExtension),
-                OriginalSizeImageUrl = GetOriginalMediaPath(_domainSettings.UploadSettings.ImageFolderName, _domainSettings.UploadSettings.OriginalImageSubFolderName, augmentObject.ImageFileId, augmentObject.ImageFileExtension),
+                ImageUrl = GetMediaPath(_domainSettings.UploadSettings.ImageFolderName, augmentObject.ImageFileId, augmentObject.ImageFileExtension),
+                OriginalSizeImageUrl = GetMediaPathWithSubFolder(_domainSettings.UploadSettings.ImageFolderName, _domainSettings.UploadSettings.OriginalImageSubFolderName, augmentObject.ImageFileId, augmentObject.ImageFileExtension),
                 Distance = augmentObject.Distance,
                 Latitude = augmentObject.Latitude,
                 Longitude = augmentObject.Longitude

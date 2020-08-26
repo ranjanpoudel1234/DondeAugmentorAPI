@@ -85,6 +85,7 @@ namespace Donde.Augmentor.Infrastructure.Repositories
         }
 
         //todo check if filter applies here for isDeletion
+        //Also update the  fact that URL has been removed now. Needs update and testing
         public async Task<IEnumerable<AugmentObjectDto>> GetGeographicalAugmentObjectsByRadius(Guid organizationId, double latitude, double longitude, int radiusInMeters)
         {
             string objectsByDistanceQuery = $@"with AugmentObjectWithDistance as (
@@ -102,17 +103,21 @@ namespace Donde.Augmentor.Infrastructure.Repositories
                         aoMedia.""MediaType"" as MediaType,
                         aoMedia.""Id"" as MediaId,
                         ai.""Name"" as ImageName,
-                        ai.""Url"" as ImageUrl,
+                        ai.""Extension"" as ImageFileExtension,
+                        ai.""FileId"" as ImageFileId,
                         aoMedia.""AvatarId"" as AvatarId,
                         av.""Name"" as AvatarName,
-                        av.""Url"" as AvatarUrl,
+                        av.""Extension"" as AvatarFileExtension,
+                        av.""FileId"" as AvatarFileId,
                         av.""AvatarConfiguration"" as AvatarConfiguration,
                         aoMedia.""AudioId"" as AudioId,
                         au.""Name"" as AudioName,
-                        au.""Url"" as AudioUrl,
+                        au.""Extension"" as AudioFileExtension,
+                        au.""FileId"" as AudioFileId,
                         aoMedia.""VideoId"" as VideoId,
                         v.""Name"" as VideoName,
-                        v.""Url"" as VideoUrl,
+                        v.""Extension"" as VideoFileExtension,
+                        v.""FileId"" as VideoFileId,
                         aoLocation.""Latitude"" as Latitude,
                         aoLocation.""Longitude"" as Longitude
                         from ""AugmentObjects"" ao
