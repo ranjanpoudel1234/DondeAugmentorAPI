@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Donde.Augmentor.Web.ViewModels;
 using Donde.Augmentor.Web.ViewModels.V1.AugmentObject;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;

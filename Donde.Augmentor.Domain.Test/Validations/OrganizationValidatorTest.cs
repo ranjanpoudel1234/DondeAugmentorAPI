@@ -139,19 +139,6 @@ namespace Donde.Augmentor.Domain.Test.Validations
         }
 
         [TestMethod]
-        public void Validate_WithOrganizationUpdateRuleSet_WithInvalidLogoUrl_ReturnsError()
-        {
-            var invalidOrganization = validOrganizationModel;
-            invalidOrganization.LogoUrl = null;
-
-            var validator = new OrganizationValidator();
-
-            var result = validator.Validate(invalidOrganization, ruleSet: $"{OrganizationValidator.OrganizationUpdateRuleSet}");
-
-            AssertFluentValidationError(result, nameof(Organization.LogoUrl), DondeErrorMessages.PROPERTY_EMPTY);
-        }
-
-        [TestMethod]
         public void Validate_WithOrganizationUpdateRuleSet_WithInvalidLogoMimeType_ReturnsError()
         {
             var invalidOrganization = validOrganizationModel;

@@ -3,7 +3,7 @@ using Donde.Augmentor.Core.Domain.Helpers;
 using Donde.Augmentor.Core.Domain.Models;
 using Donde.Augmentor.Web.ViewModels.V1.AugmentObject;
 
-namespace Donde.Augmentor.Web.AutoMapperProfiles.V1
+namespace Donde.Augmentor.Web.AutoMapperProfiles.V1.AugmentObject
 {
     public class AugmentObjectLocationProfile : Profile
     {

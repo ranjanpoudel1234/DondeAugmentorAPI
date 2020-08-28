@@ -24,7 +24,6 @@ namespace Donde.Augmentor.Core.Domain.Validations
             RuleSet(OrganizationUpdateRuleSet, () =>
             {
                 RuleFor(x => x.LogoName).NotEmpty().WithMessage(DondeErrorMessages.PROPERTY_EMPTY);
-                RuleFor(x => x.LogoUrl).NotEmpty().WithMessage(DondeErrorMessages.PROPERTY_EMPTY);
                 RuleFor(x => x.LogoMimeType).NotEmpty().WithMessage(DondeErrorMessages.PROPERTY_EMPTY);
             });       
         }

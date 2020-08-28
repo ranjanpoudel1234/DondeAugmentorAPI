@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Donde.Augmentor.Core.Domain;
 using Donde.Augmentor.Core.Domain.Enum;
 using Donde.Augmentor.Core.Domain.Models;
 using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces;
@@ -27,6 +28,7 @@ namespace Donde.Augmentor.Web.Controller.V1
         private readonly IMapper _mapper;
         private readonly ILogger<AugmentImagesController> _logger;
         private readonly IFileProcessingService _fileProcessingService;
+        private readonly DomainSettings _domainSettings;
 
         // Get the default form options so that we can use them to set the default limits for
         // request body data
@@ -35,13 +37,13 @@ namespace Donde.Augmentor.Web.Controller.V1
         public VideosController(IVideoService videoService,
             IMapper mapper, IFileProcessingService fileProcessingService,
             ILogger<AugmentImagesController> logger,
-            IHostingEnvironment env)
+            DomainSettings domainSettings)
         {
             _videoService = videoService;
             _mapper = mapper;
             _logger = logger;
             _fileProcessingService = fileProcessingService;
-
+            _domainSettings = domainSettings;
         }
 
         [ODataRoute]
@@ -63,6 +65,9 @@ namespace Donde.Augmentor.Web.Controller.V1
             var addedVideo = await _videoService.AddVideoAsync(video);
 
             var addedVideoViewModel = _mapper.Map<VideoViewModel>(addedVideo);
+
+            addedVideoViewModel.Url = GetMediaPath(_domainSettings.GeneralSettings.StorageBasePath, _domainSettings.UploadSettings.VideosFolderName,
+            addedVideoViewModel.FileId, addedVideoViewModel.Extension);
 
             return Created(addedVideoViewModel);
         }

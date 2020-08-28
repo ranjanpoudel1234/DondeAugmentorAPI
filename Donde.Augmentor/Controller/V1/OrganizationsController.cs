@@ -54,6 +54,10 @@ namespace Donde.Augmentor.Web.Controller.V1
 
             var mappedResult = _mapper.Map<List<OrganizationViewModel>>(result);
 
+            mappedResult.ForEach(x => x.LogoUrl = GetMediaPath(_domainSettings.GeneralSettings.StorageBasePath,
+                _domainSettings.UploadSettings.LogosFolderName, x.LogoFileId, x.LogoExtension));
+
+
             return Ok(mappedResult);
         }
 
@@ -77,16 +81,10 @@ namespace Donde.Augmentor.Web.Controller.V1
                 result = await organizationsViewModels.ToListAsync();
             }
 
-            result.ForEach(x => x.LogoUrl = GetPathWithRootLocationOrNull(x.LogoUrl));
+            result.ForEach(x => x.LogoUrl = GetMediaPath(_domainSettings.GeneralSettings.StorageBasePath, 
+                _domainSettings.UploadSettings.LogosFolderName, x.LogoFileId, x.LogoExtension));
 
             return Ok(result);
-        }
-
-        private string GetPathWithRootLocationOrNull(string url)
-        {
-            if (url == null) return null;
-
-            return $"{_domainSettings.GeneralSettings.StorageBasePath}{url}";
-        }
+        }      
     }
 }
