@@ -8,5 +8,7 @@ namespace Donde.Augmentor.Web.ViewModels.V2.Targets
         public string Name { get; set; }
         public string Url { get; set; }
         public string ThumbnailUrl { get; set; }
+        public Guid FileId { get; set; }
+        public string Extension { get; set; }
     }
 }

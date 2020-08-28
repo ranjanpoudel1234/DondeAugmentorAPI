@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Donde.Augmentor.Core.Domain;
 using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces;
 using Donde.Augmentor.Web.OData;
 using Donde.Augmentor.Web.ViewModels.V2.Targets;
@@ -18,15 +19,16 @@ namespace Donde.Augmentor.Web.Controller.V2
     [ApiVersion("2.0")]
     [ODataRoutePrefix(ODataConstants.TargetsRoute)]
     [Authorize]
-    public class TargetsController : ODataController
+    public class TargetsController : BaseController
     {
         private readonly IAugmentObjectService _augmentObjectService;
         private readonly IMapper _mapper;
-
-        public TargetsController(IAugmentObjectService augmentObjectService, IMapper mapper)
+        private readonly DomainSettings _domainSettings;
+        public TargetsController(IAugmentObjectService augmentObjectService, IMapper mapper, DomainSettings domainSettings)
         {
             _augmentObjectService = augmentObjectService;
             _mapper = mapper;
+            _domainSettings = domainSettings;
         }
 
         [ODataRoute]
@@ -38,7 +40,7 @@ namespace Donde.Augmentor.Web.Controller.V2
 
             var projectedTargets = augmentObjectQueryable.ProjectTo<TargetViewModel>(_mapper.ConfigurationProvider);
 
-            var appliedResults = (IQueryable<dynamic>)odataOptions.ApplyTo(projectedTargets);
+            var appliedResults = (IQueryable<TargetViewModel>)odataOptions.ApplyTo(projectedTargets);
 
             var result = await appliedResults.ToListAsync();      
 
@@ -47,6 +49,34 @@ namespace Donde.Augmentor.Web.Controller.V2
             return Ok(result.ToODataCollectionResponse(Request));
         }
 
+        private void MapMediaUrlsAndAvatarConfiguration(List<TargetViewModel> targetViewModels)
+        {
+            foreach (var target in targetViewModels)
+            {
+                target.Image.ThumbnailUrl = GetMediaPath(_domainSettings.GeneralSettings.StorageBasePath, 
+                    _domainSettings.UploadSettings.ImageFolderName, target.Image.FileId, target.Image.Extension);
+
+                target.Image.Url = GetMediaPathWithSubFolder(_domainSettings.GeneralSettings.StorageBasePath,
+                 _domainSettings.UploadSettings.ImageFolderName, _domainSettings.UploadSettings.OriginalImageSubFolderName, target.Image.FileId, target.Image.Extension);
+
+                if (target.Media.Type == Core.Domain.Enum.AugmentObjectMediaTypes.AvatarWithAudio)
+                {
+                    target.Avatar.Url = GetMediaPathWithSubFolder(_domainSettings.GeneralSettings.StorageBasePath,
+                     _domainSettings.UploadSettings.AvatarFolderName,
+                    target.Avatar.OrganizationId.ToString(),
+                    target.Avatar.FileId, target.Avatar.Extension);
+
+                    target.Image.Url = GetMediaPathWithSubFolder(_domainSettings.GeneralSettings.StorageBasePath,
+                _domainSettings.UploadSettings.ImageFolderName, _domainSettings.UploadSettings.OriginalImageSubFolderName, target.Image.FileId, target.Image.Extension);
+                }
+                else if(target.Media.Type == Core.Domain.Enum.AugmentObjectMediaTypes.Video)
+                {
+                    target.Image.Url = GetMediaPathWithSubFolder(_domainSettings.GeneralSettings.StorageBasePath,
+                _domainSettings.UploadSettings.ImageFolderName, _domainSettings.UploadSettings.OriginalImageSubFolderName, target.Image.FileId, target.Image.Extension);
+                }
+
+            }
+        }
 
         //var organizationQueryable = _roleService.GetAll();
 
