@@ -34,6 +34,7 @@ namespace Donde.Augmentor.Web.Controller.V1
             _avatarService = avatarService;
             _mapper = mapper;
             _logger = logger;
+            _domainSettings = domainSettings;
         }
 
         [ODataRoute]
@@ -59,7 +60,7 @@ namespace Donde.Augmentor.Web.Controller.V1
             foreach (var avatar in result)
             {
                 avatar.Url = GetMediaPathWithSubFolder(_domainSettings.GeneralSettings.StorageBasePath, 
-                    _domainSettings.UploadSettings.AvatarFolderName,
+                    _domainSettings.UploadSettings.AvatarsFolderName,
                     avatar.OrganizationId.ToString(),
                     avatar.FileId, avatar.Extension);
             }

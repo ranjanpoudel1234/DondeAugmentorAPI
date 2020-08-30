@@ -40,8 +40,7 @@ namespace Donde.Augmentor.Infrastructure.Repositories
                 .Include(au => au.AugmentObjectMedias)
                     .ThenInclude(aum => aum.Avatar)
                 .Include(au => au.AugmentObjectLocations)
-                .Include(au => au.Organization)
-                    .ThenInclude(org => org.Avatar);
+                .Include(au => au.Organization);
         }
 
         public IQueryable<AugmentObjectDto> GetAugmentObjects()
