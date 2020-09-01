@@ -13,6 +13,7 @@ namespace Donde.Augmentor.Core.Domain
             public const string INVALID_VALUE = "INVALID_VALUE";
             public const string INVALID_ORGANIZATION_ID = "INVALID_ORGANIZATION_ID";
             public const string INVALID_ROLE_ID = "INVALID_ROLE_ID";
+            public const string MUST_BE_EMPTY = "MUST_BE_EMPTY";
         }
 
         public class ValidMediaExtensions

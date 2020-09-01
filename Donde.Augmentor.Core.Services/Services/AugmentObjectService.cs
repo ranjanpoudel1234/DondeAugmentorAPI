@@ -1,8 +1,11 @@
 ﻿using Donde.Augmentor.Core.Domain;
 using Donde.Augmentor.Core.Domain.Dto;
+using Donde.Augmentor.Core.Domain.Helpers;
 using Donde.Augmentor.Core.Domain.Models;
+using Donde.Augmentor.Core.Domain.Validations;
 using Donde.Augmentor.Core.Repositories.Interfaces.RepositoryInterfaces;
 using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces;
+using FluentValidation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,11 +17,14 @@ namespace Donde.Augmentor.Core.Services.Services
     {
         private IAugmentObjectRepository _augmentObjectRepository;
         private DomainSettings _domainSettings;
+        private readonly IValidator<AugmentObject> _validator;
 
-        public AugmentObjectService(IAugmentObjectRepository augmentObjectRepository, DomainSettings domainSettings)
+        public AugmentObjectService(IAugmentObjectRepository augmentObjectRepository,
+            DomainSettings domainSettings, IValidator<AugmentObject> validator)
         {
             _augmentObjectRepository = augmentObjectRepository;
             _domainSettings = domainSettings;
+            _validator = validator;
         }
 
         public IQueryable<AugmentObject> GetAugmentObjectsQueryableWithChildren()
@@ -35,7 +41,14 @@ namespace Donde.Augmentor.Core.Services.Services
 
         public async Task<AugmentObject> CreateAugmentObjectAsync(AugmentObject entity)
         {
-            //todo need to add fluent validation here.
+            entity.Id = SequentialGuidGenerator.GenerateComb();
+
+            entity.AugmentObjectMedias.ForEach(x => { x.Id = SequentialGuidGenerator.GenerateComb(); x.AugmentObjectId = entity.Id; });
+
+            entity.AugmentObjectLocations.ForEach(x => { x.Id = SequentialGuidGenerator.GenerateComb(); x.AugmentObjectId = entity.Id; });
+
+            await _validator.ValidateOrThrowAsync(entity);
+
             return await _augmentObjectRepository.CreateAugmentObjectAsync(entity);
         }
 

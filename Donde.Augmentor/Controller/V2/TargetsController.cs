@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Donde.Augmentor.Core.Domain;
+using Donde.Augmentor.Core.Domain.Models;
 using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces;
 using Donde.Augmentor.Web.OData;
 using Donde.Augmentor.Web.ViewModels.V2.Targets;
@@ -13,6 +14,7 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static Donde.Augmentor.Web.Attributes.IgnoreJsonIgnore;
 
 namespace Donde.Augmentor.Web.Controller.V2
 {
@@ -51,55 +53,79 @@ namespace Donde.Augmentor.Web.Controller.V2
 
             var result = await appliedResults.ToListAsync();
 
-            MapMediaAndAvatar(result);
+            foreach (var target in result)
+            {
+                MapMediaAndAvatar(target);
+            }
 
             return Ok(result.Cast<dynamic>().ToODataCollectionResponse(Request));
         }
 
-        private void MapMediaAndAvatar(List<TargetViewModel> targetViewModels)
+        [ODataRoute]
+        [HttpPost]
+        public async Task<IActionResult> Post([FromBody] TargetViewModel targetViewModel)
         {
-            foreach (var target in targetViewModels)
+            var target = _mapper.Map<AugmentObject>(targetViewModel);
+
+            var media = _mapper.Map<AugmentObjectMedia>(targetViewModel.Media);
+            target.AugmentObjectMedias.Add(media);
+
+            var locations = _mapper.Map<List<AugmentObjectLocation>>(targetViewModel.Locations);
+            if (locations != null)
             {
-                target.Image.ThumbnailUrl = GetMediaPath(_domainSettings.GeneralSettings.StorageBasePath,
-                                                            _domainSettings.UploadSettings.ImagesFolderName,
-                                                            target.Image.FileId,
-                                                            target.Image.Extension);
+                target.AugmentObjectLocations.AddRange(locations);
+            }
 
-                target.Image.Url = GetMediaPathWithSubFolder(_domainSettings.GeneralSettings.StorageBasePath,
-                                                             _domainSettings.UploadSettings.ImagesFolderName,
-                                                             _domainSettings.UploadSettings.OriginalImageSubFolderName,
-                                                             target.Image.FileId,
-                                                             target.Image.Extension);
+            var result = await _augmentObjectService.CreateAugmentObjectAsync(target);
+            var addedTargetViewModel = _mapper.Map<TargetViewModel>(result);
 
-                if (target.Media.Type == Core.Domain.Enum.AugmentObjectMediaTypes.AvatarWithAudio)
-                {
-                    var avatar = target.Avatar;
-                    avatar.Url = GetMediaPathWithSubFolder(_domainSettings.GeneralSettings.StorageBasePath,
-                                                                  _domainSettings.UploadSettings.AvatarsFolderName,
-                                                                  avatar.OrganizationId.ToString(),
-                                                                  avatar.FileId,
-                                                                  avatar.Extension);
+            MapMediaAndAvatar(addedTargetViewModel);
 
-                    avatar.Configuration = !string.IsNullOrWhiteSpace(avatar.ConfigurationString)
-                     ? JsonConvert.DeserializeObject<AvatarConfigurationViewModel>(avatar.ConfigurationString) : null;
+            return Ok(addedTargetViewModel);
+        }
+
+        private void MapMediaAndAvatar(TargetViewModel target)
+        {
+
+            target.Image.ThumbnailUrl = GetMediaPath(_domainSettings.GeneralSettings.StorageBasePath,
+                                                        _domainSettings.UploadSettings.ImagesFolderName,
+                                                        target.Image.FileId,
+                                                        target.Image.Extension);
+
+            target.Image.Url = GetMediaPathWithSubFolder(_domainSettings.GeneralSettings.StorageBasePath,
+                                                         _domainSettings.UploadSettings.ImagesFolderName,
+                                                         _domainSettings.UploadSettings.OriginalImageSubFolderName,
+                                                         target.Image.FileId,
+                                                         target.Image.Extension);
+
+            if (target.Media.Type == Core.Domain.Enum.AugmentObjectMediaTypes.AvatarWithAudio)
+            {
+                var avatar = target.Avatar;
+                avatar.Url = GetMediaPathWithSubFolder(_domainSettings.GeneralSettings.StorageBasePath,
+                                                              _domainSettings.UploadSettings.AvatarsFolderName,
+                                                              avatar.OrganizationId.ToString(),
+                                                              avatar.FileId,
+                                                              avatar.Extension);
+
+                avatar.Configuration = !string.IsNullOrWhiteSpace(avatar.ConfigurationString)
+                 ? JsonConvert.DeserializeObject<AvatarConfigurationViewModel>(avatar.ConfigurationString) : null;
 
 
-                    var media = target.Media;
-                    media.Url = GetMediaPath(_domainSettings.GeneralSettings.StorageBasePath,
-                                                                _domainSettings.UploadSettings.AudiosFolderName,
-                                                                media.FileId,
-                                                                media.Extension);
+                var media = target.Media;
+                media.Url = GetMediaPath(_domainSettings.GeneralSettings.StorageBasePath,
+                                                            _domainSettings.UploadSettings.AudiosFolderName,
+                                                            media.FileId,
+                                                            media.Extension);
 
-                }
-                else if (target.Media.Type == Core.Domain.Enum.AugmentObjectMediaTypes.Video)
-                {
-                    target.Avatar = null; //setting null here so we dont have object with default propertyvalues(from Automapper)
-                    var media = target.Media;
-                    media.Url = GetMediaPath(_domainSettings.GeneralSettings.StorageBasePath,
-                                                                _domainSettings.UploadSettings.VideosFolderName,
-                                                                media.FileId,
-                                                                media.Extension);
-                }
+            }
+            else if (target.Media.Type == Core.Domain.Enum.AugmentObjectMediaTypes.Video)
+            {
+                target.Avatar = null; //setting null here so we dont have object with default propertyvalues(from Automapper)
+                var media = target.Media;
+                media.Url = GetMediaPath(_domainSettings.GeneralSettings.StorageBasePath,
+                                                            _domainSettings.UploadSettings.VideosFolderName,
+                                                            media.FileId,
+                                                            media.Extension);
             }
         }
     }
