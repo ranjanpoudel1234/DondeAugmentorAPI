@@ -63,11 +63,18 @@ namespace Donde.Augmentor.Web.Controller.V2
 
         [ODataRoute]
         [HttpPost]
+        [IgnoreJsonIgnore]
         public async Task<IActionResult> Post([FromBody] TargetViewModel targetViewModel)
         {
             var target = _mapper.Map<AugmentObject>(targetViewModel);
 
-            var media = _mapper.Map<AugmentObjectMedia>(targetViewModel.Media);
+            var media = _mapper.Map<AugmentObjectMedia>(targetViewModel.Media);       
+
+            if(targetViewModel.Media.Type == Core.Domain.Enum.AugmentObjectMediaTypes.AvatarWithAudio)
+            {
+                media.AvatarId = targetViewModel.Avatar.Id;
+            }
+
             target.AugmentObjectMedias.Add(media);
 
             var locations = _mapper.Map<List<AugmentObjectLocation>>(targetViewModel.Locations);

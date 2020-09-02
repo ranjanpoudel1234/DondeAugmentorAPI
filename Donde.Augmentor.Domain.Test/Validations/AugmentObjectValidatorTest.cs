@@ -263,7 +263,6 @@ namespace Donde.Augmentor.Domain.Test.Validations
             AssertFluentValidationError(result, $"{nameof(AugmentObject.AugmentObjectMedias)}[0].{nameof(AugmentObjectMedia.AvatarId)}", DondeErrorMessages.MUST_BE_EMPTY);
         }
 
-
         [TestMethod]
         public void Validate_WithAugmentObjectMedia_WithVideo_WithNotEmptyAudioId_ReturnsError()
         {

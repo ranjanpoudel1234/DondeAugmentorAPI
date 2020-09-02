@@ -62,28 +62,11 @@ namespace Donde.Augmentor.Web.AutoMapperProfiles.V2.Target
 
             CreateMap<TargetMediaViewModel, AugmentObjectMedia>()
                .ForMember(x => x.Id, opts => opts.Ignore()) //mapped in service
-               .ForMember(x => x.AvatarId, opts => opts.Ignore()) //mapped in its automapper below.
+               .ForMember(x => x.AvatarId, opts => opts.MapFrom(src => src != null ? src.Id : (Guid?)null)) //mapped in its automapper below.
                .ForMember(x => x.AugmentObjectId, opts => opts.Ignore()) //mapped in service
                .ForMember(x => x.AudioId, opts => opts.MapFrom(src => src.Type == AugmentObjectMediaTypes.AvatarWithAudio ? src.Id : (Guid?)null))
                .ForMember(x => x.VideoId, opts => opts.MapFrom(src => src.Type == AugmentObjectMediaTypes.Video ? src.Id : (Guid?)null))
                .ForMember(x => x.MediaType, opts => opts.MapFrom(src => src.Type))
-               .ForMember(x => x.AddedDate, opts => opts.Ignore())
-               .ForMember(x => x.UpdatedDate, opts => opts.Ignore())
-               .ForMember(x => x.IsDeleted, opts => opts.Ignore())
-               .ForMember(x => x.Audio, opts => opts.Ignore())
-               .ForMember(x => x.Video, opts => opts.Ignore())
-               .ForMember(x => x.Avatar, opts => opts.Ignore())
-               .ForMember(x => x.AugmentObject, opts => opts.Ignore());
-
-
-            CreateMap<TargetAvatarViewModel, AugmentObjectMedia>()
-               .ForMember(x => x.AvatarId, opts => opts.MapFrom(src => src != null ? src.Id : (Guid?) null))
-               .ForMember(x => x.Id, opts => opts.Ignore()) //mapped in service
-               .ForMember(x => x.AvatarId, opts => opts.Ignore()) //mapped in its automapper below.
-               .ForMember(x => x.AugmentObjectId, opts => opts.Ignore()) //mapped in service
-               .ForMember(x => x.AudioId, opts => opts.Ignore())
-               .ForMember(x => x.VideoId, opts => opts.Ignore())
-               .ForMember(x => x.MediaType, opts => opts.Ignore())
                .ForMember(x => x.AddedDate, opts => opts.Ignore())
                .ForMember(x => x.UpdatedDate, opts => opts.Ignore())
                .ForMember(x => x.IsDeleted, opts => opts.Ignore())

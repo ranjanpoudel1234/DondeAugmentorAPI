@@ -49,7 +49,9 @@ namespace Donde.Augmentor.Core.Services.Services
 
             await _validator.ValidateOrThrowAsync(entity);
 
-            return await _augmentObjectRepository.CreateAugmentObjectAsync(entity);
+            await _augmentObjectRepository.CreateAugmentObjectAsync(entity);
+
+            return _augmentObjectRepository.GetAugmentObjectByIdWithChildren(entity.Id);
         }
 
         public async Task<IEnumerable<AugmentObjectDto>> GetGeographicalAugmentObjectsByRadius(Guid organizationId, double latitude, double longitude, int radiusInMeters)
