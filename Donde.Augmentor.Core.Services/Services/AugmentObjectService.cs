@@ -5,6 +5,7 @@ using Donde.Augmentor.Core.Domain.Models;
 using Donde.Augmentor.Core.Domain.Validations;
 using Donde.Augmentor.Core.Repositories.Interfaces.RepositoryInterfaces;
 using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces;
+using Donde.Augmentor.Core.Services.Services.CustomValidations;
 using FluentValidation;
 using System;
 using System.Collections.Generic;
@@ -18,13 +19,15 @@ namespace Donde.Augmentor.Core.Services.Services
         private IAugmentObjectRepository _augmentObjectRepository;
         private DomainSettings _domainSettings;
         private readonly IValidator<AugmentObject> _validator;
+        private readonly IAugmentObjectResourceValidator _augmentObjectResourceValidator;
 
         public AugmentObjectService(IAugmentObjectRepository augmentObjectRepository,
-            DomainSettings domainSettings, IValidator<AugmentObject> validator)
+            DomainSettings domainSettings, IValidator<AugmentObject> validator, IAugmentObjectResourceValidator augmentObjectResourceValidator)
         {
             _augmentObjectRepository = augmentObjectRepository;
             _domainSettings = domainSettings;
             _validator = validator;
+            _augmentObjectResourceValidator = augmentObjectResourceValidator;
         }
 
         public IQueryable<AugmentObject> GetAugmentObjectsQueryableWithChildren()
@@ -49,9 +52,16 @@ namespace Donde.Augmentor.Core.Services.Services
 
             await _validator.ValidateOrThrowAsync(entity);
 
+            await _augmentObjectResourceValidator.ValidateAugmentObjectResourceOrThrowAsync(entity);
+
             await _augmentObjectRepository.CreateAugmentObjectAsync(entity);
 
             return _augmentObjectRepository.GetAugmentObjectByIdWithChildren(entity.Id);
+        }
+
+        private async Task ValidateResourceBelongsToOrganization(Guid organizationId, AugmentObject entity)
+        {
+
         }
 
         public async Task<IEnumerable<AugmentObjectDto>> GetGeographicalAugmentObjectsByRadius(Guid organizationId, double latitude, double longitude, int radiusInMeters)

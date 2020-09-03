@@ -19,6 +19,11 @@ namespace Donde.Augmentor.Infrastructure.Repositories
             return  CreateAsync(entity);
         }
 
+        public Task<Audio> GetAudioByIdAsync(Guid audioId)
+        {
+            return GetByIdAsync<Audio>(audioId);
+        }
+
         public IQueryable<Audio> GetAudios()
         {
             return GetAll<Audio>();

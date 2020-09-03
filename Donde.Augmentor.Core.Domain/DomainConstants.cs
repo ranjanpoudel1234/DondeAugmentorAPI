@@ -14,6 +14,7 @@ namespace Donde.Augmentor.Core.Domain
             public const string INVALID_ORGANIZATION_ID = "INVALID_ORGANIZATION_ID";
             public const string INVALID_ROLE_ID = "INVALID_ROLE_ID";
             public const string MUST_BE_EMPTY = "MUST_BE_EMPTY";
+            public const string RESOURCE_DOES_NOT_BELONG_TO_ORGANIZATION = "RESOURCE_DOES_NOT_BELONG_TO_ORGANIZATION";
         }
 
         public class ValidMediaExtensions
