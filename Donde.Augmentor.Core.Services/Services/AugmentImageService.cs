@@ -26,5 +26,10 @@ namespace Donde.Augmentor.Core.Services.Services
         {
             return _augmentImageRepository.AddAugmentImageAsync(augmentImage);
         }
+
+        public Task<AugmentImage> GetAugmentImageByIdAsync(Guid augmentImageId)
+        {
+            return _augmentImageRepository.GetAugmentImageByIdAsync(augmentImageId);
+        }
     }
 }

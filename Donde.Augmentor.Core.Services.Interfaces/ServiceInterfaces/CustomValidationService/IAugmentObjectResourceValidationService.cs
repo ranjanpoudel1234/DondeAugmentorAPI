@@ -1,9 +1,9 @@
 ﻿using Donde.Augmentor.Core.Domain.Models;
 using System.Threading.Tasks;
 
-namespace Donde.Augmentor.Core.Services.Services.CustomValidations
+namespace Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces.CustomValidations
 {
-    public interface IAugmentObjectResourceValidator
+    public interface IAugmentObjectResourceValidationService
     {
         Task ValidateAugmentObjectResourceOrThrowAsync(AugmentObject entity);
     }

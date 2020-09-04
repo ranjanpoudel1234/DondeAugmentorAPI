@@ -1,6 +1,7 @@
 ﻿using Donde.Augmentor.Core.Domain.Models;
 using Donde.Augmentor.Core.Repositories.Interfaces.RepositoryInterfaces;
 using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces;
+using System;
 using System.Threading.Tasks;
 
 namespace Donde.Augmentor.Core.Services.Services
@@ -17,6 +18,11 @@ namespace Donde.Augmentor.Core.Services.Services
         public Task<Video> AddVideoAsync(Video video)
         {
             return _videoRepository.AddVideoAsync(video);
+        }
+
+        public Task<Video> GetVideoByIdAsync(Guid videoId)
+        {
+            return _videoRepository.GetVideoByIdAsync(videoId);
         }
     }
 }
