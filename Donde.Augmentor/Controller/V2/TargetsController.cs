@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Donde.Augmentor.Core.Domain;
+using Donde.Augmentor.Core.Domain.CustomExceptions;
 using Donde.Augmentor.Core.Domain.Models;
 using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces;
 using Donde.Augmentor.Web.OData;
@@ -11,6 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -66,7 +68,7 @@ namespace Donde.Augmentor.Web.Controller.V2
         [IgnoreJsonIgnore]
         public async Task<IActionResult> Post([FromBody] TargetViewModel targetViewModel)
         {
-            var target = _mapper.Map<AugmentObject>(targetViewModel);
+            var augmentObject = _mapper.Map<AugmentObject>(targetViewModel);
 
             var media = _mapper.Map<AugmentObjectMedia>(targetViewModel.Media);       
 
@@ -75,21 +77,57 @@ namespace Donde.Augmentor.Web.Controller.V2
                 media.AvatarId = targetViewModel.Avatar.Id;
             }
 
-            target.AugmentObjectMedias.Add(media);
+            augmentObject.AugmentObjectMedias.Add(media);
 
             var locations = _mapper.Map<List<AugmentObjectLocation>>(targetViewModel.Locations);
             if (locations != null)
             {
-                target.AugmentObjectLocations.AddRange(locations);
+                augmentObject.AugmentObjectLocations.AddRange(locations);
             }
 
-            var result = await _augmentObjectService.CreateAugmentObjectAsync(target);
+            var result = await _augmentObjectService.CreateAugmentObjectAsync(augmentObject);
             var addedTargetViewModel = _mapper.Map<TargetViewModel>(result);
 
             MapMediaAndAvatar(addedTargetViewModel);
 
             return Ok(addedTargetViewModel);
         }
+
+        [ODataRoute("({targetId})")]
+        [HttpPut]
+        [IgnoreJsonIgnore]
+        public async Task<IActionResult> Put(Guid targetId, [FromBody] TargetViewModel targetViewModel)
+        {
+            if (targetId != targetViewModel.Id)
+            {
+                throw new HttpBadRequestException(ErrorMessages.IdsMisMatch);
+            }
+
+            var augmentObject = _mapper.Map<AugmentObject>(targetViewModel);
+
+            var media = _mapper.Map<AugmentObjectMedia>(targetViewModel.Media);
+
+            if (targetViewModel.Media.Type == Core.Domain.Enum.AugmentObjectMediaTypes.AvatarWithAudio)
+            {
+                media.AvatarId = targetViewModel.Avatar.Id;
+            }
+
+            augmentObject.AugmentObjectMedias.Add(media);
+
+            var locations = _mapper.Map<List<AugmentObjectLocation>>(targetViewModel.Locations);
+            if (locations != null)
+            {
+                augmentObject.AugmentObjectLocations.AddRange(locations);
+            }
+
+            var result = await _augmentObjectService.UpdateAugmentObjectAsync(targetId, augmentObject);
+            var addedTargetViewModel = _mapper.Map<TargetViewModel>(result);
+
+            MapMediaAndAvatar(addedTargetViewModel);
+
+            return Ok(addedTargetViewModel);
+        }
+
 
         private void MapMediaAndAvatar(TargetViewModel target)
         {

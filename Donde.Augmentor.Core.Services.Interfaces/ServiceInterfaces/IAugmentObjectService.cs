@@ -13,6 +13,6 @@ namespace Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces
         IQueryable<AugmentObjectDto> GetAugmentObjects();
         Task<IEnumerable<AugmentObjectDto>> GetGeographicalAugmentObjectsByRadius(Guid organizationId, double latitude, double longitude, int radiusInMeters);
         Task<AugmentObject> CreateAugmentObjectAsync(AugmentObject entity);
-        Task<AugmentObject> UpdateAugmentObjectAsync(Guid id, AugmentObject entity);
+        Task<AugmentObject> UpdateAugmentObjectAsync(Guid entityId, AugmentObject entity);
     }
 }

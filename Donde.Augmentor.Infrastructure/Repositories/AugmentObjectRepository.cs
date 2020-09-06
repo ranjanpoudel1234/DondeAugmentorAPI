@@ -26,36 +26,72 @@ namespace Donde.Augmentor.Infrastructure.Repositories
 
         public async Task<AugmentObject> UpdateAugmentObjectAsync(Guid id, AugmentObject entity)
         {
+            var existingAugmentObjectMedias = _dbContext.AugmentObjectMedias.Where(x => x.AugmentObjectId == id).ToList();
+            var existingAugmentObjectLocations = _dbContext.AugmentObjectLocations.Where(x => x.AugmentObjectId == id).ToList();
+
+            foreach (var media in existingAugmentObjectMedias)
+            {
+                media.IsDeleted = true;
+                media.UpdatedDate = DateTime.UtcNow; // not using generic repo as that deletes locations by default
+            }
+
+            foreach (var location in existingAugmentObjectLocations)
+            {
+                location.IsDeleted = true;
+                location.UpdatedDate = DateTime.UtcNow;
+            }
+
+            foreach (var media in entity.AugmentObjectMedias)
+            {
+                media.AddedDate = DateTime.UtcNow;
+               await _dbContext.AugmentObjectMedias.AddAsync(media);
+            }
+
+            foreach (var location in entity.AugmentObjectLocations)
+            {
+                location.AddedDate = DateTime.UtcNow;
+                await _dbContext.AugmentObjectLocations.AddAsync(location);
+            }
+
+
             return await UpdateAsync(id, entity);
         }
 
         public IQueryable<AugmentObject> GetAugmentObjectsQueryableWithChildren()
         {
-            return _dbContext.AugmentObjects
-                .Include(au => au.AugmentImage)
-                .Include(au => au.AugmentObjectMedias)
-                    .ThenInclude(aum => aum.Audio)
-                .Include(au => au.AugmentObjectMedias)
-                    .ThenInclude(aum => aum.Video)
-                .Include(au => au.AugmentObjectMedias)
-                    .ThenInclude(aum => aum.Avatar)
-                .Include(au => au.AugmentObjectLocations)
-                .Include(au => au.Organization);
+            return GetAugmentObjectWithChildrenQueryable();   
         }
 
-        public AugmentObject GetAugmentObjectByIdWithChildren(Guid id)
+        public Task<AugmentObject> GetAugmentObjectByIdWithChildrenAsync(Guid id)
+        {
+            return GetAugmentObjectWithChildrenQueryable()
+                .SingleAsync(x => x.Id == id);
+        }
+
+        public Task<AugmentObject> GetAugmentObjectByIdAsync(Guid id)
         {
             return _dbContext.AugmentObjects
-                .Include(au => au.AugmentImage)
-                .Include(au => au.AugmentObjectMedias)
-                    .ThenInclude(aum => aum.Audio)
-                .Include(au => au.AugmentObjectMedias)
-                    .ThenInclude(aum => aum.Video)
-                .Include(au => au.AugmentObjectMedias)
-                    .ThenInclude(aum => aum.Avatar)
-                .Include(au => au.AugmentObjectLocations)
-                .Include(au => au.Organization)
-                .Single(x => x.Id == id);
+                .SingleAsync(x => x.Id == id);
+        }
+
+        public Task<AugmentObject> GetAugmentObjectByIdithChildrenAsNoTrackingAsync(Guid id)
+        {
+            return GetAugmentObjectWithChildrenQueryable().AsNoTracking()
+                .SingleAsync(x => x.Id == id);
+        }
+
+        private IQueryable<AugmentObject> GetAugmentObjectWithChildrenQueryable()
+        {
+            return _dbContext.AugmentObjects
+               .Include(au => au.AugmentImage)
+               .Include(au => au.AugmentObjectMedias)
+                   .ThenInclude(aum => aum.Audio)
+               .Include(au => au.AugmentObjectMedias)
+                   .ThenInclude(aum => aum.Video)
+               .Include(au => au.AugmentObjectMedias)
+                   .ThenInclude(aum => aum.Avatar)
+               .Include(au => au.AugmentObjectLocations)
+               .Include(au => au.Organization);
         }
 
         public IQueryable<AugmentObjectDto> GetAugmentObjects()

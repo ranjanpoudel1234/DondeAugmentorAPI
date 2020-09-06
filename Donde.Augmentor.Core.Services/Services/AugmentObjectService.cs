@@ -1,4 +1,6 @@
-﻿using Donde.Augmentor.Core.Domain;
+﻿using AutoMapper;
+using Donde.Augmentor.Core.Domain;
+using Donde.Augmentor.Core.Domain.CustomExceptions;
 using Donde.Augmentor.Core.Domain.Dto;
 using Donde.Augmentor.Core.Domain.Helpers;
 using Donde.Augmentor.Core.Domain.Models;
@@ -19,20 +21,29 @@ namespace Donde.Augmentor.Core.Services.Services
         private IAugmentObjectRepository _augmentObjectRepository;
         private DomainSettings _domainSettings;
         private readonly IValidator<AugmentObject> _validator;
+        private readonly IMapper _mapper;
         private readonly IAugmentObjectResourceValidationService _augmentObjectResourceValidationService;
 
         public AugmentObjectService(IAugmentObjectRepository augmentObjectRepository,
-            DomainSettings domainSettings, IValidator<AugmentObject> validator, IAugmentObjectResourceValidationService augmentObjectResourceValidationService)
+            DomainSettings domainSettings, IValidator<AugmentObject> validator,
+            IAugmentObjectResourceValidationService augmentObjectResourceValidationService,
+             IMapper mapper)
         {
             _augmentObjectRepository = augmentObjectRepository;
             _domainSettings = domainSettings;
             _validator = validator;
             _augmentObjectResourceValidationService = augmentObjectResourceValidationService;
+            _mapper = mapper;
         }
 
         public IQueryable<AugmentObject> GetAugmentObjectsQueryableWithChildren()
         {
             return _augmentObjectRepository.GetAugmentObjectsQueryableWithChildren();
+        }
+
+        public Task<AugmentObject> GetAugmentObjectByIdWithChildrenAsync(Guid augmentObjectId)
+        {
+            return _augmentObjectRepository.GetAugmentObjectByIdWithChildrenAsync(augmentObjectId);
         }
 
         public IQueryable<AugmentObjectDto> GetAugmentObjects()
@@ -56,7 +67,30 @@ namespace Donde.Augmentor.Core.Services.Services
 
             await _augmentObjectRepository.CreateAugmentObjectAsync(entity);
 
-            return _augmentObjectRepository.GetAugmentObjectByIdWithChildren(entity.Id);
+            return await _augmentObjectRepository.GetAugmentObjectByIdWithChildrenAsync(entity.Id);
+        }
+
+        public async Task<AugmentObject> UpdateAugmentObjectAsync(Guid entityId, AugmentObject entity)
+        {
+            var existingAugmentObject = await GetAugmentObjectByIdWithChildrenAsync(entityId);
+
+            if (existingAugmentObject == null)
+            {
+                throw new HttpNotFoundException(ErrorMessages.ObjectNotFound);
+            }
+
+            var mappedAugmentObject = _mapper.Map(entity, existingAugmentObject);
+            //deleting existing ones, readding new ones, hence id maps.
+            mappedAugmentObject.AugmentObjectMedias.ForEach(x => { x.Id = SequentialGuidGenerator.GenerateComb(); x.AugmentObjectId = mappedAugmentObject.Id; });
+            mappedAugmentObject.AugmentObjectLocations.ForEach(x => { x.Id = SequentialGuidGenerator.GenerateComb(); x.AugmentObjectId = mappedAugmentObject.Id; });
+
+            await _validator.ValidateOrThrowAsync(mappedAugmentObject);
+
+            await _augmentObjectResourceValidationService.ValidateAugmentObjectResourceOrThrowAsync(mappedAugmentObject);
+
+            await _augmentObjectRepository.UpdateAugmentObjectAsync(mappedAugmentObject.Id, mappedAugmentObject);
+
+            return await _augmentObjectRepository.GetAugmentObjectByIdWithChildrenAsync(mappedAugmentObject.Id);
         }
 
         public async Task<IEnumerable<AugmentObjectDto>> GetGeographicalAugmentObjectsByRadius(Guid organizationId, double latitude, double longitude, int radiusInMeters)
@@ -68,12 +102,7 @@ namespace Donde.Augmentor.Core.Services.Services
             return augmentObjects;
         }
 
-        public async Task<AugmentObject> UpdateAugmentObjectAsync(Guid id, AugmentObject entity)
-        {
-            return await _augmentObjectRepository.UpdateAugmentObjectAsync(id, entity);
-        }
-
-
+  
         private string GetMediaPath(string folderName, Guid? fileId, string extension)
         {
              return $"{_domainSettings.GeneralSettings.StorageBasePath}{folderName}/{fileId}{extension}";
