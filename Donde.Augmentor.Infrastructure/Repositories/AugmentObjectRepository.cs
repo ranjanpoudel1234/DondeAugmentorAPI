@@ -26,32 +26,32 @@ namespace Donde.Augmentor.Infrastructure.Repositories
 
         public async Task<AugmentObject> UpdateAugmentObjectAsync(Guid id, AugmentObject entity)
         {
-            var existingAugmentObjectMedias = _dbContext.AugmentObjectMedias.Where(x => x.AugmentObjectId == id).ToList();
-            var existingAugmentObjectLocations = _dbContext.AugmentObjectLocations.Where(x => x.AugmentObjectId == id).ToList();
+            //var existingAugmentObjectMedias = _dbContext.AugmentObjectMedias.Where(x => x.AugmentObjectId == id).ToList();
+            //var existingAugmentObjectLocations = _dbContext.AugmentObjectLocations.Where(x => x.AugmentObjectId == id).ToList();
 
-            foreach (var media in existingAugmentObjectMedias)
-            {
-                media.IsDeleted = true;
-                media.UpdatedDate = DateTime.UtcNow; // not using generic repo as that deletes locations by default
-            }
+            //foreach (var media in existingAugmentObjectMedias)
+            //{
+            //    media.IsDeleted = true;
+            //    media.UpdatedDate = DateTime.UtcNow; // not using generic repo as that deletes locations by default
+            //}
 
-            foreach (var location in existingAugmentObjectLocations)
-            {
-                location.IsDeleted = true;
-                location.UpdatedDate = DateTime.UtcNow;
-            }
+            //foreach (var location in existingAugmentObjectLocations)
+            //{
+            //    location.IsDeleted = true;
+            //    location.UpdatedDate = DateTime.UtcNow;
+            //}
 
-            foreach (var media in entity.AugmentObjectMedias)
-            {
-                media.AddedDate = DateTime.UtcNow;
-               await _dbContext.AugmentObjectMedias.AddAsync(media);
-            }
+            //foreach (var media in entity.AugmentObjectMedias)
+            //{
+            //    media.AddedDate = DateTime.UtcNow;
+            //   await _dbContext.AugmentObjectMedias.AddAsync(media);
+            //}
 
-            foreach (var location in entity.AugmentObjectLocations)
-            {
-                location.AddedDate = DateTime.UtcNow;
-                await _dbContext.AugmentObjectLocations.AddAsync(location);
-            }
+            //foreach (var location in entity.AugmentObjectLocations)
+            //{
+            //    location.AddedDate = DateTime.UtcNow;
+            //    await _dbContext.AugmentObjectLocations.AddAsync(location);
+            //}
 
 
             return await UpdateAsync(id, entity);

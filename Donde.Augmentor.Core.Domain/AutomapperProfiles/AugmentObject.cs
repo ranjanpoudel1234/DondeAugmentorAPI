@@ -16,12 +16,9 @@ namespace Donde.Augmentor.Core.Domain.AutomapperProfiles
                 .ForMember(x => x.UpdatedDate, opts => opts.Ignore())
                 .ForMember(x => x.AugmentImage, opts => opts.Ignore())
                 .ForMember(x => x.Organization, opts => opts.Ignore())
-                .ForMember(x => x.Organization, opts => opts.Ignore())
+                .ForMember(x => x.AugmentObjectLocations, opts => opts.Ignore())
+                .ForMember(x => x.AugmentObjectMedias, opts => opts.Ignore())
                 .ForMember(x => x.IsDeleted, opts => opts.Ignore());
-
-            CreateMap<AugmentObjectLocation, AugmentObjectLocation>();
-
-            CreateMap<AugmentObjectMedia, AugmentObjectMedia>();
         }
     }
 }
