@@ -151,7 +151,7 @@ namespace Donde.Augmentor.Domain.Test.Validations
 
             var result = validator.Validate(invalidModel);
 
-            AssertFluentValidationError(result, nameof(AugmentObject.AugmentObjectLocations), DondeErrorMessages.MUST_BE_EMPTY);
+            AssertFluentValidationError(result, $"{nameof(AugmentObject.AugmentObjectLocations)}[0]", DondeErrorMessages.MUST_BE_EMPTY);
         }
 
         [TestMethod]

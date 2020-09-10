@@ -2,6 +2,7 @@
 using Donde.Augmentor.Core.Domain.Models;
 using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces;
 using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces.CustomValidations;
+using System.Linq;
 using System.Threading.Tasks;
 using static Donde.Augmentor.Core.Domain.DomainConstants;
 
@@ -31,7 +32,7 @@ namespace Donde.Augmentor.Core.Services.Services.CustomValidationService
             if (augmentImage.OrganizationId != entity.OrganizationId)
                 throw new HttpBadRequestException($"{entity.AugmentImageId} | {DondeErrorMessages.RESOURCE_DOES_NOT_BELONG_TO_ORGANIZATION}");
 
-            foreach(var media in entity.AugmentObjectMedias)
+            foreach(var media in entity.AugmentObjectMedias.Where(x => !x.IsDeleted))
             {
                 if (media.MediaType == Domain.Enum.AugmentObjectMediaTypes.AvatarWithAudio)
                 {

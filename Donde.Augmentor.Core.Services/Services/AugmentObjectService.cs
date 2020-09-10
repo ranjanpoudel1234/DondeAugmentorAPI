@@ -80,26 +80,23 @@ namespace Donde.Augmentor.Core.Services.Services
             }
 
             var updatedAugmentObjectWithExistingChildrenSoftDeleted = _mapper.Map(entity, existingAugmentObject);
-            updatedAugmentObjectWithExistingChildrenSoftDeleted.AugmentObjectMedias.ForEach(x => x.IsDeleted = true);
-            updatedAugmentObjectWithExistingChildrenSoftDeleted.AugmentObjectLocations.ForEach(x => x.IsDeleted = true);
-
-
-         //   await _augmentObjectRepository.UpdateAugmentObjectAsync(updatedAugmentObjectWithExistingChildrenSoftDeleted.Id, updatedAugmentObjectWithExistingChildrenSoftDeleted);
+            updatedAugmentObjectWithExistingChildrenSoftDeleted.AugmentObjectMedias.ForEach(x => { x.IsDeleted = true; x.UpdatedDate = DateTime.UtcNow; } );
+            updatedAugmentObjectWithExistingChildrenSoftDeleted.AugmentObjectLocations.ForEach(x => { x.IsDeleted = true; x.UpdatedDate = DateTime.UtcNow; });
 
             //new media and/or locations
-            entity.AugmentObjectMedias.ForEach(x => { x.Id = SequentialGuidGenerator.GenerateComb(); x.AugmentObjectId = updatedAugmentObjectWithExistingChildrenSoftDeleted.Id; });
-            entity.AugmentObjectLocations.ForEach(x => { x.Id = SequentialGuidGenerator.GenerateComb(); x.AugmentObjectId = updatedAugmentObjectWithExistingChildrenSoftDeleted.Id; });
+            entity.AugmentObjectMedias.ForEach(x => { x.Id = SequentialGuidGenerator.GenerateComb(); x.AugmentObjectId = updatedAugmentObjectWithExistingChildrenSoftDeleted.Id; x.AddedDate = DateTime.UtcNow; });
+            entity.AugmentObjectLocations.ForEach(x => { x.Id = SequentialGuidGenerator.GenerateComb(); x.AugmentObjectId = updatedAugmentObjectWithExistingChildrenSoftDeleted.Id; x.AddedDate = DateTime.UtcNow; });
 
             updatedAugmentObjectWithExistingChildrenSoftDeleted.AugmentObjectLocations.AddRange(entity.AugmentObjectLocations);
             updatedAugmentObjectWithExistingChildrenSoftDeleted.AugmentObjectMedias.AddRange(entity.AugmentObjectMedias);
 
-            //await _validator.ValidateOrThrowAsync(mappedAugmentObject);
+            await _validator.ValidateOrThrowAsync(updatedAugmentObjectWithExistingChildrenSoftDeleted);
 
-            //await _augmentObjectResourceValidationService.ValidateAugmentObjectResourceOrThrowAsync(mappedAugmentObject);
+            await _augmentObjectResourceValidationService.ValidateAugmentObjectResourceOrThrowAsync(updatedAugmentObjectWithExistingChildrenSoftDeleted);
 
             await _augmentObjectRepository.UpdateAugmentObjectAsync(updatedAugmentObjectWithExistingChildrenSoftDeleted.Id, updatedAugmentObjectWithExistingChildrenSoftDeleted);
 
-            return await _augmentObjectRepository.GetAugmentObjectByIdWithChildrenAsync(updatedAugmentObjectWithExistingChildrenSoftDeleted.Id);
+            return await _augmentObjectRepository.GetAugmentObjectByIdithChildrenAsNoTrackingAsync(updatedAugmentObjectWithExistingChildrenSoftDeleted.Id);
         }
 
         public async Task<IEnumerable<AugmentObjectDto>> GetGeographicalAugmentObjectsByRadius(Guid organizationId, double latitude, double longitude, int radiusInMeters)

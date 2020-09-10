@@ -17,19 +17,19 @@ namespace Donde.Augmentor.Core.Domain.Validations
             When(x => x.Type == Enum.AugmentObjectTypes.Geographical,
                 () => RuleFor(x => x.AugmentObjectLocations).NotEmpty().WithMessage(DondeErrorMessages.PROPERTY_EMPTY));
             When(x => x.Type == Enum.AugmentObjectTypes.Geographical,
-              () => RuleForEach(x => x.AugmentObjectLocations).SetValidator(new AugmentObjectLocationValidator()));
+              () => RuleForEach(x => x.AugmentObjectLocations).Where(x => !x.IsDeleted).SetValidator(new AugmentObjectLocationValidator()));
             When(x => x.Type == Enum.AugmentObjectTypes.Static,
-                () => RuleFor(x => x.AugmentObjectLocations).Empty().WithMessage(DondeErrorMessages.MUST_BE_EMPTY));
+                () => RuleForEach(x => x.AugmentObjectLocations).Must(x => x.IsDeleted).WithMessage(DondeErrorMessages.MUST_BE_EMPTY));
 
-            RuleFor(x => x.AugmentObjectMedias).NotEmpty().WithMessage(DondeErrorMessages.PROPERTY_EMPTY);
-            RuleForEach(x => x.AugmentObjectMedias).SetValidator(new AugmentObjectMediaValidator());
+            RuleFor(x => x.AugmentObjectMedias).Must(ao => ao.AugmentObjectMedias.Count(x => !x.IsDeleted) == 1).WithMessage(DondeErrorMessages.PROPERTY_EMPTY);
+            RuleForEach(x => x.AugmentObjectMedias).Where(x => !x.IsDeleted).SetValidator(new AugmentObjectMediaValidator());
         }
     }
 
     public class AugmentObjectLocationValidator : AbstractValidator<AugmentObjectLocation>
     {
         public AugmentObjectLocationValidator()
-        {
+        {          
             RuleFor(x => x.Id).NotEmpty().WithMessage(DondeErrorMessages.PROPERTY_EMPTY);
             RuleFor(x => x.AugmentObjectId).NotEmpty().WithMessage(DondeErrorMessages.PROPERTY_EMPTY);
             RuleFor(x => x.Latitude).NotEmpty().WithMessage(DondeErrorMessages.PROPERTY_EMPTY);

@@ -88,7 +88,7 @@ namespace Donde.Augmentor.Infrastructure.Repositories
                     var childObjectsCasted = childObjects as IEnumerable<IAuditFieldsModel>;
                     if (childObjectsCasted == null)
                     {
-                        throw new InvalidOperationException("Child collections property type must implement IDondeModelModel interface");
+                        throw new InvalidOperationException("Child collections property type must implement IAuditFieldsModel interface");
                     }
 
                     foreach (var eachChild in childObjectsCasted)
