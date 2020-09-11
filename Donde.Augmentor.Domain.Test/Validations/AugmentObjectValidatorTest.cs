@@ -89,12 +89,25 @@ namespace Donde.Augmentor.Domain.Test.Validations
         }
 
         [TestMethod]
-        public void Validate_WithGeographicalType_WithEmptyLocationId_ReturnsError()
+        public void Validate_WithGeographicalType_WithEmptyNonDeletedLocations_ReturnsError()
         {
             var validator = new AugmentObjectValidator();
 
             var invalidModel = validModel;
-            invalidModel.AugmentObjectLocations.First().Id = Guid.Empty;
+            invalidModel.AugmentObjectLocations = invalidModel.AugmentObjectLocations.Where(l => l.IsDeleted).ToList();
+
+            var result = validator.Validate(invalidModel);
+
+            AssertFluentValidationError(result, nameof(AugmentObject.AugmentObjectLocations), DondeErrorMessages.PROPERTY_EMPTY);
+        }
+
+        [TestMethod]
+        public void Validate_WithGeographicalType_WithEmptyLocationId_OnNonDeletedLocation_ReturnsError()
+        {
+            var validator = new AugmentObjectValidator();
+
+            var invalidModel = validModel;
+            invalidModel.AugmentObjectLocations.First(x => !x.IsDeleted).Id = Guid.Empty;
 
             var result = validator.Validate(invalidModel);
 
@@ -103,16 +116,29 @@ namespace Donde.Augmentor.Domain.Test.Validations
 
 
         [TestMethod]
+        public void Validate_WithGeographicalType_WithEmptyLocationId_OnDeletedLocation_ReturnsError()
+        {
+            var validator = new AugmentObjectValidator();
+
+            var invalidModel = validModel;
+            invalidModel.AugmentObjectLocations.First(x => x.IsDeleted).Id = Guid.Empty;
+
+            var result = validator.Validate(invalidModel);
+
+            AssertFluentValidationError(result, $"{nameof(AugmentObject.AugmentObjectLocations)}[1].{nameof(AugmentObjectLocation.Id)}", DondeErrorMessages.PROPERTY_EMPTY);
+        }
+
+        [TestMethod]
         public void Validate_WithGeographicalType_WithEmptyAugmentObjectId_ReturnsError()
         {
             var validator = new AugmentObjectValidator();
 
             var invalidModel = validModel;
-            invalidModel.AugmentObjectLocations.First().AugmentObjectId = Guid.Empty;
+            invalidModel.AugmentObjectLocations.Last().AugmentObjectId = Guid.Empty;
 
             var result = validator.Validate(invalidModel);
 
-            AssertFluentValidationError(result, $"{nameof(AugmentObject.AugmentObjectLocations)}[0].{nameof(AugmentObjectLocation.AugmentObjectId)}", DondeErrorMessages.PROPERTY_EMPTY);
+            AssertFluentValidationError(result, $"{nameof(AugmentObject.AugmentObjectLocations)}[1].{nameof(AugmentObjectLocation.AugmentObjectId)}", DondeErrorMessages.PROPERTY_EMPTY);
         }
 
         [TestMethod]
@@ -134,11 +160,11 @@ namespace Donde.Augmentor.Domain.Test.Validations
             var validator = new AugmentObjectValidator();
 
             var invalidModel = validModel;
-            invalidModel.AugmentObjectLocations.First().Longitude = 0.0f;
+            invalidModel.AugmentObjectLocations.Last().Longitude = 0.0f;
 
             var result = validator.Validate(invalidModel);
 
-            AssertFluentValidationError(result, $"{nameof(AugmentObject.AugmentObjectLocations)}[0].{nameof(AugmentObjectLocation.Longitude)}", DondeErrorMessages.PROPERTY_EMPTY);
+            AssertFluentValidationError(result, $"{nameof(AugmentObject.AugmentObjectLocations)}[1].{nameof(AugmentObjectLocation.Longitude)}", DondeErrorMessages.PROPERTY_EMPTY);
         }
 
         [TestMethod]
@@ -168,6 +194,20 @@ namespace Donde.Augmentor.Domain.Test.Validations
         }
 
         [TestMethod]
+        public void Validate_WithGeographicalType_WithEmptyNonDeletedMedia_ReturnsError()
+        {
+            var validator = new AugmentObjectValidator();
+
+            var invalidModel = validModel;
+            invalidModel.AugmentObjectMedias = invalidModel.AugmentObjectMedias.Where(m => m.IsDeleted).ToList();
+
+            var result = validator.Validate(invalidModel);
+
+            AssertFluentValidationError(result, nameof(AugmentObject.AugmentObjectMedias), DondeErrorMessages.PROPERTY_EMPTY);
+        }
+
+
+        [TestMethod]
         public void Validate_WithAugmentObjectMedia_WithEmptyId_ReturnsError()
         {
             var validator = new AugmentObjectValidator();
@@ -194,6 +234,19 @@ namespace Donde.Augmentor.Domain.Test.Validations
         }
 
         [TestMethod]
+        public void Validate_WithAugmentObjectMedia_WithEmptyAugmentObjectId_EvenOnDeletedObject_ReturnsError()
+        {
+            var validator = new AugmentObjectValidator();
+
+            var invalidModel = validModel;
+            invalidModel.AugmentObjectMedias.First(m => m.IsDeleted).AugmentObjectId = Guid.Empty;
+
+            var result = validator.Validate(invalidModel);
+
+            AssertFluentValidationError(result, $"{nameof(AugmentObject.AugmentObjectMedias)}[1].{nameof(AugmentObjectMedia.AugmentObjectId)}", DondeErrorMessages.PROPERTY_EMPTY);
+        }
+
+        [TestMethod]
         public void Validate_WithAugmentObjectMedia_WithAvatarWithAudio_WithNullAvatarId_ReturnsError()
         {
             var validator = new AugmentObjectValidator();
@@ -213,12 +266,12 @@ namespace Donde.Augmentor.Domain.Test.Validations
             var validator = new AugmentObjectValidator();
 
             var invalidModel = validModel;
-            invalidModel.AugmentObjectMedias.First().MediaType = AugmentObjectMediaTypes.AvatarWithAudio;
-            invalidModel.AugmentObjectMedias.First().AudioId = null;
+            invalidModel.AugmentObjectMedias.Last().MediaType = AugmentObjectMediaTypes.AvatarWithAudio;
+            invalidModel.AugmentObjectMedias.Last().AudioId = null;
 
             var result = validator.Validate(invalidModel);
 
-            AssertFluentValidationError(result, $"{nameof(AugmentObject.AugmentObjectMedias)}[0].{nameof(AugmentObjectMedia.AudioId)}", DondeErrorMessages.PROPERTY_EMPTY);
+            AssertFluentValidationError(result, $"{nameof(AugmentObject.AugmentObjectMedias)}[1].{nameof(AugmentObjectMedia.AudioId)}", DondeErrorMessages.PROPERTY_EMPTY);
         }
 
         [TestMethod]
@@ -294,6 +347,15 @@ namespace Donde.Augmentor.Domain.Test.Validations
                     AvatarId = SequentialGuidGenerator.GenerateComb(),
                     AudioId = SequentialGuidGenerator.GenerateComb(),
                     AugmentObjectId = SequentialGuidGenerator.GenerateComb()
+                },
+                  new AugmentObjectMedia()
+                {
+                    Id = SequentialGuidGenerator.GenerateComb(),
+                    MediaType = AugmentObjectMediaTypes.AvatarWithAudio,
+                    AvatarId = SequentialGuidGenerator.GenerateComb(),
+                    AudioId = SequentialGuidGenerator.GenerateComb(),
+                    AugmentObjectId = SequentialGuidGenerator.GenerateComb(),
+                    IsDeleted = true
                 }
             },
             AugmentObjectLocations = new List<AugmentObjectLocation>
@@ -303,7 +365,15 @@ namespace Donde.Augmentor.Domain.Test.Validations
                     Id = SequentialGuidGenerator.GenerateComb(),
                     AugmentObjectId = SequentialGuidGenerator.GenerateComb(),
                     Latitude = 20.56f,
+                    Longitude = 30.65f
+                },
+                new AugmentObjectLocation()
+                {
+                    Id = SequentialGuidGenerator.GenerateComb(),
+                    AugmentObjectId = SequentialGuidGenerator.GenerateComb(),
+                    Latitude = 20.56f,
                     Longitude = 30.65f,
+                    IsDeleted = true
                 }
             }
         };

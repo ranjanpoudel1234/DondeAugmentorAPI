@@ -1,5 +1,7 @@
 ﻿using Donde.Augmentor.Core.Domain.Models;
 using FluentValidation;
+using System.Collections.Generic;
+using System.Linq;
 using static Donde.Augmentor.Core.Domain.DomainConstants;
 
 namespace Donde.Augmentor.Core.Domain.Validations
@@ -15,14 +17,26 @@ namespace Donde.Augmentor.Core.Domain.Validations
             RuleFor(x => x.OrganizationId).NotEmpty().WithMessage(DondeErrorMessages.PROPERTY_EMPTY);
 
             When(x => x.Type == Enum.AugmentObjectTypes.Geographical,
-                () => RuleFor(x => x.AugmentObjectLocations).NotEmpty().WithMessage(DondeErrorMessages.PROPERTY_EMPTY));
+                () => RuleFor(x => x.AugmentObjectLocations).Must(HaveOneNonDeletedLocation).WithMessage(DondeErrorMessages.PROPERTY_EMPTY));
             When(x => x.Type == Enum.AugmentObjectTypes.Geographical,
-              () => RuleForEach(x => x.AugmentObjectLocations).Where(x => !x.IsDeleted).SetValidator(new AugmentObjectLocationValidator()));
+              () => RuleForEach(x => x.AugmentObjectLocations).SetValidator(new AugmentObjectLocationValidator()));
             When(x => x.Type == Enum.AugmentObjectTypes.Static,
                 () => RuleForEach(x => x.AugmentObjectLocations).Must(x => x.IsDeleted).WithMessage(DondeErrorMessages.MUST_BE_EMPTY));
 
-            RuleFor(x => x.AugmentObjectMedias).Must(ao => ao.AugmentObjectMedias.Count(x => !x.IsDeleted) == 1).WithMessage(DondeErrorMessages.PROPERTY_EMPTY);
-            RuleForEach(x => x.AugmentObjectMedias).Where(x => !x.IsDeleted).SetValidator(new AugmentObjectMediaValidator());
+            // try with location function tomorrow
+            RuleFor(x => x.AugmentObjectMedias).Must(HaveOneNonDeletedMedia).WithMessage(DondeErrorMessages.PROPERTY_EMPTY);
+            RuleForEach(x => x.AugmentObjectMedias).SetValidator(new AugmentObjectMediaValidator());
+
+
+            bool HaveOneNonDeletedMedia(List<AugmentObjectMedia> medias)
+            {
+                return medias.Where(x => !x.IsDeleted).Count() == 1;
+            }
+
+            bool HaveOneNonDeletedLocation(List<AugmentObjectLocation> locations)
+            {
+                return locations.Where(x => !x.IsDeleted).Count() == 1;
+            }
         }
     }
 
