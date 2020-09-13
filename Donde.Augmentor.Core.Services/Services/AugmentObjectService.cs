@@ -96,7 +96,25 @@ namespace Donde.Augmentor.Core.Services.Services
 
             await _augmentObjectRepository.UpdateAugmentObjectAsync(updatedAugmentObjectWithExistingChildrenSoftDeleted.Id, updatedAugmentObjectWithExistingChildrenSoftDeleted);
 
+            // important to load AsNoTracking so Ef core does not return the cached entity that was retrieved in line 75 above
+            // which includes now deleted media and/or location(s). Hence, reloading from data store with no tracking again.
             return await _augmentObjectRepository.GetAugmentObjectByIdithChildrenAsNoTrackingAsync(updatedAugmentObjectWithExistingChildrenSoftDeleted.Id);
+        }
+
+        public async Task DeleteAugmentObjectAsync(Guid entityId)
+        {
+            var existingAugmentObject = await GetAugmentObjectByIdWithChildrenAsync(entityId);
+
+            if (existingAugmentObject == null)
+            {
+                throw new HttpNotFoundException(ErrorMessages.ObjectNotFound);
+            }
+
+            existingAugmentObject.AugmentObjectMedias.ForEach(x => { x.IsDeleted = true; x.UpdatedDate = DateTime.UtcNow; });
+            existingAugmentObject.AugmentObjectLocations.ForEach(x => { x.IsDeleted = true; x.UpdatedDate = DateTime.UtcNow; });
+            existingAugmentObject.IsDeleted = true;
+
+            await _augmentObjectRepository.UpdateAugmentObjectAsync(existingAugmentObject.Id, existingAugmentObject);
         }
 
         public async Task<IEnumerable<AugmentObjectDto>> GetGeographicalAugmentObjectsByRadius(Guid organizationId, double latitude, double longitude, int radiusInMeters)

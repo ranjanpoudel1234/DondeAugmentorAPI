@@ -128,6 +128,14 @@ namespace Donde.Augmentor.Web.Controller.V2
             return Ok(addedTargetViewModel);
         }
 
+        [ODataRoute("({targetId})")]
+        [HttpDelete]
+        public async Task<IActionResult> Delete(Guid targetId)
+        {
+            await _augmentObjectService.DeleteAugmentObjectAsync(targetId);
+
+            return NoContent();
+        }
 
         private void MapMediaAndAvatar(TargetViewModel target)
         {
