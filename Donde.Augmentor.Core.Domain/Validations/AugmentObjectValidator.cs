@@ -17,7 +17,7 @@ namespace Donde.Augmentor.Core.Domain.Validations
             RuleFor(x => x.OrganizationId).NotEmpty().WithMessage(DondeErrorMessages.PROPERTY_EMPTY);
 
             When(x => x.Type == Enum.AugmentObjectTypes.Geographical,
-                () => RuleFor(x => x.AugmentObjectLocations).Must(HaveOneNonDeletedLocation).WithMessage(DondeErrorMessages.PROPERTY_EMPTY));
+                () => RuleFor(x => x.AugmentObjectLocations).Must(HaveAtLeastOneNonDeletedLocation).WithMessage(DondeErrorMessages.PROPERTY_EMPTY));
             When(x => x.Type == Enum.AugmentObjectTypes.Geographical,
               () => RuleForEach(x => x.AugmentObjectLocations).SetValidator(new AugmentObjectLocationValidator()));
             When(x => x.Type == Enum.AugmentObjectTypes.Static,
@@ -33,9 +33,9 @@ namespace Donde.Augmentor.Core.Domain.Validations
                 return medias.Where(x => !x.IsDeleted).Count() == 1;
             }
 
-            bool HaveOneNonDeletedLocation(List<AugmentObjectLocation> locations)
+            bool HaveAtLeastOneNonDeletedLocation(List<AugmentObjectLocation> locations)
             {
-                return locations.Where(x => !x.IsDeleted).Count() == 1;
+                return locations.Where(x => !x.IsDeleted).Count() >= 1;
             }
         }
     }
