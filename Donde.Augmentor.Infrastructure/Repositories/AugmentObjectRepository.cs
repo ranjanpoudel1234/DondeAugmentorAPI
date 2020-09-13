@@ -37,13 +37,13 @@ namespace Donde.Augmentor.Infrastructure.Repositories
         public Task<AugmentObject> GetAugmentObjectByIdWithChildrenAsync(Guid id)
         {
             return GetAugmentObjectWithChildrenQueryable()
-                .SingleAsync(x => x.Id == id);
+                .SingleOrDefaultAsync(x => x.Id == id);
         }
    
         public Task<AugmentObject> GetAugmentObjectByIdithChildrenAsNoTrackingAsync(Guid id)
         {
             return GetAugmentObjectWithChildrenQueryable().AsNoTracking()
-                .SingleAsync(x => x.Id == id);
+                .SingleOrDefaultAsync(x => x.Id == id);
         }
 
         private IQueryable<AugmentObject> GetAugmentObjectWithChildrenQueryable()

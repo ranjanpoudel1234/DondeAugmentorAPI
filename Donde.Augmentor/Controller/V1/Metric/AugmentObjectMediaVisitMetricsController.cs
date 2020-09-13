@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Donde.Augmentor.Core.Domain.Models.Metrics;
 using Donde.Augmentor.Core.Repositories.Interfaces.RepositoryInterfaces.Metric;
+using Donde.Augmentor.Web.OData;
 using Donde.Augmentor.Web.ViewModels.V1;
 using Donde.Augmentor.Web.ViewModels.V1.Metric;
 using Microsoft.AspNet.OData.Routing;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 namespace Donde.Augmentor.Web.Controller.V1.Metric
 {
     [ApiVersion("1.0")]
-    [ODataRoutePrefix("augmentObjectMediaVisitMetrics")]
+    [ODataRoutePrefix(ODataConstants.AugmentObjectMediaVisitMetricRoute)]
     [Authorize]
     public class AugmentObjectMediaVisitMetricsController : BaseController
     {
