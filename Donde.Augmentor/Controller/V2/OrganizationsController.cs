@@ -56,7 +56,15 @@ namespace Donde.Augmentor.Web.Controller.V2
                 result = await organizationsViewModels.ToListAsync();
             }
 
-            result.ForEach(x => x.Logo.Url = GetPathWithRootLocationOrNull(x.Logo.Url));
+            result.ForEach(x => {
+                x.Logo.ThumbnailUrl = GetMediaPath(_domainSettings.GeneralSettings.StorageBasePath,
+                _domainSettings.UploadSettings.LogosFolderName, x.Logo.FileId, x.Logo.FileExtension);
+
+                x.Logo.Url = GetMediaPathWithSubFolder(_domainSettings.GeneralSettings.StorageBasePath,
+                 _domainSettings.UploadSettings.LogosFolderName, _domainSettings.UploadSettings.OriginalImageSubFolderName, x.Logo.FileId, x.Logo.FileExtension);
+            });
+
+
 
             return Ok(result);
         }
@@ -73,7 +81,11 @@ namespace Donde.Augmentor.Web.Controller.V2
 
             var organizationViewModelResult = _mapper.Map<OrganizationViewModel>(result);
 
-            organizationViewModelResult.Logo.Url = GetPathWithRootLocationOrNull(organizationViewModelResult.Logo.Url);
+            organizationViewModelResult.Logo.ThumbnailUrl = GetMediaPath(_domainSettings.GeneralSettings.StorageBasePath,
+              _domainSettings.UploadSettings.LogosFolderName, organizationViewModel.Logo?.FileId, organizationViewModel.Logo?.FileExtension);
+
+            organizationViewModelResult.Logo.Url = GetMediaPathWithSubFolder(_domainSettings.GeneralSettings.StorageBasePath,
+       _domainSettings.UploadSettings.LogosFolderName, _domainSettings.UploadSettings.OriginalImageSubFolderName, organizationViewModel.Logo?.FileId, organizationViewModel.Logo?.FileExtension);
 
             return StatusCode((int)HttpStatusCode.Created, organizationViewModelResult);
         }
@@ -100,7 +112,11 @@ namespace Donde.Augmentor.Web.Controller.V2
 
             var organizationViewModelResult = _mapper.Map<OrganizationViewModel>(result);
 
-            organizationViewModelResult.Logo.Url = GetPathWithRootLocationOrNull(organizationViewModelResult.Logo.Url);
+            organizationViewModelResult.Logo.ThumbnailUrl = GetMediaPath(_domainSettings.GeneralSettings.StorageBasePath,
+              _domainSettings.UploadSettings.LogosFolderName, organizationViewModel.Logo.FileId, organizationViewModel.Logo.FileExtension);
+
+            organizationViewModelResult.Logo.Url = GetMediaPathWithSubFolder(_domainSettings.GeneralSettings.StorageBasePath,
+          _domainSettings.UploadSettings.LogosFolderName, _domainSettings.UploadSettings.OriginalImageSubFolderName, organizationViewModel.Logo.FileId, organizationViewModel.Logo.FileExtension);
 
             return Ok(organizationViewModelResult);
         }
@@ -114,11 +130,5 @@ namespace Donde.Augmentor.Web.Controller.V2
             return NoContent();
         }
 
-        private string GetPathWithRootLocationOrNull(string relativeUrl)
-        {
-            if (relativeUrl == null) return null;
-
-            return $"{_domainSettings.GeneralSettings.StorageBasePath}{relativeUrl}";
-        }
     }
 }

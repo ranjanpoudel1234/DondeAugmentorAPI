@@ -3,15 +3,17 @@ using System;
 using Donde.Augmentor.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Donde.Augmentor.Infrastructure.Migrations
 {
     [DbContext(typeof(DondeContext))]
-    partial class DondeContextModelSnapshot : ModelSnapshot
+    [Migration("20200818125705_UpdateFileIdAndExtensionOnMediaTables")]
+    partial class UpdateFileIdAndExtensionOnMediaTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -40,6 +42,8 @@ namespace Donde.Augmentor.Infrastructure.Migrations
 
                     b.Property<DateTime>("UpdatedDate");
 
+                    b.Property<string>("Url");
+
                     b.HasKey("Id");
 
                     b.HasIndex("OrganizationId");
@@ -67,6 +71,8 @@ namespace Donde.Augmentor.Infrastructure.Migrations
                     b.Property<Guid>("OrganizationId");
 
                     b.Property<DateTime>("UpdatedDate");
+
+                    b.Property<string>("Url");
 
                     b.HasKey("Id");
 
@@ -191,6 +197,8 @@ namespace Donde.Augmentor.Infrastructure.Migrations
                     b.Property<string>("TextureFileUrl");
 
                     b.Property<DateTime>("UpdatedDate");
+
+                    b.Property<string>("Url");
 
                     b.HasKey("Id");
 
@@ -341,6 +349,8 @@ namespace Donde.Augmentor.Infrastructure.Migrations
                     b.Property<string>("LogoMimeType");
 
                     b.Property<string>("LogoName");
+
+                    b.Property<string>("LogoUrl");
 
                     b.Property<string>("Name");
 
@@ -535,6 +545,8 @@ namespace Donde.Augmentor.Infrastructure.Migrations
                     b.Property<Guid>("OrganizationId");
 
                     b.Property<DateTime>("UpdatedDate");
+
+                    b.Property<string>("Url");
 
                     b.HasKey("Id");
 

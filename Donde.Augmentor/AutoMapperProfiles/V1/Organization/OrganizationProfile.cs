@@ -13,6 +13,7 @@ namespace Donde.Augmentor.Web.AutoMapperProfiles
                 .ForMember(x => x.Latitude, opts => opts.MapFrom(src => src.Sites.FirstOrDefault(x => x.Type == Core.Domain.Enum.SiteTypes.Main).Latitude))
                 .ForMember(x => x.Longitude, opts => opts.MapFrom(src => src.Sites.FirstOrDefault(x => x.Type == Core.Domain.Enum.SiteTypes.Main).Longitude))
                 .ForMember(x => x.Code, opts => opts.MapFrom(src => src.ShortName))
+                .ForMember(x => x.LogoUrl, opts => opts.Ignore())
                 .ForMember(x => x.Address, opts => opts.MapFrom(src => $"{src.StreetAddress1}, {src.City}, {src.State} {src.Zip}"));
         }
     }

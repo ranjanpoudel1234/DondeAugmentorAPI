@@ -12,19 +12,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Donde.Augmentor.Core.Domain;
 
 namespace Donde.Augmentor.Web.Controller.V1
 {
     [ApiVersion("1.0")]
     [ODataRoutePrefix("avatars")]
     [Authorize]
-    public class AvatarsController : ODataController
+    public class AvatarsController : BaseController
     {
         private readonly IAvatarService _avatarService;
         private readonly IMapper _mapper;
         private readonly ILogger<AvatarsController> _logger;
+        private readonly DomainSettings _domainSettings;
 
-        public AvatarsController(IAvatarService avatarService, IMapper mapper, ILogger<AvatarsController> logger)
+        public AvatarsController(IAvatarService avatarService, 
+            IMapper mapper, 
+            ILogger<AvatarsController> logger,
+            DomainSettings domainSettings)
         {
             _avatarService = avatarService;
             _mapper = mapper;
@@ -44,11 +49,19 @@ namespace Donde.Augmentor.Web.Controller.V1
 
             var appliedResults = odataOptions.ApplyTo(projectedAudios);
 
-            var audioViewModels = appliedResults as IQueryable<AvatarViewModel>;
+            var avatarViewModels = appliedResults as IQueryable<AvatarViewModel>;
 
-            if (audioViewModels != null)
+            if (avatarViewModels != null)
             {
-                result = await audioViewModels.ToListAsync();
+                result = await avatarViewModels.ToListAsync();
+            }
+
+            foreach (var avatar in result)
+            {
+                avatar.Url = GetMediaPathWithSubFolder(_domainSettings.GeneralSettings.StorageBasePath, 
+                    _domainSettings.UploadSettings.AvatarFolderName,
+                    avatar.OrganizationId.ToString(),
+                    avatar.FileId, avatar.Extension);
             }
 
             return Ok(result);

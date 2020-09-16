@@ -6,6 +6,9 @@ namespace Donde.Augmentor.Web.ViewModels.V2.Organization
     {
         public string Name { get; set; }
         public string Url { get; set; }
+        public string ThumbnailUrl { get; set; }
+        public Guid FileId { get; set; }
+        public string FileExtension { get; set; }
         public string MimeType { get; set; }
     }
 }

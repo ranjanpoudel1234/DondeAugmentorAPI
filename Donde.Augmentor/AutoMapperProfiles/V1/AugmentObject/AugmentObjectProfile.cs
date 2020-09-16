@@ -1,11 +1,10 @@
 ﻿using AutoMapper;
 using Donde.Augmentor.Core.Domain.Dto;
 using Donde.Augmentor.Core.Domain.Helpers;
-using Donde.Augmentor.Core.Domain.Models;
 using Donde.Augmentor.Web.ViewModels;
-using Newtonsoft.Json;
+using Donde.Augmentor.Core.Domain.Models;
 
-namespace Donde.Augmentor.Web.AutoMapperProfiles
+namespace Donde.Augmentor.Web.AutoMapperProfiles.V1.AugmentObject
 {
     public class AugmentObjectProfile : Profile
     {
@@ -15,7 +14,7 @@ namespace Donde.Augmentor.Web.AutoMapperProfiles
                .ForMember(x => x.AvatarConfigurationString, opts => opts.MapFrom(src => src.AvatarConfiguration))
                .ForMember(x => x.AvatarConfiguration, opts => opts.Ignore());
 
-            CreateMap<AugmentObjectPostViewModel, AugmentObject>()
+            CreateMap<AugmentObjectPostViewModel, Core.Domain.Models.AugmentObject>()
                 .ForMember(x => x.Id, opts => opts.MapFrom(src => SequentialGuidGenerator.GenerateComb()))
                 .ForMember(x => x.AddedDate, opts => opts.Ignore())
                 .ForMember(x => x.UpdatedDate, opts => opts.Ignore())
@@ -26,7 +25,7 @@ namespace Donde.Augmentor.Web.AutoMapperProfiles
                 .ForMember(x => x.AugmentObjectLocations, opts => opts.Ignore());
 
             // after post return
-            CreateMap<AugmentObject, AugmentObjectViewModel>()
+            CreateMap<Core.Domain.Models.AugmentObject, AugmentObjectViewModel>()
                .ForMember(x => x.MediaType, opts => opts.Ignore())
                .ForMember(x => x.MediaId, opts => opts.Ignore())
                .ForMember(x => x.Distance, opts => opts.Ignore())

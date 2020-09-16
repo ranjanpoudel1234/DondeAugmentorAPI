@@ -8,14 +8,16 @@ namespace Donde.Augmentor.Core.Domain.Models
         public Guid Id { get; set; }
 
         public string Name { get; set; }
-        public string Url { get; set; }
         public string MimeType { get; set; }
+        public Guid FileId { get; set; }
+        public string Extension { get; set; }
         public Guid OrganizationId { get; set; }
 
         public Organization Organization { get; set; }
 
         public DateTime AddedDate { get; set; }
         public DateTime UpdatedDate { get; set; }
-        public bool IsDeleted { get; set; }    
+        public bool IsDeleted { get; set; }
+      
     }
 }
