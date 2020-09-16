@@ -23,7 +23,6 @@ namespace Donde.Augmentor.Core.Domain.Validations
             When(x => x.Type == Enum.AugmentObjectTypes.Static,
                 () => RuleForEach(x => x.AugmentObjectLocations).Must(x => x.IsDeleted).WithMessage(DondeErrorMessages.MUST_BE_EMPTY));
 
-            // try with location function tomorrow
             RuleFor(x => x.AugmentObjectMedias).Must(HaveOneNonDeletedMedia).WithMessage(DondeErrorMessages.PROPERTY_EMPTY);
             RuleForEach(x => x.AugmentObjectMedias).SetValidator(new AugmentObjectMediaValidator());
 

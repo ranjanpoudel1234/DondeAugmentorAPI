@@ -88,32 +88,5 @@ namespace Donde.Augmentor.Web.Controller.V1
             augmentObjectViewModels.ForEach(au => au.AvatarConfiguration = !string.IsNullOrWhiteSpace(au.AvatarConfigurationString)
             ? JsonConvert.DeserializeObject<AvatarConfigurationViewModel>(au.AvatarConfigurationString) : null);
         }
-
-        //[ODataRoute]
-        //[HttpPost]
-        //[IgnoreJsonIgnore] //@todo remove this once v1 gets tested well.
-        /////Improvement, there could be two different post endpoint, one geographical, one regular returning 
-        /////respective viewModels that match their GET counterparts instead of sending back Geographical each time.
-        //public async Task<IActionResult> Post([FromBody] AugmentObjectPostViewModel augmentObjectPostViewModel)
-        //{
-        //    var augmentObject = _mapper.Map<AugmentObject>(augmentObjectPostViewModel);
-
-        //    var augmentObjectId = augmentObject.Id;
-        //    var augmentObjectMedia = _mapper.Map<AugmentObjectMedia>(augmentObjectPostViewModel.AugmentObjectMedia);
-        //    augmentObjectMedia.AugmentObjectId = augmentObjectId;
-        //    augmentObject.AugmentObjectMedias.Add(augmentObjectMedia);
-
-        //    var augmentObjectLocations = _mapper.Map<List<AugmentObjectLocation>>(augmentObjectPostViewModel.AugmentObjectLocations);
-        //    if(augmentObjectLocations != null)
-        //    {
-        //        augmentObjectLocations.ForEach(x => x.AugmentObjectId = augmentObjectId);
-        //        augmentObject.AugmentObjectLocations.AddRange(augmentObjectLocations);
-        //    }
-           
-        //    var result = await _augmentObjectService.CreateAugmentObjectAsync(augmentObject);
-        //    var addedAugmentObjectViewModel = _mapper.Map<AugmentObjectViewModel>(result);
-
-        //    return Ok(addedAugmentObjectViewModel);
-        //}
     }
 }
