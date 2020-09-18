@@ -12,6 +12,7 @@ namespace Donde.Augmentor.Core.Repositories.Interfaces.RepositoryInterfaces
         IQueryable<AugmentObject> GetAugmentObjectsQueryableWithChildren();
         Task<AugmentObject> GetAugmentObjectByIdWithChildrenAsync(Guid id);
         Task<AugmentObject> GetAugmentObjectByIdithChildrenAsNoTrackingAsync(Guid id);
+        Task<List<AugmentObject>> GetAugmentObjectsByOrganizationIdWithChildrenAsync(Guid organizationId);
         IQueryable<AugmentObjectDto> GetAugmentObjects();
         Task<IEnumerable<AugmentObjectDto>> GetGeographicalAugmentObjectsByRadius(Guid organizationId, double latitude, double longitude, int radiusInMeters);
         Task<AugmentObject> CreateAugmentObjectAsync(AugmentObject entity);

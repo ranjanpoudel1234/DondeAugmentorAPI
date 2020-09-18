@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace Donde.Augmentor.Core.Services.Services
 {
@@ -18,11 +19,18 @@ namespace Donde.Augmentor.Core.Services.Services
         private IOrganizationRepository _organizationRepository;
         private readonly IMapper _mapper;
         private readonly IValidator<Organization> _validator;
-        public OrganizationService(IOrganizationRepository organizationRepository, IMapper mapper, IValidator<Organization> validator)
+        private readonly IOrganizationResourceService _organizationResourceService;
+      
+
+        public OrganizationService(IOrganizationRepository organizationRepository, 
+            IMapper mapper, 
+            IValidator<Organization> validator,
+            IOrganizationResourceService organizationResourceService)
         {
             _organizationRepository = organizationRepository;
             _mapper = mapper;
             _validator = validator;
+            _organizationResourceService = organizationResourceService;
         }
 
         public async Task<IEnumerable<Organization>> GetClosestOrganizationByRadius(double latitude, double longitude, int radiusInMeters)
@@ -69,16 +77,27 @@ namespace Donde.Augmentor.Core.Services.Services
 
         public async Task<Organization> DeleteOrganizationAsync(Guid entityId)
         {
-            var existingOrganization = GetOrganizations().SingleOrDefault(x => x.Id == entityId);
-
-            if (existingOrganization == null)
+            // delete audio, video, image, avatar, augmentobject
+            using (var transaction = new CommittableTransaction())
             {
-                throw new HttpNotFoundException(ErrorMessages.ObjectNotFound);
-            }
+                var existingOrganization = GetOrganizations().SingleOrDefault(x => x.Id == entityId);
 
-            existingOrganization.IsDeleted = true;
+                if (existingOrganization == null)
+                {
+                    throw new HttpNotFoundException(ErrorMessages.ObjectNotFound);
+                }
 
-            return await _organizationRepository.UpdateOrganizationAsync(existingOrganization);
+                await _organizationResourceService.DeleteOrganizationResourcesByOrganizationIdAsync(existingOrganization.Id);
+
+                existingOrganization.IsDeleted = true;
+
+                var updatedOrganization = await _organizationRepository.UpdateOrganizationAsync(existingOrganization);
+
+                transaction.Commit();
+
+                return updatedOrganization;
+
+            }             
         }
     }
 }

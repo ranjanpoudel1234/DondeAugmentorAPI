@@ -31,22 +31,28 @@ namespace Donde.Augmentor.Infrastructure.Repositories
 
         public IQueryable<AugmentObject> GetAugmentObjectsQueryableWithChildren()
         {
-            return GetAugmentObjectWithChildrenQueryable();   
+            return GetAugmentObjectsWithChildrenQueryable();   
         }
 
         public Task<AugmentObject> GetAugmentObjectByIdWithChildrenAsync(Guid id)
         {
-            return GetAugmentObjectWithChildrenQueryable()
-                .SingleOrDefaultAsync(x => x.Id == id);
-        }
-   
-        public Task<AugmentObject> GetAugmentObjectByIdithChildrenAsNoTrackingAsync(Guid id)
-        {
-            return GetAugmentObjectWithChildrenQueryable().AsNoTracking()
+            return GetAugmentObjectsWithChildrenQueryable()
                 .SingleOrDefaultAsync(x => x.Id == id);
         }
 
-        private IQueryable<AugmentObject> GetAugmentObjectWithChildrenQueryable()
+        public async Task<List<AugmentObject>> GetAugmentObjectsByOrganizationIdWithChildrenAsync(Guid organizationId)
+        {
+            return await GetAugmentObjectsWithChildrenQueryable()
+                .Where(x => x.OrganizationId == organizationId).ToListAsync();
+        }
+
+        public Task<AugmentObject> GetAugmentObjectByIdithChildrenAsNoTrackingAsync(Guid id)
+        {
+            return GetAugmentObjectsWithChildrenQueryable().AsNoTracking()
+                .SingleOrDefaultAsync(x => x.Id == id);
+        }
+
+        private IQueryable<AugmentObject> GetAugmentObjectsWithChildrenQueryable()
         {
             return _dbContext.AugmentObjects
                .Include(au => au.AugmentImage)

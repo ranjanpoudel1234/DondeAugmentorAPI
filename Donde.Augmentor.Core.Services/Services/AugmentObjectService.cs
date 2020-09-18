@@ -117,6 +117,15 @@ namespace Donde.Augmentor.Core.Services.Services
             await _augmentObjectRepository.UpdateAugmentObjectAsync(existingAugmentObject.Id, existingAugmentObject);
         }
 
+        public async Task DeleteAugmentObjectsByOrganizationIdAsync(Guid organizationId)
+        {
+            var augmentObjectsByOrganization = await _augmentObjectRepository.GetAugmentObjectsByOrganizationIdWithChildrenAsync(organizationId);
+            foreach (var augmentObject in augmentObjectsByOrganization)
+            {
+                await this.DeleteAugmentObjectAsync(augmentObject.Id);
+            }
+        }
+
         public async Task<IEnumerable<AugmentObjectDto>> GetGeographicalAugmentObjectsByRadius(Guid organizationId, double latitude, double longitude, int radiusInMeters)
         {
             var geographicalAugmentObjects = await _augmentObjectRepository.GetGeographicalAugmentObjectsByRadius(organizationId, latitude, longitude, radiusInMeters);

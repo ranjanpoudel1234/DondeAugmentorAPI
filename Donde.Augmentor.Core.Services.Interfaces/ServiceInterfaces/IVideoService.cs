@@ -8,5 +8,6 @@ namespace Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces
     {
         Task<Video> AddVideoAsync(Video video);
         Task<Video> GetVideoByIdAsync(Guid videoId);
+        Task DeleteVideosByOrganizationIdAsync(Guid organizationId);
     }
 }

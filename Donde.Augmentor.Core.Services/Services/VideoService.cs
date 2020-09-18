@@ -24,5 +24,15 @@ namespace Donde.Augmentor.Core.Services.Services
         {
             return _videoRepository.GetVideoByIdAsync(videoId);
         }
+
+        public async Task DeleteVideosByOrganizationIdAsync(Guid organizationId)
+        {
+            var videosByOrganization = await _videoRepository.GetVideosByOrganizationIdAsync(organizationId);
+            foreach (var video in videosByOrganization)
+            {
+                video.IsDeleted = true;
+                await _videoRepository.UpdateVideoAsync(video.Id, video);
+            }
+        }
     }
 }

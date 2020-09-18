@@ -1,7 +1,9 @@
 ﻿using Donde.Augmentor.Core.Domain.Models;
 using Donde.Augmentor.Core.Repositories.Interfaces.RepositoryInterfaces;
 using Donde.Augmentor.Infrastructure.Database;
+using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -22,6 +24,16 @@ namespace Donde.Augmentor.Infrastructure.Repositories
         public IQueryable<Avatar> GetAvatars()
         {
             return GetAll<Avatar>();
+        }
+
+        public Task<Avatar> UpdateAvatarAsync(Guid id, Avatar entity)
+        {
+            return UpdateAsync(id, entity);
+        }
+
+        public async Task<List<Avatar>> GetAvatarsByOrganizationIdAsync(Guid organizationId)
+        {
+            return await GetAll<Avatar>().Where(a => a.OrganizationId == organizationId).ToListAsync();
         }
     }
 }

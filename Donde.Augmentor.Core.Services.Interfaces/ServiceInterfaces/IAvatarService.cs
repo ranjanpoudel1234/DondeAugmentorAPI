@@ -9,5 +9,6 @@ namespace Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces
     {
         IQueryable<Avatar> GetAvatars();
         Task<Avatar> GetAvatarByIdAsync(Guid avatarId);
+        Task DeleteAvatarsByOrganizationIdAsync(Guid organizationId);
     }
 }

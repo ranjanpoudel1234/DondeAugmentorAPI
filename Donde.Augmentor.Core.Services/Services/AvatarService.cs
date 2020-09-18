@@ -25,5 +25,15 @@ namespace Donde.Augmentor.Core.Services.Services
         {
             return _avatarRepository.GetAvatars();
         }
+
+        public async Task DeleteAvatarsByOrganizationIdAsync(Guid organizationId)
+        {
+            var avatarsByOrganization = await _avatarRepository.GetAvatarsByOrganizationIdAsync(organizationId);
+            foreach (var avatar in avatarsByOrganization)
+            {
+                avatar.IsDeleted = true;
+                await _avatarRepository.UpdateAvatarAsync(avatar.Id, avatar);
+            }
+        }
     }
 }

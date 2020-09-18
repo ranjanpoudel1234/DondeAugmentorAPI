@@ -31,5 +31,15 @@ namespace Donde.Augmentor.Core.Services.Services
         {
             return _audioRepository.GetAudioByIdAsync(audioId);
         }
+
+        public async Task DeleteAudiosByOrganizationIdAsync(Guid organizationId)
+        {
+            var audiosByOrganization = await _audioRepository.GetAudiosByOrganizationIdAsync(organizationId);
+            foreach (var audio in audiosByOrganization)
+            {
+                audio.IsDeleted = true;
+                await _audioRepository.UpdateAudioAsync(audio.Id, audio);
+            }
+        }
     }
 }
