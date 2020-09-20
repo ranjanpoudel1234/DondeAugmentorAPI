@@ -19,7 +19,7 @@ namespace Donde.Augmentor.Infrastructure.Repositories
             _dbContext = dbContext;
         }
 
-        public IQueryable<TEntity> GetAll<TEntity>() where TEntity : class, IDondeModel
+        public IQueryable<TEntity> GetAllAsNoTracking<TEntity>() where TEntity : class, IDondeModel
         {
             return _dbContext.Set<TEntity>().AsNoTracking();
         }

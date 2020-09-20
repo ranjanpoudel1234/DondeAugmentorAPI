@@ -18,7 +18,7 @@ namespace Donde.Augmentor.Infrastructure.Repositories
     
         public IQueryable<AugmentImage> GetAugmentImages()
         {
-            return GetAll<AugmentImage>();
+            return GetAllAsNoTracking<AugmentImage>();
         }
 
         public async Task<AugmentImage> AddAugmentImageAsync(AugmentImage augmentImage)
@@ -38,7 +38,7 @@ namespace Donde.Augmentor.Infrastructure.Repositories
 
         public async Task<List<AugmentImage>> GetAugmentImagesByOrganizationIdAsync(Guid organizationId)
         {
-            return await GetAll<AugmentImage>().Where(a => a.OrganizationId == organizationId).ToListAsync();
+            return await GetAllAsNoTracking<AugmentImage>().Where(a => a.OrganizationId == organizationId).ToListAsync();
         }
     }
 }

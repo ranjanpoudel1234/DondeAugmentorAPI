@@ -15,6 +15,6 @@ namespace Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces
         Task<AugmentObject> CreateAugmentObjectAsync(AugmentObject entity);
         Task<AugmentObject> UpdateAugmentObjectAsync(Guid entityId, AugmentObject entity);
         Task DeleteAugmentObjectAsync(Guid entityId);
-        Task DeleteAugmentObjectsByOrganizationIdAsync(Guid organizationId);
+        Task DeleteAugmentObjectsWithMediaAndLocationsByOrganizationIdAsync(Guid organizationId);
     }
 }

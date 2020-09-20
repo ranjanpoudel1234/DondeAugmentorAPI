@@ -33,7 +33,7 @@ namespace Donde.Augmentor.Infrastructure.Repositories
 
         public async Task<List<Video>> GetVideosByOrganizationIdAsync(Guid organizationId)
         {
-            return await GetAll<Video>().Where(a => a.OrganizationId == organizationId).ToListAsync();
+            return await GetAllAsNoTracking<Video>().Where(a => a.OrganizationId == organizationId).ToListAsync();
         }
     }
 }

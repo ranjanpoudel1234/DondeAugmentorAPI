@@ -77,27 +77,21 @@ namespace Donde.Augmentor.Core.Services.Services
 
         public async Task<Organization> DeleteOrganizationAsync(Guid entityId)
         {
-            // delete audio, video, image, avatar, augmentobject
-            using (var transaction = new CommittableTransaction())
+            var existingOrganizationIncludingSites = await _organizationRepository.GetOrganizationByIdAsync(entityId, includeSites: true);
+
+            if (existingOrganizationIncludingSites == null)
             {
-                var existingOrganization = GetOrganizations().SingleOrDefault(x => x.Id == entityId);
+                throw new HttpNotFoundException(ErrorMessages.ObjectNotFound);
+            }
 
-                if (existingOrganization == null)
-                {
-                    throw new HttpNotFoundException(ErrorMessages.ObjectNotFound);
-                }
+            await _organizationResourceService.DeleteOrganizationResourcesByOrganizationIdAsync(existingOrganizationIncludingSites.Id);
 
-                await _organizationResourceService.DeleteOrganizationResourcesByOrganizationIdAsync(existingOrganization.Id);
+            existingOrganizationIncludingSites.IsDeleted = true;
+            existingOrganizationIncludingSites.Sites.ForEach(s => { s.IsDeleted = true; s.UpdatedDate = DateTime.UtcNow; });
 
-                existingOrganization.IsDeleted = true;
+            var updatedOrganization = await _organizationRepository.UpdateOrganizationAsync(existingOrganizationIncludingSites);
 
-                var updatedOrganization = await _organizationRepository.UpdateOrganizationAsync(existingOrganization);
-
-                transaction.Commit();
-
-                return updatedOrganization;
-
-            }             
+            return updatedOrganization;           
         }
     }
 }

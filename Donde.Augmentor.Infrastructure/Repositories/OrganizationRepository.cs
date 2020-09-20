@@ -31,20 +31,25 @@ namespace Donde.Augmentor.Infrastructure.Repositories
         {
             if (includeSites)
             {
-                return GetAll<Organization>().Include(x => x.Sites);
+                return GetAllAsNoTracking<Organization>().Include(x => x.Sites);
             }
 
-            return GetAll<Organization>();
+            return GetAllAsNoTracking<Organization>();
         }
 
-        public Task<Organization> GetOrganizationByIdAsync(Guid organizationId)
+        public Task<Organization> GetOrganizationByIdAsync(Guid organizationId, bool includeSites = false)
         {
+            if (includeSites)
+            {
+                return _dbContext.Organizations.Include(o => o.Sites).SingleOrDefaultAsync(o => o.Id == organizationId);
+            }
+
             return GetByIdAsync<Organization>(organizationId);
         }
 
         public IQueryable<Organization> GetOrganizationByIds(List<Guid> organizationIds)
         {
-            return GetAll<Organization>().Where(x => organizationIds.Contains(x.Id));
+            return GetAllAsNoTracking<Organization>().Where(x => organizationIds.Contains(x.Id));
         }
 
         public async Task<IEnumerable<Organization>> GetClosestOrganizationByRadius(double latitude, double longitude, int radiusInMeters)

@@ -40,9 +40,16 @@ namespace Donde.Augmentor.Infrastructure.Repositories
                 .SingleOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task<List<AugmentObject>> GetAugmentObjectsByOrganizationIdWithChildrenAsync(Guid organizationId)
+        public Task<List<AugmentObject>> GetAugmentObjectsByOrganizationIdWithChildrenAsync(Guid organizationId)
         {
-            return await GetAugmentObjectsWithChildrenQueryable()
+            return GetAugmentObjectsWithChildrenQueryable()
+                .Where(x => x.OrganizationId == organizationId).ToListAsync();
+        }
+
+        public Task<List<AugmentObject>> GetAugmentObjectsByOrganizationIncludingMediaAndLocationsAsync(Guid organizationId)
+        {
+            return _dbContext.AugmentObjects.Include(au => au.AugmentObjectMedias)
+                .Include(au => au.AugmentObjectLocations)
                 .Where(x => x.OrganizationId == organizationId).ToListAsync();
         }
 

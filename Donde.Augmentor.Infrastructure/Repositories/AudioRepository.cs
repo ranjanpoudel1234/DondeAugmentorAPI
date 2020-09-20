@@ -28,7 +28,7 @@ namespace Donde.Augmentor.Infrastructure.Repositories
 
         public IQueryable<Audio> GetAudios()
         {
-            return GetAll<Audio>();
+            return GetAllAsNoTracking<Audio>();
         }
 
         public Task<Audio> UpdateAudioAsync(Guid id, Audio entity)
@@ -38,7 +38,7 @@ namespace Donde.Augmentor.Infrastructure.Repositories
 
         public async Task<List<Audio>> GetAudiosByOrganizationIdAsync(Guid organizationId)
         {
-            return await GetAll<Audio>().Where(a => a.OrganizationId == organizationId).ToListAsync();
+            return await GetAllAsNoTracking<Audio>().Where(a => a.OrganizationId == organizationId).ToListAsync();
         }
     }
 }

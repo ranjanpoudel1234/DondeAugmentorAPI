@@ -117,12 +117,16 @@ namespace Donde.Augmentor.Core.Services.Services
             await _augmentObjectRepository.UpdateAugmentObjectAsync(existingAugmentObject.Id, existingAugmentObject);
         }
 
-        public async Task DeleteAugmentObjectsByOrganizationIdAsync(Guid organizationId)
+        public async Task DeleteAugmentObjectsWithMediaAndLocationsByOrganizationIdAsync(Guid organizationId)
         {
-            var augmentObjectsByOrganization = await _augmentObjectRepository.GetAugmentObjectsByOrganizationIdWithChildrenAsync(organizationId);
+            var augmentObjectsByOrganization = await _augmentObjectRepository.GetAugmentObjectsByOrganizationIncludingMediaAndLocationsAsync(organizationId);
             foreach (var augmentObject in augmentObjectsByOrganization)
             {
-                await this.DeleteAugmentObjectAsync(augmentObject.Id);
+                augmentObject.AugmentObjectMedias.ForEach(x => { x.IsDeleted = true; x.UpdatedDate = DateTime.UtcNow; });
+                augmentObject.AugmentObjectLocations.ForEach(x => { x.IsDeleted = true; x.UpdatedDate = DateTime.UtcNow; });
+                augmentObject.IsDeleted = true;
+
+                await _augmentObjectRepository.UpdateAugmentObjectAsync(augmentObject.Id, augmentObject);
             }
         }
 

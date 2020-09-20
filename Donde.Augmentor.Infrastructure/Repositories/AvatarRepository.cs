@@ -23,7 +23,7 @@ namespace Donde.Augmentor.Infrastructure.Repositories
 
         public IQueryable<Avatar> GetAvatars()
         {
-            return GetAll<Avatar>();
+            return GetAllAsNoTracking<Avatar>();
         }
 
         public Task<Avatar> UpdateAvatarAsync(Guid id, Avatar entity)
@@ -33,7 +33,7 @@ namespace Donde.Augmentor.Infrastructure.Repositories
 
         public async Task<List<Avatar>> GetAvatarsByOrganizationIdAsync(Guid organizationId)
         {
-            return await GetAll<Avatar>().Where(a => a.OrganizationId == organizationId).ToListAsync();
+            return await GetAllAsNoTracking<Avatar>().Where(a => a.OrganizationId == organizationId).ToListAsync();
         }
     }
 }

@@ -7,7 +7,7 @@ namespace Donde.Augmentor.Core.Repositories.Interfaces.RepositoryInterfaces
 {
     public interface IGenericRepository
     {
-        IQueryable<TEntity> GetAll<TEntity>() where TEntity : class, IDondeModel;
+        IQueryable<TEntity> GetAllAsNoTracking<TEntity>() where TEntity : class, IDondeModel;
 
         Task<TEntity> GetByIdAsync<TEntity>(Guid id) where TEntity : class, IDondeModel;
 

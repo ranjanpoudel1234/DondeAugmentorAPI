@@ -36,7 +36,7 @@ namespace Donde.Augmentor.Core.Services.Services
 
             await _augmentImageService.DeleteAugmentImagesByOrganizationIdAsync(organizationId);
 
-            await _augmentObjectService.DeleteAugmentObjectsByOrganizationIdAsync(organizationId);
+            await _augmentObjectService.DeleteAugmentObjectsWithMediaAndLocationsByOrganizationIdAsync(organizationId);
 
         }
     }
