@@ -19,7 +19,7 @@ namespace Donde.Augmentor.Infrastructure.Repositories
             _dbContext = dbContext;
         }
 
-        public IQueryable<TEntity> GetAll<TEntity>() where TEntity : class, IDondeModel
+        public IQueryable<TEntity> GetAllAsNoTracking<TEntity>() where TEntity : class, IDondeModel
         {
             return _dbContext.Set<TEntity>().AsNoTracking();
         }
@@ -88,7 +88,7 @@ namespace Donde.Augmentor.Infrastructure.Repositories
                     var childObjectsCasted = childObjects as IEnumerable<IAuditFieldsModel>;
                     if (childObjectsCasted == null)
                     {
-                        throw new InvalidOperationException("Child collections property type must implement IDondeModelModel interface");
+                        throw new InvalidOperationException("Child collections property type must implement IAuditFieldsModel interface");
                     }
 
                     foreach (var eachChild in childObjectsCasted)

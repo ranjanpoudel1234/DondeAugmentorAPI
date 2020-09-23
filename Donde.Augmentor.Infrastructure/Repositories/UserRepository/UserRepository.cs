@@ -19,7 +19,7 @@ namespace Donde.Augmentor.Infrastructure.Repositories.UserRepository
 
         public IQueryable<User> GetAll()
         {
-            return GetAll<User>()
+            return GetAllAsNoTracking<User>()
                 .Include(x => x.Organizations)
                 .Include(user => user.Roles)
                 .ThenInclude(userRole => userRole.Role);
@@ -27,7 +27,7 @@ namespace Donde.Augmentor.Infrastructure.Repositories.UserRepository
 
         public Task<User> GetByIdAsync(Guid entityId)
         {
-            return GetAll<User>()
+            return GetAllAsNoTracking<User>()
                 .Include(x => x.Organizations)
                 .Include(user => user.Roles)
                 .ThenInclude(userRole => userRole.Role).SingleOrDefaultAsync(x => x.Id == entityId);

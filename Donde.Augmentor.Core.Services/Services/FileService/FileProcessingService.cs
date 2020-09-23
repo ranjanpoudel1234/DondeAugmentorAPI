@@ -88,7 +88,7 @@ namespace Donde.Augmentor.Core.Services.Services.FileService
                         if (mediaType == MediaTypes.Image || mediaType == MediaTypes.Logo)
                         {
                             attachmentDto.FilePath = mediaType == MediaTypes.Image ? 
-                                $"{ _domainSettings.UploadSettings.ImageFolderName }/{ uniqueFileName}" 
+                                $"{ _domainSettings.UploadSettings.ImagesFolderName }/{ uniqueFileName}" 
                                 : $"{ _domainSettings.UploadSettings.LogosFolderName }/{ uniqueFileName}";
 
                             await _validator.ValidateOrThrowAsync(attachmentDto, ruleSets: $"{MediaAttachmentDtoValidator.DefaultRuleSet},{MediaAttachmentDtoValidator.ImageFileRuleSet}");
@@ -148,7 +148,7 @@ namespace Donde.Augmentor.Core.Services.Services.FileService
         private async Task<Result<bool>> UploadOriginalFileAsync(MediaTypes mediaType, string uniqueFileName, string localFilePath)
         {
             var originalFileRemotePath = mediaType == MediaTypes.Image ?
-                               $"{ _domainSettings.UploadSettings.ImageFolderName }/{_domainSettings.UploadSettings.OriginalImageSubFolderName}/{ uniqueFileName}"
+                               $"{ _domainSettings.UploadSettings.ImagesFolderName }/{_domainSettings.UploadSettings.OriginalImageSubFolderName}/{ uniqueFileName}"
                                : $"{ _domainSettings.UploadSettings.LogosFolderName }/{_domainSettings.UploadSettings.OriginalImageSubFolderName}/{ uniqueFileName}";
 
             var uploadResult = await _storageService.UploadFileAsync

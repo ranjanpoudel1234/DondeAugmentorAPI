@@ -49,9 +49,7 @@ namespace Donde.Augmentor.Infrastructure.Database
 
         private void ApplyIndexes(ModelBuilder modelBuilder)
 		{		
-			modelBuilder.Entity<AugmentObjectMedia>()
-	       .HasIndex(u => u.AugmentObjectId)
-	       .IsUnique();
+		
 		}
 
         /// <summary>

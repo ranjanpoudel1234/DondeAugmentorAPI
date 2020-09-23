@@ -25,8 +25,52 @@ namespace Donde.Augmentor.Infrastructure.Repositories
         }
 
         public async Task<AugmentObject> UpdateAugmentObjectAsync(Guid id, AugmentObject entity)
-        {
+        {          
             return await UpdateAsync(id, entity);
+        }
+
+        public IQueryable<AugmentObject> GetAugmentObjectsQueryableWithChildren()
+        {
+            return GetAugmentObjectsWithChildrenQueryable();   
+        }
+
+        public Task<AugmentObject> GetAugmentObjectByIdWithChildrenAsync(Guid id)
+        {
+            return GetAugmentObjectsWithChildrenQueryable()
+                .SingleOrDefaultAsync(x => x.Id == id);
+        }
+
+        public Task<List<AugmentObject>> GetAugmentObjectsByOrganizationIdWithChildrenAsync(Guid organizationId)
+        {
+            return GetAugmentObjectsWithChildrenQueryable()
+                .Where(x => x.OrganizationId == organizationId).ToListAsync();
+        }
+
+        public Task<List<AugmentObject>> GetAugmentObjectsByOrganizationIncludingMediaAndLocationsAsync(Guid organizationId)
+        {
+            return _dbContext.AugmentObjects.Include(au => au.AugmentObjectMedias)
+                .Include(au => au.AugmentObjectLocations)
+                .Where(x => x.OrganizationId == organizationId).ToListAsync();
+        }
+
+        public Task<AugmentObject> GetAugmentObjectByIdithChildrenAsNoTrackingAsync(Guid id)
+        {
+            return GetAugmentObjectsWithChildrenQueryable().AsNoTracking()
+                .SingleOrDefaultAsync(x => x.Id == id);
+        }
+
+        private IQueryable<AugmentObject> GetAugmentObjectsWithChildrenQueryable()
+        {
+            return _dbContext.AugmentObjects
+               .Include(au => au.AugmentImage)
+               .Include(au => au.AugmentObjectMedias)
+                   .ThenInclude(aum => aum.Audio)
+               .Include(au => au.AugmentObjectMedias)
+                   .ThenInclude(aum => aum.Video)
+               .Include(au => au.AugmentObjectMedias)
+                   .ThenInclude(aum => aum.Avatar)
+               .Include(au => au.AugmentObjectLocations)
+               .Include(au => au.Organization);
         }
 
         public IQueryable<AugmentObjectDto> GetAugmentObjects()

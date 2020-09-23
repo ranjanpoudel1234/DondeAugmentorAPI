@@ -1,8 +1,14 @@
-﻿using Donde.Augmentor.Core.Domain;
+﻿using AutoMapper;
+using Donde.Augmentor.Core.Domain;
+using Donde.Augmentor.Core.Domain.CustomExceptions;
 using Donde.Augmentor.Core.Domain.Dto;
+using Donde.Augmentor.Core.Domain.Helpers;
 using Donde.Augmentor.Core.Domain.Models;
+using Donde.Augmentor.Core.Domain.Validations;
 using Donde.Augmentor.Core.Repositories.Interfaces.RepositoryInterfaces;
 using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces;
+using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces.CustomValidations;
+using FluentValidation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,11 +20,30 @@ namespace Donde.Augmentor.Core.Services.Services
     {
         private IAugmentObjectRepository _augmentObjectRepository;
         private DomainSettings _domainSettings;
+        private readonly IValidator<AugmentObject> _validator;
+        private readonly IMapper _mapper;
+        private readonly IAugmentObjectResourceValidationService _augmentObjectResourceValidationService;
 
-        public AugmentObjectService(IAugmentObjectRepository augmentObjectRepository, DomainSettings domainSettings)
+        public AugmentObjectService(IAugmentObjectRepository augmentObjectRepository,
+            DomainSettings domainSettings, IValidator<AugmentObject> validator,
+            IAugmentObjectResourceValidationService augmentObjectResourceValidationService,
+             IMapper mapper)
         {
             _augmentObjectRepository = augmentObjectRepository;
             _domainSettings = domainSettings;
+            _validator = validator;
+            _augmentObjectResourceValidationService = augmentObjectResourceValidationService;
+            _mapper = mapper;
+        }
+
+        public IQueryable<AugmentObject> GetAugmentObjectsQueryableWithChildren()
+        {
+            return _augmentObjectRepository.GetAugmentObjectsQueryableWithChildren();
+        }
+
+        public Task<AugmentObject> GetAugmentObjectByIdWithChildrenAsync(Guid augmentObjectId)
+        {
+            return _augmentObjectRepository.GetAugmentObjectByIdWithChildrenAsync(augmentObjectId);
         }
 
         public IQueryable<AugmentObjectDto> GetAugmentObjects()
@@ -30,8 +55,79 @@ namespace Donde.Augmentor.Core.Services.Services
 
         public async Task<AugmentObject> CreateAugmentObjectAsync(AugmentObject entity)
         {
-            //todo need to add fluent validation here.
-            return await _augmentObjectRepository.CreateAugmentObjectAsync(entity);
+            entity.Id = SequentialGuidGenerator.GenerateComb();
+
+            entity.AugmentObjectMedias.ForEach(x => { x.Id = SequentialGuidGenerator.GenerateComb(); x.AugmentObjectId = entity.Id; });
+
+            entity.AugmentObjectLocations.ForEach(x => { x.Id = SequentialGuidGenerator.GenerateComb(); x.AugmentObjectId = entity.Id; });
+
+            await _validator.ValidateOrThrowAsync(entity);
+
+            await _augmentObjectResourceValidationService.ValidateAugmentObjectResourceOrThrowAsync(entity);
+
+            await _augmentObjectRepository.CreateAugmentObjectAsync(entity);
+
+            return await _augmentObjectRepository.GetAugmentObjectByIdWithChildrenAsync(entity.Id);
+        }
+
+        public async Task<AugmentObject> UpdateAugmentObjectAsync(Guid entityId, AugmentObject entity)
+        {
+            var existingAugmentObject = await GetAugmentObjectByIdWithChildrenAsync(entityId);
+
+            if (existingAugmentObject == null)
+            {
+                throw new HttpNotFoundException(ErrorMessages.ObjectNotFound);
+            }
+
+            var updatedAugmentObjectWithExistingChildrenSoftDeleted = _mapper.Map(entity, existingAugmentObject);
+            updatedAugmentObjectWithExistingChildrenSoftDeleted.AugmentObjectMedias.ForEach(x => { x.IsDeleted = true; x.UpdatedDate = DateTime.UtcNow; } );
+            updatedAugmentObjectWithExistingChildrenSoftDeleted.AugmentObjectLocations.ForEach(x => { x.IsDeleted = true; x.UpdatedDate = DateTime.UtcNow; });
+
+            //new media and/or locations
+            entity.AugmentObjectMedias.ForEach(x => { x.Id = SequentialGuidGenerator.GenerateComb(); x.AugmentObjectId = updatedAugmentObjectWithExistingChildrenSoftDeleted.Id; x.AddedDate = DateTime.UtcNow; });
+            entity.AugmentObjectLocations.ForEach(x => { x.Id = SequentialGuidGenerator.GenerateComb(); x.AugmentObjectId = updatedAugmentObjectWithExistingChildrenSoftDeleted.Id; x.AddedDate = DateTime.UtcNow; });
+
+            updatedAugmentObjectWithExistingChildrenSoftDeleted.AugmentObjectLocations.AddRange(entity.AugmentObjectLocations);
+            updatedAugmentObjectWithExistingChildrenSoftDeleted.AugmentObjectMedias.AddRange(entity.AugmentObjectMedias);
+
+            await _validator.ValidateOrThrowAsync(updatedAugmentObjectWithExistingChildrenSoftDeleted);
+
+            await _augmentObjectResourceValidationService.ValidateAugmentObjectResourceOrThrowAsync(updatedAugmentObjectWithExistingChildrenSoftDeleted);
+
+            await _augmentObjectRepository.UpdateAugmentObjectAsync(updatedAugmentObjectWithExistingChildrenSoftDeleted.Id, updatedAugmentObjectWithExistingChildrenSoftDeleted);
+
+            // important to load AsNoTracking so Ef core does not return the cached entity that was retrieved in line 75 above
+            // which includes now deleted media and/or location(s). Hence, reloading from data store with no tracking again.
+            return await _augmentObjectRepository.GetAugmentObjectByIdithChildrenAsNoTrackingAsync(updatedAugmentObjectWithExistingChildrenSoftDeleted.Id);
+        }
+
+        public async Task DeleteAugmentObjectAsync(Guid entityId)
+        {
+            var existingAugmentObject = await GetAugmentObjectByIdWithChildrenAsync(entityId);
+
+            if (existingAugmentObject == null)
+            {
+                throw new HttpNotFoundException(ErrorMessages.ObjectNotFound);
+            }
+
+            existingAugmentObject.AugmentObjectMedias.ForEach(x => { x.IsDeleted = true; x.UpdatedDate = DateTime.UtcNow; });
+            existingAugmentObject.AugmentObjectLocations.ForEach(x => { x.IsDeleted = true; x.UpdatedDate = DateTime.UtcNow; });
+            existingAugmentObject.IsDeleted = true;
+
+            await _augmentObjectRepository.UpdateAugmentObjectAsync(existingAugmentObject.Id, existingAugmentObject);
+        }
+
+        public async Task DeleteAugmentObjectsWithMediaAndLocationsByOrganizationIdAsync(Guid organizationId)
+        {
+            var augmentObjectsByOrganization = await _augmentObjectRepository.GetAugmentObjectsByOrganizationIncludingMediaAndLocationsAsync(organizationId);
+            foreach (var augmentObject in augmentObjectsByOrganization)
+            {
+                augmentObject.AugmentObjectMedias.ForEach(x => { x.IsDeleted = true; x.UpdatedDate = DateTime.UtcNow; });
+                augmentObject.AugmentObjectLocations.ForEach(x => { x.IsDeleted = true; x.UpdatedDate = DateTime.UtcNow; });
+                augmentObject.IsDeleted = true;
+
+                await _augmentObjectRepository.UpdateAugmentObjectAsync(augmentObject.Id, augmentObject);
+            }
         }
 
         public async Task<IEnumerable<AugmentObjectDto>> GetGeographicalAugmentObjectsByRadius(Guid organizationId, double latitude, double longitude, int radiusInMeters)
@@ -43,12 +139,7 @@ namespace Donde.Augmentor.Core.Services.Services
             return augmentObjects;
         }
 
-        public async Task<AugmentObject> UpdateAugmentObjectAsync(Guid id, AugmentObject entity)
-        {
-            return await _augmentObjectRepository.UpdateAugmentObjectAsync(id, entity);
-        }
-
-
+  
         private string GetMediaPath(string folderName, Guid? fileId, string extension)
         {
              return $"{_domainSettings.GeneralSettings.StorageBasePath}{folderName}/{fileId}{extension}";
@@ -76,7 +167,7 @@ namespace Donde.Augmentor.Core.Services.Services
                 MediaId = augmentObject.MediaId,
                 AvatarId = augmentObject.AvatarId,
                 AvatarName = augmentObject.AvatarName == null ? null : augmentObject.AvatarName,
-                AvatarUrl = augmentObject.AvatarFileId.HasValue ? GetMediaPathWithSubFolder(_domainSettings.UploadSettings.AvatarFolderName, augmentObject.OrganizationId.ToString(), augmentObject.AvatarFileId, augmentObject.AvatarFileExtension) : null,
+                AvatarUrl = augmentObject.AvatarFileId.HasValue ? GetMediaPathWithSubFolder(_domainSettings.UploadSettings.AvatarsFolderName, augmentObject.OrganizationId.ToString(), augmentObject.AvatarFileId, augmentObject.AvatarFileExtension) : null,
                 AvatarConfiguration = augmentObject.AvatarConfiguration,
                 AudioId = augmentObject.AudioId,
                 AudioName = augmentObject.AudioName == null ? null : augmentObject.AudioName,
@@ -85,8 +176,8 @@ namespace Donde.Augmentor.Core.Services.Services
                 VideoName = augmentObject.VideoName == null ? null : augmentObject.VideoName,
                 VideoUrl = augmentObject.VideoFileId.HasValue ?  GetMediaPath(_domainSettings.UploadSettings.VideosFolderName, augmentObject.VideoFileId, augmentObject.VideoFileExtension) : null,
                 ImageName = augmentObject.ImageName,
-                ImageUrl = GetMediaPath(_domainSettings.UploadSettings.ImageFolderName, augmentObject.ImageFileId, augmentObject.ImageFileExtension),
-                OriginalSizeImageUrl = GetMediaPathWithSubFolder(_domainSettings.UploadSettings.ImageFolderName, _domainSettings.UploadSettings.OriginalImageSubFolderName, augmentObject.ImageFileId, augmentObject.ImageFileExtension),
+                ImageUrl = GetMediaPath(_domainSettings.UploadSettings.ImagesFolderName, augmentObject.ImageFileId, augmentObject.ImageFileExtension),
+                OriginalSizeImageUrl = GetMediaPathWithSubFolder(_domainSettings.UploadSettings.ImagesFolderName, _domainSettings.UploadSettings.OriginalImageSubFolderName, augmentObject.ImageFileId, augmentObject.ImageFileExtension),
                 Distance = augmentObject.Distance,
                 Latitude = augmentObject.Latitude,
                 Longitude = augmentObject.Longitude

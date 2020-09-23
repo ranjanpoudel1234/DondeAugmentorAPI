@@ -4,8 +4,8 @@ using Donde.Augmentor.Core.Domain.CustomExceptions;
 using Donde.Augmentor.Core.Domain.Models;
 using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces;
 using Donde.Augmentor.Web.OData;
-using Donde.Augmentor.Web.ViewModels;
-using Donde.Augmentor.Web.ViewModels.AugmentObject;
+using Donde.Augmentor.Web.ViewModels.V1;
+using Donde.Augmentor.Web.ViewModels.V1.AugmentObject;
 using Microsoft.AspNet.OData;
 using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNet.OData.Routing;
@@ -21,8 +21,8 @@ using static Donde.Augmentor.Web.Attributes.IgnoreJsonIgnore;
 
 namespace Donde.Augmentor.Web.Controller.V1
 {
-    [ApiVersion("1.0")]
-    [ODataRoutePrefix("augmentObjects")]
+    [ApiVersion("1.0", Deprecated = true)]
+    [ODataRoutePrefix(ODataConstants.AugmentObjectsRoute)]
     [Authorize]
     public class AugmentObjectsController : ODataController
     {
@@ -87,33 +87,6 @@ namespace Donde.Augmentor.Web.Controller.V1
         {
             augmentObjectViewModels.ForEach(au => au.AvatarConfiguration = !string.IsNullOrWhiteSpace(au.AvatarConfigurationString)
             ? JsonConvert.DeserializeObject<AvatarConfigurationViewModel>(au.AvatarConfigurationString) : null);
-        }
-
-        [ODataRoute]
-        [HttpPost]
-        [IgnoreJsonIgnore]
-        ///Improvement, there could be two different post endpoint, one geographical, one regular returning 
-        ///respective viewModels that match their GET counterparts instead of sending back Geographical each time.
-        public async Task<IActionResult> Post([FromBody] AugmentObjectPostViewModel augmentObjectPostViewModel)
-        {
-            var augmentObject = _mapper.Map<AugmentObject>(augmentObjectPostViewModel);
-
-            var augmentObjectId = augmentObject.Id;
-            var augmentObjectMedia = _mapper.Map<AugmentObjectMedia>(augmentObjectPostViewModel.AugmentObjectMedia);
-            augmentObjectMedia.AugmentObjectId = augmentObjectId;
-            augmentObject.AugmentObjectMedias.Add(augmentObjectMedia);
-
-            var augmentObjectLocations = _mapper.Map<List<AugmentObjectLocation>>(augmentObjectPostViewModel.AugmentObjectLocations);
-            if(augmentObjectLocations != null)
-            {
-                augmentObjectLocations.ForEach(x => x.AugmentObjectId = augmentObjectId);
-                augmentObject.AugmentObjectLocations.AddRange(augmentObjectLocations);
-            }
-           
-            var result = await _augmentObjectService.CreateAugmentObjectAsync(augmentObject);
-            var addedAugmentObjectViewModel = _mapper.Map<AugmentObjectViewModel>(result);
-
-            return Ok(addedAugmentObjectViewModel);
         }
     }
 }

@@ -26,5 +26,20 @@ namespace Donde.Augmentor.Core.Services.Services
         {
             return _augmentImageRepository.AddAugmentImageAsync(augmentImage);
         }
+
+        public Task<AugmentImage> GetAugmentImageByIdAsync(Guid augmentImageId)
+        {
+            return _augmentImageRepository.GetAugmentImageByIdAsync(augmentImageId);
+        }
+
+        public async Task DeleteAugmentImagesByOrganizationIdAsync(Guid organizationId)
+        {
+            var augmentImagesByOrganization = await _augmentImageRepository.GetAugmentImagesByOrganizationIdAsync(organizationId);
+            foreach (var augmentImage in augmentImagesByOrganization)
+            {
+                augmentImage.IsDeleted = true;
+                await _augmentImageRepository.UpdateAugmentImageAsync(augmentImage.Id, augmentImage);
+            }
+        }
     }
 }

@@ -1,8 +1,7 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Donde.Augmentor.Core.Domain.Dto;
 using Donde.Augmentor.Core.Domain.Helpers;
-using Donde.Augmentor.Web.ViewModels;
-using Donde.Augmentor.Core.Domain.Models;
+using Donde.Augmentor.Web.ViewModels.V1.AugmentObject;
 
 namespace Donde.Augmentor.Web.AutoMapperProfiles.V1.AugmentObject
 {
@@ -12,9 +11,8 @@ namespace Donde.Augmentor.Web.AutoMapperProfiles.V1.AugmentObject
         {
             CreateMap<AugmentObjectDto, AugmentObjectViewModel>()
                .ForMember(x => x.AvatarConfigurationString, opts => opts.MapFrom(src => src.AvatarConfiguration))
-               .ForMember(x => x.AvatarConfiguration, opts => opts.Ignore());
-
-            CreateMap<AugmentObjectPostViewModel, Core.Domain.Models.AugmentObject>()
+               .ForMember(x => x.AvatarConfiguration, opts => opts.Ignore());
+           CreateMap<AugmentObjectPostViewModel, Core.Domain.Models.AugmentObject>()
                 .ForMember(x => x.Id, opts => opts.MapFrom(src => SequentialGuidGenerator.GenerateComb()))
                 .ForMember(x => x.AddedDate, opts => opts.Ignore())
                 .ForMember(x => x.UpdatedDate, opts => opts.Ignore())
@@ -22,10 +20,8 @@ namespace Donde.Augmentor.Web.AutoMapperProfiles.V1.AugmentObject
                 .ForMember(x => x.AugmentImage, opts => opts.Ignore())
                 .ForMember(x => x.Organization, opts => opts.Ignore())
                 .ForMember(x => x.AugmentObjectMedias, opts => opts.Ignore())
-                .ForMember(x => x.AugmentObjectLocations, opts => opts.Ignore());
-
-            // after post return
-            CreateMap<Core.Domain.Models.AugmentObject, AugmentObjectViewModel>()
+                .ForMember(x => x.AugmentObjectLocations, opts => opts.Ignore());
+            // after post return            CreateMap<Core.Domain.Models.AugmentObject, AugmentObjectViewModel>()
                .ForMember(x => x.MediaType, opts => opts.Ignore())
                .ForMember(x => x.MediaId, opts => opts.Ignore())
                .ForMember(x => x.Distance, opts => opts.Ignore())
