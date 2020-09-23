@@ -48,15 +48,15 @@ namespace Donde.Augmentor.Core.Services.Services
             return await _augmentObjectRepository.UpdateAugmentObjectAsync(id, entity);
         }
 
-        private string GetPathWithRootLocationOrNull(string url, bool getOriginal = false)
+
+        private string GetMediaPath(string folderName, Guid? fileId, string extension)
         {
-            if (url == null) return null;
+             return $"{_domainSettings.GeneralSettings.StorageBasePath}{folderName}/{fileId}{extension}";
+        }
 
-            if (!getOriginal)
-            return $"{_domainSettings.GeneralSettings.StorageBasePath}{url}";
-
-            var urlSplit = url.Split("/");
-            return $"{_domainSettings.GeneralSettings.StorageBasePath}{urlSplit[0]}/{_domainSettings.UploadSettings.OriginalImageSubFolderName}/{urlSplit[1]}";
+        private string GetMediaPathWithSubFolder(string folderName, string mediaSubFolderName, Guid? fileId, string extension)
+        {
+            return $"{_domainSettings.GeneralSettings.StorageBasePath}{folderName}/{mediaSubFolderName}/{fileId}{extension}";
         }
 
         private AugmentObjectDto GetAugmentObjectMapWithUpdatedUrls(AugmentObjectDto augmentObject)
@@ -76,17 +76,17 @@ namespace Donde.Augmentor.Core.Services.Services
                 MediaId = augmentObject.MediaId,
                 AvatarId = augmentObject.AvatarId,
                 AvatarName = augmentObject.AvatarName == null ? null : augmentObject.AvatarName,
-                AvatarUrl = GetPathWithRootLocationOrNull(augmentObject.AvatarUrl),
+                AvatarUrl = augmentObject.AvatarFileId.HasValue ? GetMediaPathWithSubFolder(_domainSettings.UploadSettings.AvatarFolderName, augmentObject.OrganizationId.ToString(), augmentObject.AvatarFileId, augmentObject.AvatarFileExtension) : null,
                 AvatarConfiguration = augmentObject.AvatarConfiguration,
                 AudioId = augmentObject.AudioId,
                 AudioName = augmentObject.AudioName == null ? null : augmentObject.AudioName,
-                AudioUrl = GetPathWithRootLocationOrNull(augmentObject.AudioUrl),
+                AudioUrl = augmentObject.AudioFileId.HasValue ?  GetMediaPath(_domainSettings.UploadSettings.AudiosFolderName, augmentObject.AudioFileId, augmentObject.AudioFileExtension) : null,
                 VideoId = augmentObject.VideoId,
                 VideoName = augmentObject.VideoName == null ? null : augmentObject.VideoName,
-                VideoUrl = GetPathWithRootLocationOrNull(augmentObject.VideoUrl),
+                VideoUrl = augmentObject.VideoFileId.HasValue ?  GetMediaPath(_domainSettings.UploadSettings.VideosFolderName, augmentObject.VideoFileId, augmentObject.VideoFileExtension) : null,
                 ImageName = augmentObject.ImageName,
-                ImageUrl = GetPathWithRootLocationOrNull(augmentObject.ImageUrl),
-                OriginalSizeImageUrl = GetPathWithRootLocationOrNull(augmentObject.ImageUrl, getOriginal: true),
+                ImageUrl = GetMediaPath(_domainSettings.UploadSettings.ImageFolderName, augmentObject.ImageFileId, augmentObject.ImageFileExtension),
+                OriginalSizeImageUrl = GetMediaPathWithSubFolder(_domainSettings.UploadSettings.ImageFolderName, _domainSettings.UploadSettings.OriginalImageSubFolderName, augmentObject.ImageFileId, augmentObject.ImageFileExtension),
                 Distance = augmentObject.Distance,
                 Latitude = augmentObject.Latitude,
                 Longitude = augmentObject.Longitude

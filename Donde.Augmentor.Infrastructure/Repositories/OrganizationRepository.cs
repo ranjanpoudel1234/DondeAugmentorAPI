@@ -3,6 +3,7 @@ using Donde.Augmentor.Core.Domain.Models;
 using Donde.Augmentor.Core.Repositories.Interfaces.RepositoryInterfaces;
 using Donde.Augmentor.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -26,9 +27,24 @@ namespace Donde.Augmentor.Infrastructure.Repositories
             return await UpdateAsync(entity.Id, entity);
         }
 
-        public IQueryable<Organization> GetOrganizations()
+        public IQueryable<Organization> GetOrganizations(bool includeSites = false)
         {
+            if (includeSites)
+            {
+                return GetAll<Organization>().Include(x => x.Sites);
+            }
+
             return GetAll<Organization>();
+        }
+
+        public Task<Organization> GetOrganizationByIdAsync(Guid organizationId)
+        {
+            return GetByIdAsync<Organization>(organizationId);
+        }
+
+        public IQueryable<Organization> GetOrganizationByIds(List<Guid> organizationIds)
+        {
+            return GetAll<Organization>().Where(x => organizationIds.Contains(x.Id));
         }
 
         public async Task<IEnumerable<Organization>> GetClosestOrganizationByRadius(double latitude, double longitude, int radiusInMeters)

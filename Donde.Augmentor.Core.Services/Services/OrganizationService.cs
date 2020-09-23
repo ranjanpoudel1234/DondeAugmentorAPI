@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using Donde.Augmentor.Core.Domain.CustomExceptions;
+using Donde.Augmentor.Core.Domain.Helpers;
 using Donde.Augmentor.Core.Domain.Models;
 using Donde.Augmentor.Core.Domain.Validations;
 using Donde.Augmentor.Core.Repositories.Interfaces.RepositoryInterfaces;
 using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces;
-using Donde.Augmentor.Core.Services.Validations;
 using FluentValidation;
 using System;
 using System.Collections.Generic;
@@ -30,13 +30,24 @@ namespace Donde.Augmentor.Core.Services.Services
             return await _organizationRepository.GetClosestOrganizationByRadius(latitude, longitude, radiusInMeters);
         }
 
-        public IQueryable<Organization> GetOrganizations()
+        public IQueryable<Organization> GetOrganizations(bool includeSites = false)
         {
-            return _organizationRepository.GetOrganizations();
+            return _organizationRepository.GetOrganizations(includeSites);
+        }
+
+        public IQueryable<Organization> GetOrganizationByIds(List<Guid> organizationIds)
+        {
+            return _organizationRepository.GetOrganizationByIds(organizationIds);
+        }
+
+        public Task<Organization> GetOrganizationByIdAsync(Guid organizationId)
+        {
+            return _organizationRepository.GetOrganizationByIdAsync(organizationId);
         }
 
         public async Task<Organization> CreateOrganizationAsync(Organization entity)
         {
+            entity.Id = SequentialGuidGenerator.GenerateComb();
             await _validator.ValidateOrThrowAsync(entity, ruleSets: $"{OrganizationValidator.DefaultRuleSet}");
             return await _organizationRepository.CreateOrganizationAsync(entity);
         }
@@ -54,6 +65,20 @@ namespace Donde.Augmentor.Core.Services.Services
 
             await _validator.ValidateOrThrowAsync(entity, ruleSets: $"{OrganizationValidator.DefaultRuleSet},{OrganizationValidator.OrganizationUpdateRuleSet}");
             return await _organizationRepository.UpdateOrganizationAsync(mappedOrganization);
+        }
+
+        public async Task<Organization> DeleteOrganizationAsync(Guid entityId)
+        {
+            var existingOrganization = GetOrganizations().SingleOrDefault(x => x.Id == entityId);
+
+            if (existingOrganization == null)
+            {
+                throw new HttpNotFoundException(ErrorMessages.ObjectNotFound);
+            }
+
+            existingOrganization.IsDeleted = true;
+
+            return await _organizationRepository.UpdateOrganizationAsync(existingOrganization);
         }
     }
 }

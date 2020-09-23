@@ -46,5 +46,16 @@ namespace Donde.Augmentor.Web.Controller
                 throw new HttpUnauthorizedException("Not Authorized");
             }
         }
+
+        protected string GetMediaPath(string storageBasePath, string folderName, Guid? fileId, string extension)
+        {
+            return $"{storageBasePath}{folderName}/{fileId}{extension}";
+        }
+
+        protected string GetMediaPathWithSubFolder(string storageBasePath, string folderName, 
+            string mediaSubFolderName, Guid? fileId, string extension)
+        {
+            return $"{storageBasePath}{folderName}/{mediaSubFolderName}/{fileId}{extension}";
+        }
     }
 }

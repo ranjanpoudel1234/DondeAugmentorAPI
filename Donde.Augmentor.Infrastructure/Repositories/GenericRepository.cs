@@ -27,6 +27,12 @@ namespace Donde.Augmentor.Infrastructure.Repositories
         public async Task<TEntity> GetByIdAsync<TEntity>(Guid id) where TEntity : class, IDondeModel
         {
             return await _dbContext.Set<TEntity>()
+                .FirstOrDefaultAsync(e => e.Id == id);
+        }
+
+        public async Task<TEntity> GetByIdWithNoTrackingAsync<TEntity>(Guid id) where TEntity : class, IDondeModel
+        {
+            return await _dbContext.Set<TEntity>()
                 .AsNoTracking()
                 .FirstOrDefaultAsync(e => e.Id == id);
         }
@@ -40,7 +46,7 @@ namespace Donde.Augmentor.Infrastructure.Repositories
             _dbContext.Set<TEntity>().Update(entity);
             await _dbContext.SaveChangesAsync();
 
-            return await GetByIdAsync<TEntity>(id);
+            return await GetByIdWithNoTrackingAsync<TEntity>(id);
         }
 
         public async Task<TEntity> CreateAsync<TEntity>(TEntity entity) where TEntity : class, IDondeModel, IAuditFieldsModel

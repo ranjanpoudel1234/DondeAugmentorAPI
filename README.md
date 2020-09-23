@@ -38,3 +38,21 @@ ii) After that, deploy again with ebExtensions not commented, this time
 4) `pkcs12 -export -out augmentUDev.pfx -inkey augmentUDev.key -in augmentUDev.crt`
 
 5) augmentUDev
+
+# Production Environment Setup 
+
+1) Elastic Beanstalk Setup
+
+    a) Clone from Beta Environment.
+
+2) RDS Setup.
+
+    a) After configuration using similar to beta, use this to configure the security group. Give inbound rule to the same security group because ElasticBeanstalk production environment will also use the same security group.
+
+3) S3 Setup
+
+    a) Create new bucket just like beta
+
+    b) Copy folders from Beta to production bucket
+    
+    c) Remove existing files except Avatar information.
