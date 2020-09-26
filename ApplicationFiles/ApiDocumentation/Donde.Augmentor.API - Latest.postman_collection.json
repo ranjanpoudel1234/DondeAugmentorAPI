@@ -1959,7 +1959,7 @@
 												],
 												"body": {
 													"mode": "raw",
-													"raw": "{\n\t  \"id\": \"{{currentUserId}}\",\n    \"userName\": \"hsmith4213\",\n    \"password\": \"will not change\",\n    \"firstName\": \"Henry\",\n    \"lastName\": \"Smith\",\n    \"middleInitial\": \"Q\",\n    \"prefix\": \"Dr\",\n    \"suffix\": null,\n    \"organizationIds\": [\n        \"63af8049-1e2c-48d3-b899-ac0200eab358\"\n    ],\n      \"roleIds\": [\n        \"{{currentRoleId}}\",\n        \"{{secondRoleId}}\"\n    ],\n    \"createdDateUtc\": \"2020-08-02T08:52:48.2642476-05:00\",\n    \"updatedDateUtc\": \"0001-01-01T00:00:00-06:00\",\n    \"isDeleted\": false,\n    \"emailAddress\": \"henry1@selu.edu\",\n    \"emailConfirmed\": false,\n    \"phoneNumber\": \"504-555-9181\",\n    \"phoneNumberConfirmed\": false,\n    \"twoFactorEnabled\": false\n}",
+													"raw": "{\n\t \"id\": \"{{currentUserId}}\",\n    \"userName\": \"dondedmrp@gmail.com\",\n    \"password\": \"will not change\",\n    \"firstName\": \"Donde\",\n    \"lastName\": \"Admin\",\n    \"middleInitial\": \"Q\",\n    \"prefix\": \"Dr\",\n    \"suffix\": null,\n    \"organizationIds\": [\n    ],\n      \"roleIds\": [\n        \"{{currentRoleId}}\"\n    ],\n    \"createdDateUtc\": \"2020-08-02T08:52:48.2642476-05:00\",\n    \"updatedDateUtc\": \"0001-01-01T00:00:00-06:00\",\n    \"isDeleted\": false,\n    \"emailAddress\": \"dondedmrp@gmail.com\",\n    \"emailConfirmed\": false,\n    \"phoneNumber\": \"504-555-9181\",\n    \"phoneNumberConfirmed\": false,\n    \"twoFactorEnabled\": false\n}",
 													"options": {
 														"raw": {}
 													}
@@ -2765,6 +2765,89 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "Authorize - Web User-ByRefreshToken",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/x-www-form-urlencoded",
+										"type": "text"
+									},
+									{
+										"key": "grant_type",
+										"type": "text",
+										"value": "password",
+										"disabled": true
+									},
+									{
+										"key": "username",
+										"value": "ranjanpoudel1234@gmail.com",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "grant_type",
+											"value": "refresh_token",
+											"type": "text"
+										},
+										{
+											"key": "username",
+											"value": "ranjanpoudel1234@gmail.com",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "password",
+											"value": "Test1@34",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "scope",
+											"value": "donde-api openid profile email offline_access",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "client_id",
+											"value": "AugmentUWeb676519b76190ef31cfcc5c2df6f114e04f0b6b66372581349bafff31cf49df6b",
+											"type": "text"
+										},
+										{
+											"key": "client_secret",
+											"value": "855f8076-efe0-4d1d-a749-9df517f8d875",
+											"type": "text"
+										},
+										{
+											"key": "refresh_token",
+											"value": "def1f1d325e08bf129b9c4489f3b8551237300fc63eee21d72be04bf087113d2",
+											"type": "text"
+										}
+									],
+									"options": {
+										"urlencoded": {}
+									}
+								},
+								"url": {
+									"raw": "{{hostname}}/connect/token",
+									"host": [
+										"{{hostname}}"
+									],
+									"path": [
+										"connect",
+										"token"
+									]
+								}
+							},
+							"response": []
 						}
 					],
 					"protocolProfileBehavior": {},
@@ -3126,7 +3209,7 @@
 												],
 												"body": {
 													"mode": "raw",
-													"raw": "{\n    \"id\": \"{{currentOrganizationId}}\",\n    \"name\" : \"Louisiana State Univeristy\",\n\t\"shortName\" : \"LSU\",\n    \"type\": \"University\",\n    \"address\": {\n        \"streetAddress1\": \"500 W University Ave\",\n        \"streetAddress2\": \"\",\n        \"city\": \"Hammond\",\n        \"state\": \"LA\",\n        \"zip\": \"70402\"\n    },\n    \"logo\": {\n        \"name\": \"delgardo-community-college-logo1.png\",\n        \"url\": \"https://donde-augmentor-dev-bucket.s3.amazonaws.com/DondeAugmentorLogos/{{currentOrganizationId}}.png\",\n        \"mimeType\": \"image/png\"\n    }\n}",
+													"raw": "{\n    \"id\": \"{{currentOrganizationId}}\",\n    \"name\" : \"Louisiana State Univeristy\",\n\t\"shortName\" : \"LSU\",\n    \"type\": \"University\",\n    \"address\": {\n        \"streetAddress1\": \"500 W University Ave\",\n      \"streetAddress2\": \"Southeastern Louisiana Univeristy\",\n      \"city\": \"Hammond\",\n      \"state\": \"LA\",\n      \"zip\": \"70402\",\n      \"latitude\": 30.4145,\n      \"longitude\": -91.1783\n    },\n    \"logo\": {\n        \"name\": \"delgardo-community-college-logo1.png\",\n        \"url\": \"https://donde-augmentor-dev-bucket.s3.amazonaws.com/DondeAugmentorLogos/{{currentOrganizationId}}.png\",\n        \"mimeType\": \"image/png\"\n    }\n}",
 													"options": {
 														"raw": {}
 													}
@@ -3301,7 +3384,7 @@
 												],
 												"body": {
 													"mode": "raw",
-													"raw": "{\n\t\"name\" : \"Delgardo main site test\",\n\t\"shortName\" : \"LSU\",\n  \"organizationId\": \"{{currentOrganizationId}}\",\n \t\"location\": {\n      \"streetAddress1\": \"156 Thomas Boyd Hall\",\n      \"streetAddress2\": \"Louisiana State University\",\n      \"city\": \"Baton Rouge\",\n      \"state\": \"LA\",\n      \"zip\": \"70803\",\n      \"latitude\": 30.4145,\n      \"longitude\": -91.1783\n    },\n    \"type\": \"Main\"\n}",
+													"raw": "{\n\t\"name\" : \"SELU Main Campus\",\n\t\"shortName\" : \"SELU\",\n    \"organizationId\": \"{{currentOrganizationId}}\",\n \t\"location\": {\n      \"streetAddress1\": \"500 W University Ave\",\n      \"streetAddress2\": \"Southeastern Louisiana Univeristy\",\n      \"city\": \"Hammond\",\n      \"state\": \"LA\",\n      \"zip\": \"70402\",\n      \"latitude\": 30.4145,\n      \"longitude\": -91.1783\n    },\n    \"type\": \"Main\"\n}",
 													"options": {
 														"raw": {}
 													}
@@ -5654,6 +5737,45 @@
 									],
 									"protocolProfileBehavior": {},
 									"_postman_isSubFolder": true
+								}
+							],
+							"protocolProfileBehavior": {},
+							"_postman_isSubFolder": true
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Avatar",
+					"item": [
+						{
+							"name": "V1",
+							"item": [
+								{
+									"name": "GetAvatars",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{hostname}}/api/v1/avatars?$filter = organizationId eq {{currentOrganizationId}}",
+											"host": [
+												"{{hostname}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"avatars"
+											],
+											"query": [
+												{
+													"key": "$filter ",
+													"value": " organizationId eq {{currentOrganizationId}}"
+												}
+											]
+										}
+									},
+									"response": []
 								}
 							],
 							"protocolProfileBehavior": {},
