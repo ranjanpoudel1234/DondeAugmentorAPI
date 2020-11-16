@@ -30,6 +30,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Threading.Tasks;
 using IdentityServer4.AccessTokenValidation;
 using IdentityServer4.Models;
+using Donde.Augmentor.Infrastructure.Database;
 
 namespace Donde.Augmentor.Web
 {
@@ -60,12 +61,12 @@ namespace Donde.Augmentor.Web
             IdentitySignInKeyCredentialSettings = Configuration.GetSection("Donde.Augmentor.IdentitySettings:SigninKeyCredentials").Get<SignInKeyCredentialSettings>();
 
             //necessary here otherwise the Account controller will give registration issue on userStore
-             services.AddDbContext<DondeIdentityContext>(options =>
+             services.AddDbContext<DondeContext>(options =>
              options.UseNpgsql(GetConnectionString())
                     .ConfigureWarnings(warnings => warnings.Throw(RelationalEventId.QueryClientEvaluationWarning)));
 
             services.AddDondeIdentityServer(IsLocalEnvironment, Clients, IdentitySignInKeyCredentialSettings);
-           
+
 
             services.AddAuthorization();
             services.AddAuthentication(options =>
@@ -98,7 +99,10 @@ namespace Donde.Augmentor.Web
                config =>
                {
                    config.Filters.Add(typeof(DondeCustomExceptionFilter));
-               });
+               }).AddJsonOptions(opt =>
+               {
+                   opt.SerializerSettings.DateTimeZoneHandling = Newtonsoft.Json.DateTimeZoneHandling.Utc;
+               }); ;
 
             services.AddDefaultAWSOptions(Configuration.GetAWSOptions());
             services.AddAWSService<IAmazonS3>();

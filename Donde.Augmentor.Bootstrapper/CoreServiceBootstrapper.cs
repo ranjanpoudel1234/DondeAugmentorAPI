@@ -1,5 +1,4 @@
 ﻿using Donde.Augmentor.Core.Domain.Validations;
-using Donde.Augmentor.Core.Services.Validations;
 using FluentValidation;
 using SimpleInjector;
 using System;
@@ -21,11 +20,13 @@ namespace Donde.Augmentor.Bootstrapper
                 {
                     "Donde.Augmentor.Core.Services.Services",
                     "Donde.Augmentor.Core.Services.Services.FileService",
-                     "Donde.Augmentor.Core.Services.Services.MetricService"
+                    "Donde.Augmentor.Core.Services.Services.MetricService",
+                    "Donde.Augmentor.Core.Services.Services.UserService",
+                    "Donde.Augmentor.Core.Services.Services.RoleAndPermissionService",
+                    "Donde.Augmentor.Core.Services.Services.CustomValidationService"
                 });
 
-            //any fluent validators can be registered here.
-            simpleInjectorContainer.Register(typeof(IValidator<>), typeof(MediaAttachmentDtoValidator).Assembly, Lifestyle.Scoped);
+            //any fluent validators can be registered here.;
             simpleInjectorContainer.Register(typeof(IValidator<>), typeof(OrganizationValidator).Assembly, Lifestyle.Scoped);
         }
 

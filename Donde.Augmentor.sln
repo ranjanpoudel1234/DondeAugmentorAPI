@@ -29,14 +29,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Donde.Agumentor.Infrastruct
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Donde.Augmentor.Web.Test", "Donde.Augmentor.Web.Test\Donde.Augmentor.Web.Test.csproj", "{721F2A74-CE75-4366-B1B1-4139D51E7177}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ApplicationFiles", "ApplicationFiles", "{38DF1BB5-6102-4FAE-B7DC-257DC57E1F76}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DatabaseSeed", "DatabaseSeed", "{2B83B991-DEB9-43F5-8715-72C2EA8DD768}"
-	ProjectSection(SolutionItems) = preProject
-		SeedDataAll.sql = SeedDataAll.sql
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Donde.Augmentor.Domain.Test", "Donde.Augmentor.Domain.Test\Donde.Augmentor.Domain.Test.csproj", "{1946C606-F499-41DD-B32B-17DECE14317E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Donde.Augmentor.Domain.Test", "Donde.Augmentor.Domain.Test\Donde.Augmentor.Domain.Test.csproj", "{1946C606-F499-41DD-B32B-17DECE14317E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -97,7 +90,6 @@ Global
 		{F9ADCF87-714F-4F60-AE93-AC51C017F17B} = {08CC8D26-83D9-43D7-950B-49AD2C1AE6BC}
 		{20001E46-1D8C-4FFC-BA4B-38B8A8809513} = {B6BD0C3E-1107-4ADE-BA4B-8DA6912297D0}
 		{721F2A74-CE75-4366-B1B1-4139D51E7177} = {B6BD0C3E-1107-4ADE-BA4B-8DA6912297D0}
-		{2B83B991-DEB9-43F5-8715-72C2EA8DD768} = {38DF1BB5-6102-4FAE-B7DC-257DC57E1F76}
 		{1946C606-F499-41DD-B32B-17DECE14317E} = {B6BD0C3E-1107-4ADE-BA4B-8DA6912297D0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution

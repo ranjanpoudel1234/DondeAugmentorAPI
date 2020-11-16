@@ -1,0 +1,92 @@
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using Donde.Augmentor.Core.Domain.CustomExceptions;
+using Donde.Augmentor.Core.Domain.Models;
+using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces;
+using Donde.Augmentor.Web.OData;
+using Donde.Augmentor.Web.ViewModels.V1;
+using Donde.Augmentor.Web.ViewModels.V1.AugmentObject;
+using Microsoft.AspNet.OData;
+using Microsoft.AspNet.OData.Query;
+using Microsoft.AspNet.OData.Routing;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using static Donde.Augmentor.Web.Attributes.IgnoreJsonIgnore;
+
+namespace Donde.Augmentor.Web.Controller.V1
+{
+    [ApiVersion("1.0", Deprecated = true)]
+    [ODataRoutePrefix(ODataConstants.AugmentObjectsRoute)]
+    [Authorize]
+    public class AugmentObjectsController : ODataController
+    {
+        private readonly IAugmentObjectService _augmentObjectService;
+        private readonly IMapper _mapper;
+        
+        public AugmentObjectsController(IAugmentObjectService augmentObjectService, IMapper mapper)
+        {
+            _augmentObjectService = augmentObjectService;
+            _mapper = mapper;
+        }
+
+        [ODataRoute]
+        [HttpGet]
+        [AllowAnonymous]
+        [IgnoreJsonIgnore] // to get the child collections
+        public async Task<IActionResult> Get(ODataQueryOptions<AugmentObjectViewModel> odataOptions)
+        {
+            var result = new List<AugmentObjectViewModel>();
+
+            var augmentObjectQueryable = _augmentObjectService.GetAugmentObjects();
+
+            var projectedAudios = augmentObjectQueryable.ProjectTo<AugmentObjectViewModel>(_mapper.ConfigurationProvider);
+
+            var appliedResults = odataOptions.ApplyTo(projectedAudios);
+
+            var augmentObjectViewModels = appliedResults as IQueryable<AugmentObjectViewModel>;
+
+            if (augmentObjectViewModels != null)
+            {
+                result = await augmentObjectViewModels.ToListAsync();
+            }
+
+            MapAvatarConfiguration(result);
+
+            return Ok(result.ToODataCollectionResponse(Request));
+        }
+
+        [HttpGet("api/v1/organizations/{organizationId}/geographicalAugmentObjects")]
+        [AllowAnonymous]
+       
+        public async Task<IActionResult> GetAugmentObjectGeocoded(Guid organizationId, double latitude, double longitude, int radiusInMeters)
+        {
+            if(latitude == 0 || longitude == 0)
+            {
+                throw new HttpBadRequestException("Latitude and Longitude query string required");
+            }
+
+            if (radiusInMeters == 0)
+                radiusInMeters = 50000;// hardcoded for now.
+
+            var result = await _augmentObjectService.GetGeographicalAugmentObjectsByRadius(organizationId, latitude, longitude, radiusInMeters);
+
+            var mappedResult = _mapper.Map<List<AugmentObjectViewModel>>(result);
+
+            MapAvatarConfiguration(mappedResult);
+
+            return Ok(mappedResult);
+        }
+
+        private void MapAvatarConfiguration<T>(List<T> augmentObjectViewModels) where T: IAugmentObjectViewModel
+        {
+            augmentObjectViewModels.ForEach(au => au.AvatarConfiguration = !string.IsNullOrWhiteSpace(au.AvatarConfigurationString)
+            ? JsonConvert.DeserializeObject<AvatarConfigurationViewModel>(au.AvatarConfigurationString) : null);
+        }
+    }
+}

@@ -19,12 +19,18 @@ namespace Donde.Augmentor.Infrastructure.Repositories
             _dbContext = dbContext;
         }
 
-        public IQueryable<TEntity> GetAll<TEntity>() where TEntity : class, IDondeModel
+        public IQueryable<TEntity> GetAllAsNoTracking<TEntity>() where TEntity : class, IDondeModel
         {
             return _dbContext.Set<TEntity>().AsNoTracking();
         }
 
         public async Task<TEntity> GetByIdAsync<TEntity>(Guid id) where TEntity : class, IDondeModel
+        {
+            return await _dbContext.Set<TEntity>()
+                .FirstOrDefaultAsync(e => e.Id == id);
+        }
+
+        public async Task<TEntity> GetByIdWithNoTrackingAsync<TEntity>(Guid id) where TEntity : class, IDondeModel
         {
             return await _dbContext.Set<TEntity>()
                 .AsNoTracking()
@@ -40,7 +46,7 @@ namespace Donde.Augmentor.Infrastructure.Repositories
             _dbContext.Set<TEntity>().Update(entity);
             await _dbContext.SaveChangesAsync();
 
-            return await GetByIdAsync<TEntity>(id);
+            return await GetByIdWithNoTrackingAsync<TEntity>(id);
         }
 
         public async Task<TEntity> CreateAsync<TEntity>(TEntity entity) where TEntity : class, IDondeModel, IAuditFieldsModel
@@ -82,7 +88,7 @@ namespace Donde.Augmentor.Infrastructure.Repositories
                     var childObjectsCasted = childObjects as IEnumerable<IAuditFieldsModel>;
                     if (childObjectsCasted == null)
                     {
-                        throw new InvalidOperationException("Child collections property type must implement IDondeModelModel interface");
+                        throw new InvalidOperationException("Child collections property type must implement IAuditFieldsModel interface");
                     }
 
                     foreach (var eachChild in childObjectsCasted)

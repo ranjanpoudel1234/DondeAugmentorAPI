@@ -26,6 +26,10 @@ namespace Donde.Augmentor.Infrastructure.Migrations
 
                     b.Property<DateTime>("AddedDate");
 
+                    b.Property<string>("Extension");
+
+                    b.Property<Guid>("FileId");
+
                     b.Property<bool>("IsDeleted");
 
                     b.Property<string>("MimeType");
@@ -35,8 +39,6 @@ namespace Donde.Augmentor.Infrastructure.Migrations
                     b.Property<Guid>("OrganizationId");
 
                     b.Property<DateTime>("UpdatedDate");
-
-                    b.Property<string>("Url");
 
                     b.HasKey("Id");
 
@@ -52,6 +54,10 @@ namespace Donde.Augmentor.Infrastructure.Migrations
 
                     b.Property<DateTime>("AddedDate");
 
+                    b.Property<string>("Extension");
+
+                    b.Property<Guid>("FileId");
+
                     b.Property<bool>("IsDeleted");
 
                     b.Property<string>("MimeType");
@@ -61,8 +67,6 @@ namespace Donde.Augmentor.Infrastructure.Migrations
                     b.Property<Guid>("OrganizationId");
 
                     b.Property<DateTime>("UpdatedDate");
-
-                    b.Property<string>("Url");
 
                     b.HasKey("Id");
 
@@ -150,8 +154,7 @@ namespace Donde.Augmentor.Infrastructure.Migrations
 
                     b.HasIndex("AudioId");
 
-                    b.HasIndex("AugmentObjectId")
-                        .IsUnique();
+                    b.HasIndex("AugmentObjectId");
 
                     b.HasIndex("AvatarId");
 
@@ -170,6 +173,10 @@ namespace Donde.Augmentor.Infrastructure.Migrations
                     b.Property<string>("AvatarConfiguration")
                         .HasColumnType("jsonb");
 
+                    b.Property<string>("Extension");
+
+                    b.Property<Guid>("FileId");
+
                     b.Property<bool>("IsDeleted");
 
                     b.Property<string>("MimeType");
@@ -184,13 +191,79 @@ namespace Donde.Augmentor.Infrastructure.Migrations
 
                     b.Property<DateTime>("UpdatedDate");
 
-                    b.Property<string>("Url");
-
                     b.HasKey("Id");
 
                     b.HasIndex("OrganizationId");
 
                     b.ToTable("Avatars");
+                });
+
+            modelBuilder.Entity("Donde.Augmentor.Core.Domain.Models.Identity.User", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("AccessFailedCount");
+
+                    b.Property<DateTime>("AddedDate");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken();
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(256);
+
+                    b.Property<bool>("EmailConfirmed");
+
+                    b.Property<string>("FirstName");
+
+                    b.Property<string>("FullName");
+
+                    b.Property<bool>("IsDeleted");
+
+                    b.Property<string>("LastName");
+
+                    b.Property<bool>("LockoutEnabled");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd");
+
+                    b.Property<string>("MiddleInitial");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("PasswordHash");
+
+                    b.Property<string>("PhoneNumber");
+
+                    b.Property<bool>("PhoneNumberConfirmed");
+
+                    b.Property<string>("Prefix");
+
+                    b.Property<string>("SecurityStamp");
+
+                    b.Property<string>("Suffix");
+
+                    b.Property<bool>("TwoFactorEnabled");
+
+                    b.Property<DateTime>("UpdatedDate");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasName("UserNameIndex");
+
+                    b.ToTable("AspNetUsers");
                 });
 
             modelBuilder.Entity("Donde.Augmentor.Core.Domain.Models.Metrics.AugmentObjectMediaVisitMetric", b =>
@@ -256,33 +329,189 @@ namespace Donde.Augmentor.Infrastructure.Migrations
 
                     b.Property<DateTime>("AddedDate");
 
-                    b.Property<string>("Address");
-
-                    b.Property<string>("Code");
-
-                    b.Property<string>("EmailAddress");
+                    b.Property<string>("City");
 
                     b.Property<bool>("IsDeleted");
 
-                    b.Property<double>("Latitude");
+                    b.Property<string>("LogoExtension");
+
+                    b.Property<Guid>("LogoFileId");
 
                     b.Property<string>("LogoMimeType");
 
                     b.Property<string>("LogoName");
 
-                    b.Property<string>("LogoUrl");
-
-                    b.Property<double>("Longitude");
-
                     b.Property<string>("Name");
+
+                    b.Property<string>("ShortName");
+
+                    b.Property<string>("State");
+
+                    b.Property<string>("StreetAddress1");
+
+                    b.Property<string>("StreetAddress2");
 
                     b.Property<int>("Type");
 
                     b.Property<DateTime>("UpdatedDate");
 
+                    b.Property<string>("Zip");
+
                     b.HasKey("Id");
 
                     b.ToTable("Organizations");
+                });
+
+            modelBuilder.Entity("Donde.Augmentor.Core.Domain.Models.RolesAndPermissions.Permission", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("AddedDate");
+
+                    b.Property<string>("Description");
+
+                    b.Property<bool>("IsDeleted");
+
+                    b.Property<int>("Resource");
+
+                    b.Property<int>("ResourceAction");
+
+                    b.Property<DateTime>("UpdatedDate");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Permissions");
+                });
+
+            modelBuilder.Entity("Donde.Augmentor.Core.Domain.Models.RolesAndPermissions.Role", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("AddedDate");
+
+                    b.Property<bool>("IsDeleted");
+
+                    b.Property<string>("Name");
+
+                    b.Property<DateTime>("UpdatedDate");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Roles");
+                });
+
+            modelBuilder.Entity("Donde.Augmentor.Core.Domain.Models.RolesAndPermissions.RolePermission", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("AddedDate");
+
+                    b.Property<bool>("IsDeleted");
+
+                    b.Property<Guid>("PermissionId");
+
+                    b.Property<Guid>("RoleId");
+
+                    b.Property<DateTime>("UpdatedDate");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PermissionId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("RolePermissions");
+                });
+
+            modelBuilder.Entity("Donde.Augmentor.Core.Domain.Models.RolesAndPermissions.UserOrganization", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("AddedDate");
+
+                    b.Property<bool>("IsDeleted");
+
+                    b.Property<Guid>("OrganizationId");
+
+                    b.Property<DateTime>("UpdatedDate");
+
+                    b.Property<Guid>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrganizationId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserOrganizations");
+                });
+
+            modelBuilder.Entity("Donde.Augmentor.Core.Domain.Models.RolesAndPermissions.UserRole", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("AddedDate");
+
+                    b.Property<bool>("IsDeleted");
+
+                    b.Property<Guid>("RoleId");
+
+                    b.Property<DateTime>("UpdatedDate");
+
+                    b.Property<Guid>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserRoles");
+                });
+
+            modelBuilder.Entity("Donde.Augmentor.Core.Domain.Models.Site", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("AddedDate");
+
+                    b.Property<string>("City");
+
+                    b.Property<bool>("IsDeleted");
+
+                    b.Property<double>("Latitude");
+
+                    b.Property<double>("Longitude");
+
+                    b.Property<string>("Name");
+
+                    b.Property<Guid>("OrganizationId");
+
+                    b.Property<string>("ShortName");
+
+                    b.Property<string>("State");
+
+                    b.Property<string>("StreetAddress1");
+
+                    b.Property<string>("StreetAddress2");
+
+                    b.Property<int>("Type");
+
+                    b.Property<DateTime>("UpdatedDate");
+
+                    b.Property<string>("Zip");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrganizationId");
+
+                    b.ToTable("Sites");
                 });
 
             modelBuilder.Entity("Donde.Augmentor.Core.Domain.Models.Video", b =>
@@ -291,6 +520,10 @@ namespace Donde.Augmentor.Infrastructure.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<DateTime>("AddedDate");
+
+                    b.Property<string>("Extension");
+
+                    b.Property<Guid>("FileId");
 
                     b.Property<bool>("IsDeleted");
 
@@ -302,13 +535,115 @@ namespace Donde.Augmentor.Infrastructure.Migrations
 
                     b.Property<DateTime>("UpdatedDate");
 
-                    b.Property<string>("Url");
-
                     b.HasKey("Id");
 
                     b.HasIndex("OrganizationId");
 
                     b.ToTable("Videos");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken();
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasName("RoleNameIndex");
+
+                    b.ToTable("AspNetRoles");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("ClaimType");
+
+                    b.Property<string>("ClaimValue");
+
+                    b.Property<Guid>("RoleId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetRoleClaims");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("ClaimType");
+
+                    b.Property<string>("ClaimValue");
+
+                    b.Property<Guid>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserClaims");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
+                {
+                    b.Property<string>("LoginProvider");
+
+                    b.Property<string>("ProviderKey");
+
+                    b.Property<string>("ProviderDisplayName");
+
+                    b.Property<Guid>("UserId");
+
+                    b.HasKey("LoginProvider", "ProviderKey");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserLogins");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
+                {
+                    b.Property<Guid>("UserId");
+
+                    b.Property<Guid>("RoleId");
+
+                    b.HasKey("UserId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetUserRoles");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
+                {
+                    b.Property<Guid>("UserId");
+
+                    b.Property<string>("LoginProvider");
+
+                    b.Property<string>("Name");
+
+                    b.Property<string>("Value");
+
+                    b.HasKey("UserId", "LoginProvider", "Name");
+
+                    b.ToTable("AspNetUserTokens");
                 });
 
             modelBuilder.Entity("Donde.Augmentor.Core.Domain.Models.Audio", b =>
@@ -397,11 +732,103 @@ namespace Donde.Augmentor.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("Donde.Augmentor.Core.Domain.Models.RolesAndPermissions.RolePermission", b =>
+                {
+                    b.HasOne("Donde.Augmentor.Core.Domain.Models.RolesAndPermissions.Permission", "Permission")
+                        .WithMany("Roles")
+                        .HasForeignKey("PermissionId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Donde.Augmentor.Core.Domain.Models.RolesAndPermissions.Role")
+                        .WithMany("Permissions")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Donde.Augmentor.Core.Domain.Models.RolesAndPermissions.UserOrganization", b =>
+                {
+                    b.HasOne("Donde.Augmentor.Core.Domain.Models.Organization")
+                        .WithMany("Users")
+                        .HasForeignKey("OrganizationId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Donde.Augmentor.Core.Domain.Models.Identity.User")
+                        .WithMany("Organizations")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Donde.Augmentor.Core.Domain.Models.RolesAndPermissions.UserRole", b =>
+                {
+                    b.HasOne("Donde.Augmentor.Core.Domain.Models.RolesAndPermissions.Role", "Role")
+                        .WithMany("Users")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Donde.Augmentor.Core.Domain.Models.Identity.User")
+                        .WithMany("Roles")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Donde.Augmentor.Core.Domain.Models.Site", b =>
+                {
+                    b.HasOne("Donde.Augmentor.Core.Domain.Models.Organization")
+                        .WithMany("Sites")
+                        .HasForeignKey("OrganizationId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("Donde.Augmentor.Core.Domain.Models.Video", b =>
                 {
                     b.HasOne("Donde.Augmentor.Core.Domain.Models.Organization", "Organization")
                         .WithMany()
                         .HasForeignKey("OrganizationId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>")
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
+                {
+                    b.HasOne("Donde.Augmentor.Core.Domain.Models.Identity.User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
+                {
+                    b.HasOne("Donde.Augmentor.Core.Domain.Models.Identity.User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>")
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Donde.Augmentor.Core.Domain.Models.Identity.User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
+                {
+                    b.HasOne("Donde.Augmentor.Core.Domain.Models.Identity.User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

@@ -1,0 +1,90 @@
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using Donde.Augmentor.Core.Domain;
+using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces;
+using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces.IFileService;
+using Donde.Augmentor.Web.ViewModels.V1;
+using Microsoft.AspNet.OData.Query;
+using Microsoft.AspNet.OData.Routing;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace Donde.Augmentor.Web.Controller.V1
+{
+    [ApiVersion("1.0", Deprecated = true)]
+    [ODataRoutePrefix("organizations")]
+    [Authorize]
+    public class OrganizationsController : BaseController
+    {
+        private readonly IOrganizationService _organizationService;
+        private readonly IMapper _mapper;
+        private readonly ILogger<OrganizationsController> _logger;
+        private readonly IFileProcessingService _fileProcessingService;
+        public readonly DomainSettings _domainSettings;
+
+        public OrganizationsController(IOrganizationService organizationService, 
+            IMapper mapper, 
+            ILogger<OrganizationsController> logger,
+            IFileProcessingService fileProcessingService,
+            DomainSettings domainSettings)
+        {
+            _organizationService = organizationService;
+            _mapper = mapper;
+            _logger = logger;
+            _fileProcessingService = fileProcessingService;
+            _domainSettings = domainSettings;
+        }
+
+        [HttpGet("api/v1/organizationsGeocoded")] //not in use right now
+        [AllowAnonymous]
+        public async Task<IActionResult> GetOrganizationsGeocoded(double latitude, double longitude, int radiusInMeters)
+        {
+            //@todo, make this appSettings later.
+            //@todo add top by default to odata query.
+            radiusInMeters = radiusInMeters == 0 ? 50 * 1610 : radiusInMeters; // 50 mile times 1690 meter per mile.
+
+            //@todo, add validation here for checking latitude and longitude.
+
+            var result = await _organizationService.GetClosestOrganizationByRadius(latitude, longitude, radiusInMeters);
+
+            var mappedResult = _mapper.Map<List<OrganizationViewModel>>(result);
+
+            mappedResult.ForEach(x => x.LogoUrl = GetMediaPath(_domainSettings.GeneralSettings.StorageBasePath,
+                _domainSettings.UploadSettings.LogosFolderName, x.LogoFileId, x.LogoExtension));
+
+
+            return Ok(mappedResult);
+        }
+
+        [ODataRoute]
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> Get(ODataQueryOptions<OrganizationViewModel> odataOptions)
+        {
+            var result = new List<OrganizationViewModel>();
+
+            var organizationQueryable = _organizationService.GetOrganizations(includeSites: true);
+
+            var projectedOrganizations = organizationQueryable.ProjectTo<OrganizationViewModel>(_mapper.ConfigurationProvider);
+
+            var appliedResults = odataOptions.ApplyTo(projectedOrganizations);
+
+            var organizationsViewModels = appliedResults as IQueryable<OrganizationViewModel>;
+
+            if (organizationsViewModels != null)
+            {
+                result = await organizationsViewModels.ToListAsync();
+            }
+
+            result.ForEach(x => x.LogoUrl = GetMediaPath(_domainSettings.GeneralSettings.StorageBasePath, 
+                _domainSettings.UploadSettings.LogosFolderName, x.LogoFileId, x.LogoExtension));
+
+            return Ok(result);
+        }      
+    }
+}

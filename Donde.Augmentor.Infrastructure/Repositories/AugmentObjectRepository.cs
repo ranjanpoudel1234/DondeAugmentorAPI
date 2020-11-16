@@ -25,8 +25,52 @@ namespace Donde.Augmentor.Infrastructure.Repositories
         }
 
         public async Task<AugmentObject> UpdateAugmentObjectAsync(Guid id, AugmentObject entity)
-        {
+        {          
             return await UpdateAsync(id, entity);
+        }
+
+        public IQueryable<AugmentObject> GetAugmentObjectsQueryableWithChildren()
+        {
+            return GetAugmentObjectsWithChildrenQueryable();   
+        }
+
+        public Task<AugmentObject> GetAugmentObjectByIdWithChildrenAsync(Guid id)
+        {
+            return GetAugmentObjectsWithChildrenQueryable()
+                .SingleOrDefaultAsync(x => x.Id == id);
+        }
+
+        public Task<List<AugmentObject>> GetAugmentObjectsByOrganizationIdWithChildrenAsync(Guid organizationId)
+        {
+            return GetAugmentObjectsWithChildrenQueryable()
+                .Where(x => x.OrganizationId == organizationId).ToListAsync();
+        }
+
+        public Task<List<AugmentObject>> GetAugmentObjectsByOrganizationIncludingMediaAndLocationsAsync(Guid organizationId)
+        {
+            return _dbContext.AugmentObjects.Include(au => au.AugmentObjectMedias)
+                .Include(au => au.AugmentObjectLocations)
+                .Where(x => x.OrganizationId == organizationId).ToListAsync();
+        }
+
+        public Task<AugmentObject> GetAugmentObjectByIdithChildrenAsNoTrackingAsync(Guid id)
+        {
+            return GetAugmentObjectsWithChildrenQueryable().AsNoTracking()
+                .SingleOrDefaultAsync(x => x.Id == id);
+        }
+
+        private IQueryable<AugmentObject> GetAugmentObjectsWithChildrenQueryable()
+        {
+            return _dbContext.AugmentObjects
+               .Include(au => au.AugmentImage)
+               .Include(au => au.AugmentObjectMedias)
+                   .ThenInclude(aum => aum.Audio)
+               .Include(au => au.AugmentObjectMedias)
+                   .ThenInclude(aum => aum.Video)
+               .Include(au => au.AugmentObjectMedias)
+                   .ThenInclude(aum => aum.Avatar)
+               .Include(au => au.AugmentObjectLocations)
+               .Include(au => au.Organization);
         }
 
         public IQueryable<AugmentObjectDto> GetAugmentObjects()
@@ -62,17 +106,21 @@ namespace Donde.Augmentor.Infrastructure.Repositories
                                      MediaType = augmentObjectMedia.MediaType,
                                      MediaId = augmentObjectMedia.Id,
                                      ImageName = augmentImage.Name,
-                                     ImageUrl = augmentImage.Url,
+                                     ImageFileExtension = augmentImage.Extension,
+                                     ImageFileId = augmentImage.FileId,
                                      AvatarId = augmentObjectMedia.AvatarId,
                                      AvatarName = avatar == null ? null: avatar.Name,
-                                     AvatarUrl = avatar == null? null: avatar.Url,
                                      AvatarConfiguration = avatar == null ? null : avatar.AvatarConfiguration,
+                                     AvatarFileExtension = avatar == null ? null : avatar.Extension,
+                                     AvatarFileId = avatar == null ? (Guid?)null : avatar.FileId,
                                      AudioId = augmentObjectMedia.AudioId,
                                      AudioName = audio == null ? null : audio.Name,
-                                     AudioUrl = audio == null ? null : audio.Url,
+                                     AudioFileExtension = audio == null ? null : audio.Extension,
+                                     AudioFileId = audio == null ? (Guid?)null : audio.FileId,
                                      VideoId = augmentObjectMedia.VideoId,
                                      VideoName = video == null ? null : video.Name,
-                                     VideoUrl = video == null ? null : video.Url,
+                                     VideoFileExtension = video == null ? null : video.Extension,
+                                     VideoFileId = video == null ? (Guid?)null : video.FileId,
                                      Latitude = location.Latitude,
                                      Longitude = location.Longitude
                                  };
@@ -81,6 +129,7 @@ namespace Donde.Augmentor.Infrastructure.Repositories
         }
 
         //todo check if filter applies here for isDeletion
+        //Also update the  fact that URL has been removed now. Needs update and testing
         public async Task<IEnumerable<AugmentObjectDto>> GetGeographicalAugmentObjectsByRadius(Guid organizationId, double latitude, double longitude, int radiusInMeters)
         {
             string objectsByDistanceQuery = $@"with AugmentObjectWithDistance as (
@@ -98,17 +147,21 @@ namespace Donde.Augmentor.Infrastructure.Repositories
                         aoMedia.""MediaType"" as MediaType,
                         aoMedia.""Id"" as MediaId,
                         ai.""Name"" as ImageName,
-                        ai.""Url"" as ImageUrl,
+                        ai.""Extension"" as ImageFileExtension,
+                        ai.""FileId"" as ImageFileId,
                         aoMedia.""AvatarId"" as AvatarId,
                         av.""Name"" as AvatarName,
-                        av.""Url"" as AvatarUrl,
+                        av.""Extension"" as AvatarFileExtension,
+                        av.""FileId"" as AvatarFileId,
                         av.""AvatarConfiguration"" as AvatarConfiguration,
                         aoMedia.""AudioId"" as AudioId,
                         au.""Name"" as AudioName,
-                        au.""Url"" as AudioUrl,
+                        au.""Extension"" as AudioFileExtension,
+                        au.""FileId"" as AudioFileId,
                         aoMedia.""VideoId"" as VideoId,
                         v.""Name"" as VideoName,
-                        v.""Url"" as VideoUrl,
+                        v.""Extension"" as VideoFileExtension,
+                        v.""FileId"" as VideoFileId,
                         aoLocation.""Latitude"" as Latitude,
                         aoLocation.""Longitude"" as Longitude
                         from ""AugmentObjects"" ao

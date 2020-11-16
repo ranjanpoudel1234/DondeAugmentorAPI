@@ -26,7 +26,7 @@ namespace Donde.Agumentor.Infrastructure.Test.Repositories
 
                 var defaultRepository = DefaultGenericRepository(context);
 
-                var result = defaultRepository.GetAll<AugmentObject>();
+                var result = defaultRepository.GetAllAsNoTracking<AugmentObject>();
 
                 result.ShouldNotBeNull();
                 result.ShouldBeAssignableTo<IQueryable<AugmentObject>>();
@@ -41,7 +41,7 @@ namespace Donde.Agumentor.Infrastructure.Test.Repositories
             {           
                 var defaultRepository = DefaultGenericRepository(context);
 
-                var result = defaultRepository.GetAll<AugmentObject>();
+                var result = defaultRepository.GetAllAsNoTracking<AugmentObject>();
 
                 result.ShouldNotBeNull();
                 result.ShouldBeAssignableTo<IQueryable<AugmentObject>>();

@@ -11,13 +11,7 @@ namespace Donde.Augmentor.Web.OData
         public static ODataCollectionResponse<object> ToODataCollectionResponse(this IEnumerable<object> result, HttpRequest request)
         {
             return new ODataCollectionResponse<object>(result, request != null ? (long?)request.ODataFeature()?.TotalCount : new long?());
-        }
-
-        public static PageResult<TResultType> ToAionODataPagedResult<TResultType>(this IEnumerable<TResultType> result, HttpRequest request)
-        {
-            return new PageResult<TResultType>(
-                result, request?.ODataFeature()?.NextLink, request?.ODataFeature()?.TotalCount);
-        }
+        }    
     }
     public class ODataCollectionResponse<T>
     {

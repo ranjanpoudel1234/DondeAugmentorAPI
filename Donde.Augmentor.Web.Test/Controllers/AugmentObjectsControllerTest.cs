@@ -1,10 +1,8 @@
 ﻿using AutoMapper;
 using Donde.Augmentor.Core.Domain.Dto;
 using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces;
-using Donde.Augmentor.Web.Controller;
-using Donde.Augmentor.Web.ViewModels;
+using Donde.Augmentor.Web.Controller.V1;
 using FakeItEasy;
-using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;

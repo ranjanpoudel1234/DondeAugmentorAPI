@@ -1,5 +1,6 @@
 ﻿using Donde.Augmentor.Core.Domain.Models.Metrics;
 using Donde.Augmentor.Web.ViewModels;
+using Donde.Augmentor.Web.ViewModels.V1.Metric;
 using Microsoft.AspNet.OData.Builder;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,7 +15,7 @@ namespace Donde.Augmentor.Web.OData.ModelConfiguration.Metric
 
         private EntityTypeConfiguration<AugmentObjectVisitMetricViewModel> ConfigureCurrent(ODataModelBuilder builder)
         {
-            var audios = builder.EntitySet<AugmentObjectVisitMetricViewModel>("augmentObjectVisitMetrics").EntityType;
+            var audios = builder.EntitySet<AugmentObjectVisitMetricViewModel>(ODataConstants.AugmentObjectVisitMetricRoute).EntityType;
             return audios;
         }
 

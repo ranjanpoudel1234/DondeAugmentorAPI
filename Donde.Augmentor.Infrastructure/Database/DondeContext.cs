@@ -2,16 +2,16 @@
 using Donde.Augmentor.Core.Domain.Models;
 using Donde.Augmentor.Core.Domain.Models.Identity;
 using Donde.Augmentor.Core.Domain.Models.Metrics;
+using Donde.Augmentor.Core.Domain.Models.RolesAndPermissions;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Remotion.Linq.Parsing.ExpressionVisitors;
 using System;
-using System.Linq;
-using System.Linq.Expressions;
 
 namespace Donde.Augmentor.Infrastructure.Database
 {
-	public class DondeContext : DbContext
-	{
+    public class DondeContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
+    {
 		public DondeContext()
 		{
 
@@ -22,7 +22,8 @@ namespace Donde.Augmentor.Infrastructure.Database
 
 		}
 		public DbSet<Organization> Organizations { get; set; }
-		public DbSet<Avatar> Avatars { get; set; }
+        public DbSet<Site> Sites { get; set; }
+        public DbSet<Avatar> Avatars { get; set; }
 		public DbSet<Audio> Audios { get; set; }
 		public DbSet<Video> Videos { get; set; }
 		public DbSet<AugmentImage> AugmentImages { get; set; }
@@ -32,18 +33,23 @@ namespace Donde.Augmentor.Infrastructure.Database
         public DbSet<AugmentObjectVisitMetric> AugmentObjectVisitMetrics { get; set; }
         public DbSet<AugmentObjectMediaVisitMetric> AugmentObjectMediaVisitMetrics { get; set; }
 
+
+        public DbSet<Permission> Permissions { get; set; }
+        public DbSet<Role> Roles { get; set; }
+        public DbSet<RolePermission> RolePermissions { get; set; }
+        public DbSet<UserOrganization> UserOrganizations { get; set; }
+        public DbSet<UserRole> UserRoles { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
-			ApplyIndexes(modelBuilder);
+            base.OnModelCreating(modelBuilder);
+            ApplyIndexes(modelBuilder);
             modelBuilder.ApplyGlobalFilters<IAuditFieldsModel>(model => !((IAuditFieldsModel)model).IsDeleted);
 
         }
 
         private void ApplyIndexes(ModelBuilder modelBuilder)
 		{		
-			modelBuilder.Entity<AugmentObjectMedia>()
-	       .HasIndex(u => u.AugmentObjectId)
-	       .IsUnique();
+		
 		}
 
         /// <summary>
