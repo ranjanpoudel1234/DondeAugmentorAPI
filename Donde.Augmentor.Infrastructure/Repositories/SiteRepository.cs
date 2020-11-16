@@ -20,7 +20,7 @@ namespace Donde.Augmentor.Infrastructure.Repositories
 
         public IQueryable<Site> GetSites()
         {
-            return GetAll<Site>();
+            return GetAllAsNoTracking<Site>();
         }
     }
 }

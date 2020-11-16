@@ -29,7 +29,6 @@ namespace Donde.Augmentor.Web.Controller.V2
 
         [ODataRoute]
         [HttpGet]
-        [AllowAnonymous]
         public async Task<IActionResult> GetAll(ODataQueryOptions<RoleViewModel> odataOptions)
         {
             var organizationQueryable = _roleService.GetAll();

@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces;
-using Donde.Augmentor.Web.ViewModels;
+using Donde.Augmentor.Web.ViewModels.V1;
 using Microsoft.AspNet.OData;
 using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNet.OData.Routing;
@@ -34,6 +34,7 @@ namespace Donde.Augmentor.Web.Controller.V1
             _avatarService = avatarService;
             _mapper = mapper;
             _logger = logger;
+            _domainSettings = domainSettings;
         }
 
         [ODataRoute]
@@ -59,7 +60,7 @@ namespace Donde.Augmentor.Web.Controller.V1
             foreach (var avatar in result)
             {
                 avatar.Url = GetMediaPathWithSubFolder(_domainSettings.GeneralSettings.StorageBasePath, 
-                    _domainSettings.UploadSettings.AvatarFolderName,
+                    _domainSettings.UploadSettings.AvatarsFolderName,
                     avatar.OrganizationId.ToString(),
                     avatar.FileId, avatar.Extension);
             }

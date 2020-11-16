@@ -99,7 +99,10 @@ namespace Donde.Augmentor.Web
                config =>
                {
                    config.Filters.Add(typeof(DondeCustomExceptionFilter));
-               });
+               }).AddJsonOptions(opt =>
+               {
+                   opt.SerializerSettings.DateTimeZoneHandling = Newtonsoft.Json.DateTimeZoneHandling.Utc;
+               }); ;
 
             services.AddDefaultAWSOptions(Configuration.GetAWSOptions());
             services.AddAWSService<IAmazonS3>();

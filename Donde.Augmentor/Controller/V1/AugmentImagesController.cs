@@ -6,7 +6,7 @@ using Donde.Augmentor.Core.Domain.Models;
 using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces;
 using Donde.Augmentor.Core.Service.Interfaces.ServiceInterfaces.IFileService;
 using Donde.Augmentor.Web.Attributes;
-using Donde.Augmentor.Web.ViewModels;
+using Donde.Augmentor.Web.ViewModels.V1;
 using Microsoft.AspNet.OData;
 using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNet.OData.Routing;
@@ -72,8 +72,8 @@ namespace Donde.Augmentor.Web.Controller.V1
 
             foreach (var augmentImage in result)
             {
-                augmentImage.ThumbnailUrl = GetMediaPath(_domainSettings.GeneralSettings.StorageBasePath, _domainSettings.UploadSettings.ImageFolderName, augmentImage.FileId, augmentImage.Extension);
-                augmentImage.Url = GetMediaPathWithSubFolder(_domainSettings.GeneralSettings.StorageBasePath, _domainSettings.UploadSettings.ImageFolderName, _domainSettings.UploadSettings.OriginalImageSubFolderName, augmentImage.FileId, augmentImage.Extension);
+                augmentImage.ThumbnailUrl = GetMediaPath(_domainSettings.GeneralSettings.StorageBasePath, _domainSettings.UploadSettings.ImagesFolderName, augmentImage.FileId, augmentImage.Extension);
+                augmentImage.Url = GetMediaPathWithSubFolder(_domainSettings.GeneralSettings.StorageBasePath, _domainSettings.UploadSettings.ImagesFolderName, _domainSettings.UploadSettings.OriginalImageSubFolderName, augmentImage.FileId, augmentImage.Extension);
             }
       
             return Ok(result);
@@ -103,8 +103,8 @@ namespace Donde.Augmentor.Web.Controller.V1
 
             var augmentImageViewModel = _mapper.Map<AugmentImageViewModel>(addedAugmentImage);
 
-            augmentImageViewModel.ThumbnailUrl = GetMediaPath(_domainSettings.GeneralSettings.StorageBasePath, _domainSettings.UploadSettings.ImageFolderName, augmentImageViewModel.FileId, augmentImageViewModel.Extension);
-            augmentImageViewModel.Url = GetMediaPathWithSubFolder(_domainSettings.GeneralSettings.StorageBasePath, _domainSettings.UploadSettings.ImageFolderName, _domainSettings.UploadSettings.OriginalImageSubFolderName, augmentImageViewModel.FileId, augmentImageViewModel.Extension);
+            augmentImageViewModel.ThumbnailUrl = GetMediaPath(_domainSettings.GeneralSettings.StorageBasePath, _domainSettings.UploadSettings.ImagesFolderName, augmentImageViewModel.FileId, augmentImageViewModel.Extension);
+            augmentImageViewModel.Url = GetMediaPathWithSubFolder(_domainSettings.GeneralSettings.StorageBasePath, _domainSettings.UploadSettings.ImagesFolderName, _domainSettings.UploadSettings.OriginalImageSubFolderName, augmentImageViewModel.FileId, augmentImageViewModel.Extension);
 
             return Created(augmentImageViewModel);
         }

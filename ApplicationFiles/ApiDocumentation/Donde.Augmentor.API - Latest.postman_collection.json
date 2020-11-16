@@ -155,7 +155,7 @@
 										{
 											"key": "",
 											"type": "file",
-											"src": "/C:/Users/User/Dropbox/Southeastern Louisiana University/GeographicalObjectwithAudio/Landscapes/Fayard.jpg"
+											"src": "/C:/Users/User/Dropbox/Southeastern Louisiana University/StaticWithAudio/dysonHallLion.jpg"
 										}
 									],
 									"options": {
@@ -1612,765 +1612,6 @@
 			"name": "Documentation",
 			"item": [
 				{
-					"name": "Organizations",
-					"item": [
-						{
-							"name": "V1",
-							"item": [
-								{
-									"name": "Get Organizations",
-									"request": {
-										"method": "GET",
-										"header": [
-											{
-												"key": "Authorization",
-												"value": "Bearer {{access_token}}",
-												"type": "text"
-											}
-										],
-										"url": {
-											"raw": "{{hostname}}/api/v1/organizations?$count=true&$orderby=name desc",
-											"host": [
-												"{{hostname}}"
-											],
-											"path": [
-												"api",
-												"v1",
-												"organizations"
-											],
-											"query": [
-												{
-													"key": "$count",
-													"value": "true"
-												},
-												{
-													"key": "$orderby",
-													"value": "name desc"
-												}
-											]
-										}
-									},
-									"response": []
-								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
-						},
-						{
-							"name": "V2",
-							"item": [
-								{
-									"name": "Organizations",
-									"item": [
-										{
-											"name": "Get Organizations",
-											"request": {
-												"method": "GET",
-												"header": [
-													{
-														"key": "Authorization",
-														"type": "text",
-														"value": "Bearer {{access_token}}"
-													}
-												],
-												"url": {
-													"raw": "{{hostname}}/api/v2/organizations?$count=true&$orderby=name",
-													"host": [
-														"{{hostname}}"
-													],
-													"path": [
-														"api",
-														"v2",
-														"organizations"
-													],
-													"query": [
-														{
-															"key": "$count",
-															"value": "true"
-														},
-														{
-															"key": "$orderby",
-															"value": "name"
-														}
-													]
-												}
-											},
-											"response": []
-										},
-										{
-											"name": "Get Organization ById",
-											"request": {
-												"method": "GET",
-												"header": [
-													{
-														"key": "Authorization",
-														"type": "text",
-														"value": "Bearer {{access_token}}"
-													}
-												],
-												"url": {
-													"raw": "{{hostname}}/api/v2/organizations?$filter=id eq {{currentOrganizationId}}",
-													"host": [
-														"{{hostname}}"
-													],
-													"path": [
-														"api",
-														"v2",
-														"organizations"
-													],
-													"query": [
-														{
-															"key": "$filter",
-															"value": "id eq {{currentOrganizationId}}"
-														}
-													]
-												}
-											},
-											"response": []
-										},
-										{
-											"name": "Add Organization",
-											"request": {
-												"method": "POST",
-												"header": [
-													{
-														"key": "Content-Type",
-														"name": "Content-Type",
-														"type": "text",
-														"value": "application/json"
-													},
-													{
-														"key": "DONDE-AUGMENTOR-ORGANIZATION-ID",
-														"type": "text",
-														"value": "{{currentOrganizationId}}"
-													},
-													{
-														"key": "Authorization",
-														"type": "text",
-														"value": "Bearer {{access_token}}"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "{\n\t\"name\" : \"Delgado Community College\",\n\t\"shortName\" : \"Delgado\",\n \t\"address\": {\n      \"streetAddress1\": \"615 City Park Avenue\",\n      \"streetAddress2\": null,\n      \"city\": \"New Orleans\",\n      \"state\": \"LA\",\n      \"zip\": \"70119\"\n    },\n    \"type\": \"University\"\n}",
-													"options": {
-														"raw": {}
-													}
-												},
-												"url": {
-													"raw": "{{hostname}}/api/v2/organizations",
-													"host": [
-														"{{hostname}}"
-													],
-													"path": [
-														"api",
-														"v2",
-														"organizations"
-													]
-												}
-											},
-											"response": []
-										},
-										{
-											"name": "Add Organization-Validation Checks",
-											"request": {
-												"method": "POST",
-												"header": [
-													{
-														"key": "Content-Type",
-														"name": "Content-Type",
-														"type": "text",
-														"value": "application/json"
-													},
-													{
-														"key": "DONDE-AUGMENTOR-ORGANIZATION-ID",
-														"type": "text",
-														"value": "{{currentOrganizationId}}"
-													},
-													{
-														"key": "Authorization",
-														"type": "text",
-														"value": "Bearer {{access_token}}"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "{\n\t\"name\" : \"Delgado Community College\",\n\t\"shortName\" : \"Delgado\",\n \t\"address\": {\n      \"streetAddress1\": \"615 City Park Avenue\",\n      \"streetAddress2\": null,\n      \"city\": \"New Orleans\",\n      \"state\": \"LA\",\n      \"zip\": \"701195\"\n    },\n    \"type\": \"University\"\n}",
-													"options": {
-														"raw": {}
-													}
-												},
-												"url": {
-													"raw": "{{hostname}}/api/v2/organizations",
-													"host": [
-														"{{hostname}}"
-													],
-													"path": [
-														"api",
-														"v2",
-														"organizations"
-													]
-												}
-											},
-											"response": []
-										},
-										{
-											"name": "Add Organization Logo",
-											"request": {
-												"method": "POST",
-												"header": [
-													{
-														"key": "DONDE-AUGMENTOR-ORGANIZATION-ID",
-														"type": "text",
-														"value": "{{currentOrganizationId}}"
-													},
-													{
-														"key": "Authorization",
-														"type": "text",
-														"value": "Bearer {{access_token}}"
-													}
-												],
-												"body": {
-													"mode": "formdata",
-													"formdata": [
-														{
-															"key": "",
-															"type": "file",
-															"src": "/C:/Users/User/Dropbox/UniversityOfLouisianMonroe/MonroeLogo.jpg"
-														}
-													],
-													"options": {
-														"formdata": {}
-													}
-												},
-												"url": {
-													"raw": "{{hostname}}/api/v2/organizationLogos",
-													"host": [
-														"{{hostname}}"
-													],
-													"path": [
-														"api",
-														"v2",
-														"organizationLogos"
-													]
-												}
-											},
-											"response": []
-										},
-										{
-											"name": "Add Organization Logo - File Larger than 15mb error",
-											"request": {
-												"method": "POST",
-												"header": [
-													{
-														"key": "DONDE-AUGMENTOR-ORGANIZATION-ID",
-														"type": "text",
-														"value": "{{currentOrganizationId}}"
-													},
-													{
-														"key": "Authorization",
-														"type": "text",
-														"value": "Bearer {{access_token}}"
-													}
-												],
-												"body": {
-													"mode": "formdata",
-													"formdata": [
-														{
-															"key": "",
-															"type": "file",
-															"src": "/C:/Users/User/Desktop/LargeImage.jpg"
-														}
-													],
-													"options": {
-														"formdata": {}
-													}
-												},
-												"url": {
-													"raw": "{{hostname}}/api/v2/organizationLogos",
-													"host": [
-														"{{hostname}}"
-													],
-													"path": [
-														"api",
-														"v2",
-														"organizationLogos"
-													]
-												}
-											},
-											"response": []
-										},
-										{
-											"name": "Add Organization Logo - NonExistingOrganization-404",
-											"request": {
-												"method": "POST",
-												"header": [
-													{
-														"key": "DONDE-AUGMENTOR-ORGANIZATION-ID",
-														"type": "text",
-														"value": "c5633773-b282-4b9b-af8b-ab820084d97d"
-													},
-													{
-														"key": "Authorization",
-														"type": "text",
-														"value": "Bearer {{access_token}}"
-													}
-												],
-												"body": {
-													"mode": "formdata",
-													"formdata": [
-														{
-															"key": "",
-															"type": "file",
-															"src": "/C:/Users/User/Dropbox/Delgardo Community College/delgardo-community-college-logo.png"
-														}
-													],
-													"options": {
-														"formdata": {}
-													}
-												},
-												"url": {
-													"raw": "{{hostname}}/api/v2/organizationLogos",
-													"host": [
-														"{{hostname}}"
-													],
-													"path": [
-														"api",
-														"v2",
-														"organizationLogos"
-													]
-												}
-											},
-											"response": []
-										},
-										{
-											"name": "Update Organization",
-											"request": {
-												"method": "PUT",
-												"header": [
-													{
-														"key": "Content-Type",
-														"name": "Content-Type",
-														"type": "text",
-														"value": "application/json"
-													},
-													{
-														"key": "DONDE-AUGMENTOR-ORGANIZATION-ID",
-														"type": "text",
-														"value": "{{currentOrganizationId}}"
-													},
-													{
-														"key": "Authorization",
-														"type": "text",
-														"value": "Bearer {{access_token}}"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "{\n    \"id\": \"{{currentOrganizationId}}\",\n    \"name\" : \"Louisiana State Univeristy\",\n\t\"shortName\" : \"LSU\",\n    \"type\": \"University\",\n    \"address\": {\n        \"streetAddress1\": \"500 W University Ave\",\n        \"streetAddress2\": \"\",\n        \"city\": \"Hammond\",\n        \"state\": \"LA\",\n        \"zip\": \"70402\"\n    },\n    \"logo\": {\n        \"name\": \"delgardo-community-college-logo1.png\",\n        \"url\": \"https://donde-augmentor-dev-bucket.s3.amazonaws.com/DondeAugmentorLogos/{{currentOrganizationId}}.png\",\n        \"mimeType\": \"image/png\"\n    }\n}",
-													"options": {
-														"raw": {}
-													}
-												},
-												"url": {
-													"raw": "{{hostname}}/api/v2/organizations({{currentOrganizationId}})",
-													"host": [
-														"{{hostname}}"
-													],
-													"path": [
-														"api",
-														"v2",
-														"organizations({{currentOrganizationId}})"
-													]
-												}
-											},
-											"response": []
-										},
-										{
-											"name": "Update Organization - Validation Check",
-											"request": {
-												"method": "PUT",
-												"header": [
-													{
-														"key": "Content-Type",
-														"name": "Content-Type",
-														"type": "text",
-														"value": "application/json"
-													},
-													{
-														"key": "DONDE-AUGMENTOR-ORGANIZATION-ID",
-														"type": "text",
-														"value": "{{currentOrganizationId}}"
-													},
-													{
-														"key": "Authorization",
-														"type": "text",
-														"value": "Bearer {{access_token}}"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "{\n    \"id\": \"{{currentOrganizationId}}\",\n    \"name\": \"Delgado Community College1\",\n    \"shortName\": \"Delgado1\",\n    \"createdDateUtc\": \"2020-07-24T13:39:05.148438-05:00\",\n    \"type\": \"University\",\n    \"address\": {\n        \"streetAddress1\": \"615 City Park Avenue1\",\n        \"streetAddress2\": \"Update street address 2\",\n        \"city\": \"New Orleans1\",\n        \"state\": \"LA\",\n        \"zip\": \"70119\"\n    },\n    \"logo\": {\n        \"name\": \"delgardo-community-college-logo1.png\",\n        \"url\": \"https://donde-augmentor-dev-bucket.s3.amazonaws.com/DondeAugmentorLogos/{{currentOrganizationId}}.png\",\n        \"mimeType\": \"image/png\"\n    }\n}",
-													"options": {
-														"raw": {}
-													}
-												},
-												"url": {
-													"raw": "{{hostname}}/api/v2/organizations({{currentOrganizationId}})",
-													"host": [
-														"{{hostname}}"
-													],
-													"path": [
-														"api",
-														"v2",
-														"organizations({{currentOrganizationId}})"
-													]
-												}
-											},
-											"response": []
-										},
-										{
-											"name": "Delete Organization",
-											"request": {
-												"method": "DELETE",
-												"header": [
-													{
-														"key": "Content-Type",
-														"name": "Content-Type",
-														"type": "text",
-														"value": "application/json"
-													},
-													{
-														"key": "DONDE-AUGMENTOR-ORGANIZATION-ID",
-														"type": "text",
-														"value": "{{currentOrganizationId}}"
-													},
-													{
-														"key": "Authorization",
-														"type": "text",
-														"value": "Bearer {{access_token}}"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "",
-													"options": {
-														"raw": {}
-													}
-												},
-												"url": {
-													"raw": "{{hostname}}/api/v2/organizations({{currentOrganizationId}})",
-													"host": [
-														"{{hostname}}"
-													],
-													"path": [
-														"api",
-														"v2",
-														"organizations({{currentOrganizationId}})"
-													]
-												}
-											},
-											"response": []
-										}
-									],
-									"protocolProfileBehavior": {},
-									"_postman_isSubFolder": true
-								},
-								{
-									"name": "Sites",
-									"item": [
-										{
-											"name": "GetSitesByOrganization",
-											"request": {
-												"method": "GET",
-												"header": [
-													{
-														"key": "Authorization",
-														"type": "text",
-														"value": "Bearer {{access_token}}"
-													}
-												],
-												"url": {
-													"raw": "{{hostname}}/api/v2/sites?$filter=organizationId eq {{currentOrganizationId}}&$count=true&$orderby=name",
-													"host": [
-														"{{hostname}}"
-													],
-													"path": [
-														"api",
-														"v2",
-														"sites"
-													],
-													"query": [
-														{
-															"key": "$filter",
-															"value": "organizationId eq {{currentOrganizationId}}"
-														},
-														{
-															"key": "$count",
-															"value": "true"
-														},
-														{
-															"key": "$orderby",
-															"value": "name"
-														}
-													]
-												}
-											},
-											"response": []
-										},
-										{
-											"name": "Add Site(Main)",
-											"request": {
-												"method": "POST",
-												"header": [
-													{
-														"key": "Content-Type",
-														"name": "Content-Type",
-														"type": "text",
-														"value": "application/json"
-													},
-													{
-														"key": "DONDE-AUGMENTOR-ORGANIZATION-ID",
-														"type": "text",
-														"value": "{{currentOrganizationId}}"
-													},
-													{
-														"key": "Authorization",
-														"type": "text",
-														"value": "Bearer {{access_token}}"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "{\n\t\"name\" : \"LSU Main Campus\",\n\t\"shortName\" : \"LSU\",\n  \"organizationId\": \"{{currentOrganizationId}}\",\n \t\"location\": {\n      \"streetAddress1\": \"156 Thomas Boyd Hall\",\n      \"streetAddress2\": \"Louisiana State University\",\n      \"city\": \"Baton Rouge\",\n      \"state\": \"LA\",\n      \"zip\": \"70803\",\n      \"latitude\": 30.4145,\n      \"longitude\": -91.1783\n    },\n    \"type\": \"Main\"\n}",
-													"options": {
-														"raw": {}
-													}
-												},
-												"url": {
-													"raw": "{{hostname}}/api/v2/sites",
-													"host": [
-														"{{hostname}}"
-													],
-													"path": [
-														"api",
-														"v2",
-														"sites"
-													]
-												}
-											},
-											"response": []
-										},
-										{
-											"name": "Add Site(Satellite)",
-											"request": {
-												"method": "POST",
-												"header": [
-													{
-														"key": "Content-Type",
-														"name": "Content-Type",
-														"type": "text",
-														"value": "application/json"
-													},
-													{
-														"key": "DONDE-AUGMENTOR-ORGANIZATION-ID",
-														"type": "text",
-														"value": "{{currentOrganizationId}}"
-													},
-													{
-														"key": "Authorization",
-														"type": "text",
-														"value": "Bearer {{access_token}}"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "{\n\t\"name\" : \"City Park Campus 2\",\n\t\"shortName\" : \"Satellite one\",\n  \"organizationId\": \"{{currentOrganizationId}}\",\n \t\"location\": {\n      \"streetAddress1\": \"615 City Park Avenue\",\n      \"streetAddress2\": \"Park Street\",\n      \"city\": \"New Orleans\",\n      \"state\": \"LA\",\n      \"zip\": \"70119\",\n      \"latitude\": 29.986658,\n      \"longitude\": -90.104739\n    },\n    \"type\": \"Satellite\"\n}",
-													"options": {
-														"raw": {}
-													}
-												},
-												"url": {
-													"raw": "{{hostname}}/api/v2/sites",
-													"host": [
-														"{{hostname}}"
-													],
-													"path": [
-														"api",
-														"v2",
-														"sites"
-													]
-												}
-											},
-											"response": []
-										},
-										{
-											"name": "Add Site(validation Checks)",
-											"request": {
-												"method": "POST",
-												"header": [
-													{
-														"key": "Content-Type",
-														"name": "Content-Type",
-														"type": "text",
-														"value": "application/json"
-													},
-													{
-														"key": "DONDE-AUGMENTOR-ORGANIZATION-ID",
-														"type": "text",
-														"value": "{{currentOrganizationId}}"
-													},
-													{
-														"key": "Authorization",
-														"type": "text",
-														"value": "Bearer {{access_token}}"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "{\n\t\"name\" : \"\",\n\t\"shortName\" : null,\n  \"organizationId\": \"{{currentOrganizationId}}\",\n \t\"location\": {\n      \"streetAddress1\": \"615 City Park Avenue\",\n      \"streetAddress2\": null,\n      \"city\": \"New Orleans\",\n      \"state\": \"LA\",\n      \"zip\": \"70119\",\n      \"latitude\": 29.986658,\n      \"longitude\": -90.104739\n    },\n    \"type\": \"Main\"\n}",
-													"options": {
-														"raw": {}
-													}
-												},
-												"url": {
-													"raw": "{{hostname}}/api/v2/sites",
-													"host": [
-														"{{hostname}}"
-													],
-													"path": [
-														"api",
-														"v2",
-														"sites"
-													]
-												}
-											},
-											"response": []
-										}
-									],
-									"protocolProfileBehavior": {},
-									"_postman_isSubFolder": true
-								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
-						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
-				},
-				{
-					"name": "AugmentObjects",
-					"item": [],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
-				},
-				{
-					"name": "RolesAndPermissions",
-					"item": [
-						{
-							"name": "V2",
-							"item": [
-								{
-									"name": "GetRoles",
-									"request": {
-										"method": "GET",
-										"header": [
-											{
-												"key": "Authorization",
-												"type": "text",
-												"value": "Bearer {{access_token}}"
-											}
-										],
-										"url": {
-											"raw": "{{hostname}}/api/v2/roles?$count=true",
-											"host": [
-												"{{hostname}}"
-											],
-											"path": [
-												"api",
-												"v2",
-												"roles"
-											],
-											"query": [
-												{
-													"key": "$count",
-													"value": "true"
-												}
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "GetRoles OData",
-									"request": {
-										"method": "GET",
-										"header": [
-											{
-												"key": "Authorization",
-												"type": "text",
-												"value": "Bearer {{access_token}}"
-											}
-										],
-										"url": {
-											"raw": "{{hostname}}/api/v2/roles?$count=true&$filter=id eq 28c29a18-bc1a-4070-957b-ac0600c526fa",
-											"host": [
-												"{{hostname}}"
-											],
-											"path": [
-												"api",
-												"v2",
-												"roles"
-											],
-											"query": [
-												{
-													"key": "$count",
-													"value": "true"
-												},
-												{
-													"key": "$filter",
-													"value": "id eq 28c29a18-bc1a-4070-957b-ac0600c526fa"
-												}
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "GetPermissions",
-									"request": {
-										"method": "GET",
-										"header": [
-											{
-												"key": "Authorization",
-												"type": "text",
-												"value": "Bearer {{access_token}}"
-											}
-										],
-										"url": {
-											"raw": "{{hostname}}/api/v2/permissions",
-											"host": [
-												"{{hostname}}"
-											],
-											"path": [
-												"api",
-												"v2",
-												"permissions"
-											]
-										}
-									},
-									"response": []
-								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
-						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
-				},
-				{
 					"name": "AccountAndUsers",
 					"item": [
 						{
@@ -2680,7 +1921,7 @@
 												],
 												"body": {
 													"mode": "raw",
-													"raw": "{\n\t\"userName\": \"hsmithRole\",\n\t\"firstName\": \"HenryRole\",\n\t\"lastName\": \"Smith\",\n\t\"middleInitial\": \"Q\",\n\t\"suffix\": null,\n\t\"prefix\": \"Dr\",\n\t\"organizationIds\": [\n\t\t\"{{currentOrganizationId}}\"\n\t],\n\t\"roleIds\":[\n\t\t\"{{currentRoleId}}\"\n\t],\n\t\"emailAddress\": \"henry1@selu.edu\",\n\t\"emailConfirmed\": false,\n\t\"phoneNumber\": \"504-555-9181\",\n\t\"password\": \"Test1@34\"\n}",
+													"raw": "{\n\t\"userName\": \"hsmithRole\",\n\t\"firstName\": \"HenryRole\",\n\t\"lastName\": \"Smith\",\n\t\"middleInitial\": \"Q\",\n\t\"suffix\": null,\n\t\"prefix\": \"Dr\",\n\t\"organizationIds\": [\n\t],\n\t\"roleIds\":[\n\t],\n\t\"emailAddress\": \"henry1@selu.edu\",\n\t\"emailConfirmed\": false,\n\t\"phoneNumber\": \"504-555-9181\",\n\t\"password\": \"Test1@34\"\n}",
 													"options": {
 														"raw": {}
 													}
@@ -2718,7 +1959,7 @@
 												],
 												"body": {
 													"mode": "raw",
-													"raw": "{\n\t  \"id\": \"{{currentUserId}}\",\n    \"userName\": \"hsmith4213\",\n    \"password\": \"will not change\",\n    \"firstName\": \"Henry\",\n    \"lastName\": \"Smith\",\n    \"middleInitial\": \"Q\",\n    \"prefix\": \"Dr\",\n    \"suffix\": null,\n    \"organizationIds\": [\n        \"63af8049-1e2c-48d3-b899-ac0200eab358\"\n    ],\n      \"roleIds\": [\n        \"{{currentRoleId}}\",\n        \"{{secondRoleId}}\"\n    ],\n    \"createdDateUtc\": \"2020-08-02T08:52:48.2642476-05:00\",\n    \"updatedDateUtc\": \"0001-01-01T00:00:00-06:00\",\n    \"isDeleted\": false,\n    \"emailAddress\": \"henry1@selu.edu\",\n    \"emailConfirmed\": false,\n    \"phoneNumber\": \"504-555-9181\",\n    \"phoneNumberConfirmed\": false,\n    \"twoFactorEnabled\": false\n}",
+													"raw": "{\n\t \"id\": \"{{currentUserId}}\",\n    \"userName\": \"dondedmrp@gmail.com\",\n    \"password\": \"will not change\",\n    \"firstName\": \"Donde\",\n    \"lastName\": \"Admin\",\n    \"middleInitial\": \"Q\",\n    \"prefix\": \"Dr\",\n    \"suffix\": null,\n    \"organizationIds\": [\n    ],\n      \"roleIds\": [\n        \"{{currentRoleId}}\"\n    ],\n    \"createdDateUtc\": \"2020-08-02T08:52:48.2642476-05:00\",\n    \"updatedDateUtc\": \"0001-01-01T00:00:00-06:00\",\n    \"isDeleted\": false,\n    \"emailAddress\": \"dondedmrp@gmail.com\",\n    \"emailConfirmed\": false,\n    \"phoneNumber\": \"504-555-9181\",\n    \"phoneNumberConfirmed\": false,\n    \"twoFactorEnabled\": false\n}",
 													"options": {
 														"raw": {}
 													}
@@ -3207,20 +2448,20 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n\t  \"id\": \"{{currentUserId}}\",\n    \"userName\": \"hsmith1\",\n    \"password\": \"will not change\",\n    \"firstName\": \"Henry\",\n    \"lastName\": \"Smith\",\n    \"middleInitial\": \"Q\",\n    \"prefix\": \"Dr\",\n    \"suffix\": \"Suffix\",\n    \"organizationIds\": [\n        \"63af8049-1e2c-48d3-b899-ac0200eab358\"\n    ],\n    \"createdDateUtc\": \"2020-08-02T08:52:48.2642476-05:00\",\n    \"updatedDateUtc\": \"0001-01-01T00:00:00-06:00\",\n    \"isDeleted\": false,\n    \"emailAddress\": \"henry2@selu.edu\",\n    \"emailConfirmed\": false,\n    \"phoneNumber\": \"504-555-9181\",\n    \"phoneNumberConfirmed\": false,\n    \"twoFactorEnabled\": false\n}",
+											"raw": "{\n\t\"id\": \"c0121d76-34a9-45e1-9990-750ea4621744\",\n            \"userName\": \"dondedmrp@gmail.com\",\n            \"password\": null,\n            \"firstName\": \"AugmentU\",\n            \"lastName\": \"SuperAdmin\",\n            \"middleInitial\": null,\n            \"prefix\": null,\n            \"suffix\": null,\n            \"organizationIds\": [],\n            \"roleIds\": [\"b2c251c7-494a-488c-bd18-ac1400dc7594\"],\n            \"createdDateUtc\": \"0001-01-01T00:00:00Z\",\n            \"updatedDateUtc\": \"0001-01-01T00:00:00Z\",\n            \"isDeleted\": false,\n            \"emailAddress\": \"dondedmrp@gmail.com\",\n            \"emailConfirmed\": false,\n            \"phoneNumber\": null,\n            \"phoneNumberConfirmed\": false,\n            \"twoFactorEnabled\": false\n}",
 											"options": {
 												"raw": {}
 											}
 										},
 										"url": {
-											"raw": "{{hostname}}/api/v2/users({{currentUserId}})",
+											"raw": "{{hostname}}/api/v2/users(c0121d76-34a9-45e1-9990-750ea4621744)",
 											"host": [
 												"{{hostname}}"
 											],
 											"path": [
 												"api",
 												"v2",
-												"users({{currentUserId}})"
+												"users(c0121d76-34a9-45e1-9990-750ea4621744)"
 											]
 										}
 									},
@@ -3432,6 +2673,20 @@
 						},
 						{
 							"name": "Authorize - Web",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "2db68611-47ce-4990-a371-147b4814244c",
+										"exec": [
+											"pm.test(\"set env variable\", () => {\r",
+											"  pm.environment.set(\"access_token\", pm.response.json().access_token);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
 							"request": {
 								"method": "POST",
 								"header": [
@@ -3510,6 +2765,3021 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "Authorize - Web User-ByRefreshToken",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/x-www-form-urlencoded",
+										"type": "text"
+									},
+									{
+										"key": "grant_type",
+										"type": "text",
+										"value": "password",
+										"disabled": true
+									},
+									{
+										"key": "username",
+										"value": "ranjanpoudel1234@gmail.com",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "grant_type",
+											"value": "refresh_token",
+											"type": "text"
+										},
+										{
+											"key": "username",
+											"value": "ranjanpoudel1234@gmail.com",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "password",
+											"value": "Test1@34",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "scope",
+											"value": "donde-api openid profile email offline_access",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "client_id",
+											"value": "AugmentUWeb676519b76190ef31cfcc5c2df6f114e04f0b6b66372581349bafff31cf49df6b",
+											"type": "text"
+										},
+										{
+											"key": "client_secret",
+											"value": "855f8076-efe0-4d1d-a749-9df517f8d875",
+											"type": "text"
+										},
+										{
+											"key": "refresh_token",
+											"value": "def1f1d325e08bf129b9c4489f3b8551237300fc63eee21d72be04bf087113d2",
+											"type": "text"
+										}
+									],
+									"options": {
+										"urlencoded": {}
+									}
+								},
+								"url": {
+									"raw": "{{hostname}}/connect/token",
+									"host": [
+										"{{hostname}}"
+									],
+									"path": [
+										"connect",
+										"token"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Organizations",
+					"item": [
+						{
+							"name": "V1",
+							"item": [
+								{
+									"name": "Get Organizations",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"value": "Bearer {{access_token}}",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{hostname}}/api/v1/organizations?$count=true&$orderby=name desc",
+											"host": [
+												"{{hostname}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"organizations"
+											],
+											"query": [
+												{
+													"key": "$count",
+													"value": "true"
+												},
+												{
+													"key": "$orderby",
+													"value": "name desc"
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"protocolProfileBehavior": {},
+							"_postman_isSubFolder": true
+						},
+						{
+							"name": "V2",
+							"item": [
+								{
+									"name": "Organizations",
+									"item": [
+										{
+											"name": "Get Organizations",
+											"request": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "Bearer {{access_token}}"
+													}
+												],
+												"url": {
+													"raw": "{{hostname}}/api/v2/organizations?$count=true&$orderby=createdDateUtc desc",
+													"host": [
+														"{{hostname}}"
+													],
+													"path": [
+														"api",
+														"v2",
+														"organizations"
+													],
+													"query": [
+														{
+															"key": "$count",
+															"value": "true"
+														},
+														{
+															"key": "$orderby",
+															"value": "createdDateUtc desc"
+														}
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Get Organization ById",
+											"request": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "Bearer {{access_token}}"
+													}
+												],
+												"url": {
+													"raw": "{{hostname}}/api/v2/organizations?$filter=id eq {{currentOrganizationId}}",
+													"host": [
+														"{{hostname}}"
+													],
+													"path": [
+														"api",
+														"v2",
+														"organizations"
+													],
+													"query": [
+														{
+															"key": "$filter",
+															"value": "id eq {{currentOrganizationId}}"
+														}
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Add Organization",
+											"request": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Content-Type",
+														"name": "Content-Type",
+														"type": "text",
+														"value": "application/json"
+													},
+													{
+														"key": "DONDE-AUGMENTOR-ORGANIZATION-ID",
+														"type": "text",
+														"value": "{{currentOrganizationId}}"
+													},
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "Bearer {{access_token}}"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n\t\"name\" : \"Delgado Community College\",\n\t\"shortName\" : \"Delgado\",\n \t\"address\": {\n      \"streetAddress1\": \"615 City Park Avenue\",\n      \"streetAddress2\": null,\n      \"city\": \"New Orleans\",\n      \"state\": \"LA\",\n      \"zip\": \"70119\"\n    },\n    \"type\": \"University\"\n}",
+													"options": {
+														"raw": {}
+													}
+												},
+												"url": {
+													"raw": "{{hostname}}/api/v2/organizations",
+													"host": [
+														"{{hostname}}"
+													],
+													"path": [
+														"api",
+														"v2",
+														"organizations"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Add Organization-Validation Checks",
+											"request": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Content-Type",
+														"name": "Content-Type",
+														"type": "text",
+														"value": "application/json"
+													},
+													{
+														"key": "DONDE-AUGMENTOR-ORGANIZATION-ID",
+														"type": "text",
+														"value": "{{currentOrganizationId}}"
+													},
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "Bearer {{access_token}}"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n\t\"name\" : \"Delgado Community College\",\n\t\"shortName\" : \"Delgado\",\n \t\"address\": {\n      \"streetAddress1\": \"615 City Park Avenue\",\n      \"streetAddress2\": null,\n      \"city\": \"New Orleans\",\n      \"state\": \"LA\",\n      \"zip\": \"701195\"\n    },\n    \"type\": \"University\"\n}",
+													"options": {
+														"raw": {}
+													}
+												},
+												"url": {
+													"raw": "{{hostname}}/api/v2/organizations",
+													"host": [
+														"{{hostname}}"
+													],
+													"path": [
+														"api",
+														"v2",
+														"organizations"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Add Organization Logo",
+											"request": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "DONDE-AUGMENTOR-ORGANIZATION-ID",
+														"type": "text",
+														"value": "{{currentOrganizationId}}"
+													},
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "Bearer {{access_token}}"
+													}
+												],
+												"body": {
+													"mode": "formdata",
+													"formdata": [
+														{
+															"key": "",
+															"type": "file",
+															"src": "/C:/Users/User/Dropbox/UniversityOfLouisianMonroe/MonroeLogo.jpg"
+														}
+													],
+													"options": {
+														"formdata": {}
+													}
+												},
+												"url": {
+													"raw": "{{hostname}}/api/v2/organizationLogos",
+													"host": [
+														"{{hostname}}"
+													],
+													"path": [
+														"api",
+														"v2",
+														"organizationLogos"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Add Organization Logo - File Larger than 15mb error",
+											"request": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "DONDE-AUGMENTOR-ORGANIZATION-ID",
+														"type": "text",
+														"value": "{{currentOrganizationId}}"
+													},
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "Bearer {{access_token}}"
+													}
+												],
+												"body": {
+													"mode": "formdata",
+													"formdata": [
+														{
+															"key": "",
+															"type": "file",
+															"src": "/C:/Users/User/Desktop/LargeImage.jpg"
+														}
+													],
+													"options": {
+														"formdata": {}
+													}
+												},
+												"url": {
+													"raw": "{{hostname}}/api/v2/organizationLogos",
+													"host": [
+														"{{hostname}}"
+													],
+													"path": [
+														"api",
+														"v2",
+														"organizationLogos"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Add Organization Logo - NonExistingOrganization-404",
+											"request": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "DONDE-AUGMENTOR-ORGANIZATION-ID",
+														"type": "text",
+														"value": "c5633773-b282-4b9b-af8b-ab820084d97d"
+													},
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "Bearer {{access_token}}"
+													}
+												],
+												"body": {
+													"mode": "formdata",
+													"formdata": [
+														{
+															"key": "",
+															"type": "file",
+															"src": "/C:/Users/User/Dropbox/Delgardo Community College/delgardo-community-college-logo.png"
+														}
+													],
+													"options": {
+														"formdata": {}
+													}
+												},
+												"url": {
+													"raw": "{{hostname}}/api/v2/organizationLogos",
+													"host": [
+														"{{hostname}}"
+													],
+													"path": [
+														"api",
+														"v2",
+														"organizationLogos"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Update Organization",
+											"request": {
+												"method": "PUT",
+												"header": [
+													{
+														"key": "Content-Type",
+														"name": "Content-Type",
+														"type": "text",
+														"value": "application/json"
+													},
+													{
+														"key": "DONDE-AUGMENTOR-ORGANIZATION-ID",
+														"type": "text",
+														"value": "{{currentOrganizationId}}"
+													},
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "Bearer {{access_token}}"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"id\": \"{{currentOrganizationId}}\",\n    \"name\" : \"Louisiana State Univeristy\",\n\t\"shortName\" : \"LSU\",\n    \"type\": \"University\",\n    \"address\": {\n        \"streetAddress1\": \"500 W University Ave\",\n      \"streetAddress2\": \"Southeastern Louisiana Univeristy\",\n      \"city\": \"Hammond\",\n      \"state\": \"LA\",\n      \"zip\": \"70402\",\n      \"latitude\": 30.4145,\n      \"longitude\": -91.1783\n    },\n    \"logo\": {\n        \"name\": \"delgardo-community-college-logo1.png\",\n        \"url\": \"https://donde-augmentor-dev-bucket.s3.amazonaws.com/DondeAugmentorLogos/{{currentOrganizationId}}.png\",\n        \"mimeType\": \"image/png\"\n    }\n}",
+													"options": {
+														"raw": {}
+													}
+												},
+												"url": {
+													"raw": "{{hostname}}/api/v2/organizations({{currentOrganizationId}})",
+													"host": [
+														"{{hostname}}"
+													],
+													"path": [
+														"api",
+														"v2",
+														"organizations({{currentOrganizationId}})"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Update Organization - Validation Check",
+											"request": {
+												"method": "PUT",
+												"header": [
+													{
+														"key": "Content-Type",
+														"name": "Content-Type",
+														"type": "text",
+														"value": "application/json"
+													},
+													{
+														"key": "DONDE-AUGMENTOR-ORGANIZATION-ID",
+														"type": "text",
+														"value": "{{currentOrganizationId}}"
+													},
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "Bearer {{access_token}}"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"id\": \"{{currentOrganizationId}}\",\n    \"name\": \"Delgado Community College1\",\n    \"shortName\": \"Delgado1\",\n    \"createdDateUtc\": \"2020-07-24T13:39:05.148438-05:00\",\n    \"type\": \"University\",\n    \"address\": {\n        \"streetAddress1\": \"615 City Park Avenue1\",\n        \"streetAddress2\": \"Update street address 2\",\n        \"city\": \"New Orleans1\",\n        \"state\": \"LA\",\n        \"zip\": \"70119\"\n    },\n    \"logo\": {\n        \"name\": \"delgardo-community-college-logo1.png\",\n        \"url\": \"https://donde-augmentor-dev-bucket.s3.amazonaws.com/DondeAugmentorLogos/{{currentOrganizationId}}.png\",\n        \"mimeType\": \"image/png\"\n    }\n}",
+													"options": {
+														"raw": {}
+													}
+												},
+												"url": {
+													"raw": "{{hostname}}/api/v2/organizations({{currentOrganizationId}})",
+													"host": [
+														"{{hostname}}"
+													],
+													"path": [
+														"api",
+														"v2",
+														"organizations({{currentOrganizationId}})"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Delete Organization",
+											"request": {
+												"method": "DELETE",
+												"header": [
+													{
+														"key": "Content-Type",
+														"name": "Content-Type",
+														"type": "text",
+														"value": "application/json"
+													},
+													{
+														"key": "DONDE-AUGMENTOR-ORGANIZATION-ID",
+														"type": "text",
+														"value": "{{currentOrganizationId}}"
+													},
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "Bearer {{access_token}}"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "",
+													"options": {
+														"raw": {}
+													}
+												},
+												"url": {
+													"raw": "{{hostname}}/api/v2/organizations({{currentOrganizationId}})",
+													"host": [
+														"{{hostname}}"
+													],
+													"path": [
+														"api",
+														"v2",
+														"organizations({{currentOrganizationId}})"
+													]
+												}
+											},
+											"response": []
+										}
+									],
+									"protocolProfileBehavior": {},
+									"_postman_isSubFolder": true
+								},
+								{
+									"name": "Sites",
+									"item": [
+										{
+											"name": "GetSitesByOrganization",
+											"request": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "Bearer {{access_token}}"
+													}
+												],
+												"url": {
+													"raw": "{{hostname}}/api/v2/sites?$filter=organizationId eq {{currentOrganizationId}}&$count=true&$orderby=name",
+													"host": [
+														"{{hostname}}"
+													],
+													"path": [
+														"api",
+														"v2",
+														"sites"
+													],
+													"query": [
+														{
+															"key": "$filter",
+															"value": "organizationId eq {{currentOrganizationId}}"
+														},
+														{
+															"key": "$count",
+															"value": "true"
+														},
+														{
+															"key": "$orderby",
+															"value": "name"
+														}
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Add Site(Main)",
+											"request": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Content-Type",
+														"name": "Content-Type",
+														"type": "text",
+														"value": "application/json"
+													},
+													{
+														"key": "DONDE-AUGMENTOR-ORGANIZATION-ID",
+														"type": "text",
+														"value": "{{currentOrganizationId}}"
+													},
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "Bearer {{access_token}}"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n\t\"name\" : \"SELU Main Campus\",\n\t\"shortName\" : \"SELU\",\n    \"organizationId\": \"{{currentOrganizationId}}\",\n \t\"location\": {\n      \"streetAddress1\": \"500 W University Ave\",\n      \"streetAddress2\": \"Southeastern Louisiana Univeristy\",\n      \"city\": \"Hammond\",\n      \"state\": \"LA\",\n      \"zip\": \"70402\",\n      \"latitude\": 30.4145,\n      \"longitude\": -91.1783\n    },\n    \"type\": \"Main\"\n}",
+													"options": {
+														"raw": {}
+													}
+												},
+												"url": {
+													"raw": "{{hostname}}/api/v2/sites",
+													"host": [
+														"{{hostname}}"
+													],
+													"path": [
+														"api",
+														"v2",
+														"sites"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Add Site(Satellite)",
+											"request": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Content-Type",
+														"name": "Content-Type",
+														"type": "text",
+														"value": "application/json"
+													},
+													{
+														"key": "DONDE-AUGMENTOR-ORGANIZATION-ID",
+														"type": "text",
+														"value": "{{currentOrganizationId}}"
+													},
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "Bearer {{access_token}}"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n\t\"name\" : \"City Park Campus 2\",\n\t\"shortName\" : \"Satellite one\",\n  \"organizationId\": \"{{currentOrganizationId}}\",\n \t\"location\": {\n      \"streetAddress1\": \"615 City Park Avenue\",\n      \"streetAddress2\": \"Park Street\",\n      \"city\": \"New Orleans\",\n      \"state\": \"LA\",\n      \"zip\": \"70119\",\n      \"latitude\": 29.986658,\n      \"longitude\": -90.104739\n    },\n    \"type\": \"Satellite\"\n}",
+													"options": {
+														"raw": {}
+													}
+												},
+												"url": {
+													"raw": "{{hostname}}/api/v2/sites",
+													"host": [
+														"{{hostname}}"
+													],
+													"path": [
+														"api",
+														"v2",
+														"sites"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Add Site(validation Checks)",
+											"request": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Content-Type",
+														"name": "Content-Type",
+														"type": "text",
+														"value": "application/json"
+													},
+													{
+														"key": "DONDE-AUGMENTOR-ORGANIZATION-ID",
+														"type": "text",
+														"value": "{{currentOrganizationId}}"
+													},
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "Bearer {{access_token}}"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n\t\"name\" : \"\",\n\t\"shortName\" : null,\n  \"organizationId\": \"{{currentOrganizationId}}\",\n \t\"location\": {\n      \"streetAddress1\": \"615 City Park Avenue\",\n      \"streetAddress2\": null,\n      \"city\": \"New Orleans\",\n      \"state\": \"LA\",\n      \"zip\": \"70119\",\n      \"latitude\": 29.986658,\n      \"longitude\": -90.104739\n    },\n    \"type\": \"Main\"\n}",
+													"options": {
+														"raw": {}
+													}
+												},
+												"url": {
+													"raw": "{{hostname}}/api/v2/sites",
+													"host": [
+														"{{hostname}}"
+													],
+													"path": [
+														"api",
+														"v2",
+														"sites"
+													]
+												}
+											},
+											"response": []
+										}
+									],
+									"protocolProfileBehavior": {},
+									"_postman_isSubFolder": true
+								}
+							],
+							"protocolProfileBehavior": {},
+							"_postman_isSubFolder": true
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "RolesAndPermissions",
+					"item": [
+						{
+							"name": "V2",
+							"item": [
+								{
+									"name": "GetRoles",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{access_token}}"
+											}
+										],
+										"url": {
+											"raw": "{{hostname}}/api/v2/roles?$count=true",
+											"host": [
+												"{{hostname}}"
+											],
+											"path": [
+												"api",
+												"v2",
+												"roles"
+											],
+											"query": [
+												{
+													"key": "$count",
+													"value": "true"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "GetRoles OData",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{access_token}}"
+											}
+										],
+										"url": {
+											"raw": "{{hostname}}/api/v2/roles?$count=true&$filter=id eq 66aa141d-f5ba-44fe-95a2-ac1400dc756f",
+											"host": [
+												"{{hostname}}"
+											],
+											"path": [
+												"api",
+												"v2",
+												"roles"
+											],
+											"query": [
+												{
+													"key": "$count",
+													"value": "true"
+												},
+												{
+													"key": "$filter",
+													"value": "id eq 66aa141d-f5ba-44fe-95a2-ac1400dc756f"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "GetPermissions",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{access_token}}"
+											}
+										],
+										"url": {
+											"raw": "{{hostname}}/api/v2/permissions",
+											"host": [
+												"{{hostname}}"
+											],
+											"path": [
+												"api",
+												"v2",
+												"permissions"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"protocolProfileBehavior": {},
+							"_postman_isSubFolder": true
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "AugmentImage",
+					"item": [
+						{
+							"name": "V1",
+							"item": [
+								{
+									"name": "Get AugmentImages(not needed for now)",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{access_token}}"
+											}
+										],
+										"url": {
+											"raw": "{{hostname}}/api/v1/augmentImages",
+											"host": [
+												"{{hostname}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"augmentImages"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "AugmentImage-Upload",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "DONDE-AUGMENTOR-ORGANIZATION-ID",
+												"value": "{{currentOrganizationId}}",
+												"type": "text"
+											},
+											{
+												"key": "Authorization",
+												"value": "Bearer {{access_token}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "",
+													"type": "file",
+													"src": "/C:/Users/User/Dropbox/Southeastern Louisiana University/StaticWithAudio/dysonHallLion.jpg"
+												}
+											],
+											"options": {
+												"formdata": {}
+											}
+										},
+										"url": {
+											"raw": "{{hostname}}/api/v1/augmentImages",
+											"host": [
+												"{{hostname}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"augmentImages"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"protocolProfileBehavior": {},
+							"_postman_isSubFolder": true
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Audio",
+					"item": [
+						{
+							"name": "V1",
+							"item": [
+								{
+									"name": "Audio-Upload",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "DONDE-AUGMENTOR-ORGANIZATION-ID",
+												"type": "text",
+												"value": "{{currentOrganizationId}}"
+											},
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{access_token}}"
+											}
+										],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "",
+													"type": "file",
+													"src": "/C:/Users/User/Dropbox/Southeastern Louisiana University/StaticWithAudio/DysonHallLion.mp3"
+												}
+											],
+											"options": {
+												"formdata": {}
+											}
+										},
+										"url": {
+											"raw": "{{hostname}}/api/v1/audios",
+											"host": [
+												"{{hostname}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"audios"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"protocolProfileBehavior": {},
+							"_postman_isSubFolder": true
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Video",
+					"item": [
+						{
+							"name": "V1",
+							"item": [
+								{
+									"name": "Video-Upload",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "DONDE-AUGMENTOR-ORGANIZATION-ID",
+												"type": "text",
+												"value": "{{currentOrganizationId}}"
+											},
+											{
+												"key": "Authorization",
+												"value": "Bearer {{access_token}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "",
+													"type": "file",
+													"src": "/C:/Users/User/Dropbox/Southeastern Louisiana University/StaticObjectWithVideo/FrontLineThankyou.mp4"
+												}
+											],
+											"options": {
+												"formdata": {}
+											}
+										},
+										"url": {
+											"raw": "{{hostname}}/api/v1/videos",
+											"host": [
+												"{{hostname}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"videos"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"protocolProfileBehavior": {},
+							"_postman_isSubFolder": true
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "AugmentObjects/Targets",
+					"item": [
+						{
+							"name": "V1",
+							"item": [
+								{
+									"name": "AddAugmentObject - Static(404 removed)",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											},
+											{
+												"key": "DONDE-AUGMENTOR-ORGANIZATION-ID",
+												"value": "{{currentOrganizationId}}",
+												"type": "text"
+											},
+											{
+												"key": "Authorization",
+												"value": "Bearer {{access_token}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n\n\t\"augmentImageId\": \"{{currentAugmentImageId}}\",\n\t\"title\" : \"Luther H. Dyson Hall\",\n\t\"description\": \"Roomie welcomes you to Dyson Hall of Southeastern Louisiana University\",\n\t\"organizationId\":\"{{currentOrganizationId}}\",\n\t\"type\": \"Static\",\n\t\"augmentObjectMedia\":{\n\t\t\"videoId\": \"{{currentVideoId}}\",\n\t\t\"mediaType\": \"Video\"\n\t}\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{hostname}}/api/v1/augmentObjects",
+											"host": [
+												"{{hostname}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"augmentObjects"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "AddAugmentObject - Geographic",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"type": "text",
+												"value": "application/json"
+											},
+											{
+												"key": "DONDE-AUGMENTOR-ORGANIZATION-ID",
+												"type": "text",
+												"value": "{{currentOrganizationId}}"
+											},
+											{
+												"key": "Authorization",
+												"value": "Bearer {{access_token}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n\n\t\"augmentImageId\": \"{{currentAugmentImageId}}\",\n\t\"title\" : \"Gringotts\",\n\t\"description\": \"Vaults that only Goblins can open\",\n\t\"organizationId\":\"{{currentOrganizationId}}\",\n\t\"type\": \"Geographical\",\n\t\"augmentObjectMedia\":\n\t{\n\t\t\"videoId\": \"{{currentVideoId}}\",\n\t\t\"mediaType\": \"Video\"\n\t},\n\t\"augmentObjectLocations\":[\n\t\t{\n\t\t\t\"latitude\": \"30.25\",\n\t\t\t\"longitude\": \"-90.50\"\n\t\t}\n\t]\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{hostname}}/api/v1/augmentObjects",
+											"host": [
+												"{{hostname}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"augmentObjects"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "AddAugmentObject - Static- AudioWithAvatar",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"type": "text",
+												"value": "application/json"
+											},
+											{
+												"key": "DONDE-AUGMENTOR-ORGANIZATION-ID",
+												"type": "text",
+												"value": "{{currentOrganizationId}}"
+											},
+											{
+												"key": "Authorization",
+												"value": "Bearer {{access_token}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n\n\t\"augmentImageId\": \"{{currentAugmentImageId}}\",\n\t\"title\" : \"UML Commencement\",\n\t\"description\": \"Commencement Speech by President Bruno\",\n\t\"organizationId\":\"{{currentOrganizationId}}\",\n\t\"type\": \"Static\",\n\t\"augmentObjectMedia\":\n\t{\n\t\t\"audioId\": \"{{currentAudioId}}\",\n\t\t\"avatarId\": \"{{currentAvatarId}}\",\n\t\t\"mediaType\": \"AvatarWithAudio\"\n\t}\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{hostname}}/api/v1/augmentObjects",
+											"host": [
+												"{{hostname}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"augmentObjects"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "AddAugmentObject - Geographic- AudioWithAvatar Copy",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"type": "text",
+												"value": "application/json"
+											},
+											{
+												"key": "DONDE-AUGMENTOR-ORGANIZATION-ID",
+												"type": "text",
+												"value": "{{currentOrganizationId}}"
+											},
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{access_token}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n\n\t\"augmentImageId\": \"{{currentAugmentImageId}}\",\n\t\"title\" : \"COLLEGE OF EDUCATION\",\n\t\"description\": \"Southeastern's College of Education fosters a welcoming community where students can gain knowledge and skills by active involvement in the learning process. Our goal is to prepare candidates to become effective professionals who set the standard for educational excellence in their communities.\",\n\t\"organizationId\":\"{{currentOrganizationId}}\",\n\t\"type\": \"Geographical\",\n\t\"augmentObjectMedia\":\n\t{\n\t\t\"audioId\": \"{{currentAudioId}}\",\n\t\t\"avatarId\": \"{{currentAvatarId}}\",\n\t\t\"mediaType\": \"AvatarWithAudio\"\n\t},\n\t\"augmentObjectLocations\":\n\t[\n\t\t{\n\t\t\t\"latitude\": \"30.515461\",\n\t\t\t\"longitude\": \"-90.471347\"\n\t\t}\n\t]\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{hostname}}/api/v1/augmentObjects",
+											"host": [
+												"{{hostname}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"augmentObjects"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "GetAugmentObjects - ALL",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{hostname}}/api/v1/augmentObjects?$filter=organizationId eq {{currentOrganizationId}}&$top=30&$count=true",
+											"host": [
+												"{{hostname}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"augmentObjects"
+											],
+											"query": [
+												{
+													"key": "$filter",
+													"value": "organizationId eq {{currentOrganizationId}}"
+												},
+												{
+													"key": "$top",
+													"value": "30"
+												},
+												{
+													"key": "$count",
+													"value": "true"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "GetGeographicalAugmentObjectsByRadius Copy",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{hostname}}/api/v1/organizations/{{currentOrganizationId}}/geographicalAugmentObjects?latitude=30.459780&longitude=-90.054006&radiusInMeters=70000",
+											"host": [
+												"{{hostname}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"organizations",
+												"{{currentOrganizationId}}",
+												"geographicalAugmentObjects"
+											],
+											"query": [
+												{
+													"key": "latitude",
+													"value": "30.459780"
+												},
+												{
+													"key": "longitude",
+													"value": "-90.054006"
+												},
+												{
+													"key": "radiusInMeters",
+													"value": "70000"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "GetAugmentObjects - Static only",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{hostname}}/api/v1/augmentObjects?$filter=organizationId eq {{currentOrganizationId}} and type eq 'Static'&$top=100&$count=true",
+											"host": [
+												"{{hostname}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"augmentObjects"
+											],
+											"query": [
+												{
+													"key": "$filter",
+													"value": "organizationId eq {{currentOrganizationId}} and type eq 'Static'"
+												},
+												{
+													"key": "$top",
+													"value": "100"
+												},
+												{
+													"key": "$count",
+													"value": "true"
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"protocolProfileBehavior": {},
+							"_postman_isSubFolder": true
+						},
+						{
+							"name": "V2",
+							"item": [
+								{
+									"name": "ValidationTest",
+									"item": [
+										{
+											"name": "AddAugmentObject - Static(Check basic required properties, should not have locations, media type should be correct)",
+											"request": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Content-Type",
+														"name": "Content-Type",
+														"type": "text",
+														"value": "application/json"
+													},
+													{
+														"key": "DONDE-AUGMENTOR-ORGANIZATION-ID",
+														"type": "text",
+														"value": "{{currentOrganizationId}}"
+													},
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "Bearer {{access_token}}"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n\t\"image\":{\n        \"id\":\"{{currentAugmentImageId}}\",\n        \"name\":\"should not matter\",\n        \"url\":\"should not matter\",\n        \"thumbnailUrl\": \"should not matter\",\n        \"fileId\": \"00000000-0000-0000-0000-000000000000\"\n    },\n\t\"title\" : \"Luther H. Dyson Hall\",\n\t\"description\": \"Roomie welcomes you to Dyson Hall of Southeastern Louisiana University\",\n\t\"organizationId\":\"{{currentOrganizationId}}\",\n\t\"type\": \"Static\",\n\t\"media\":{\n\t\t\"id\": \"{{currentVideoId}}\",\n\t\t\"type\": \"Video\",\n        \"name\":\"should not matter\",\n        \"url\":\"should not matter\",\n        \"fileId\": \"00000000-0000-0000-0000-000000000000\",\n        \"extension\": \".pdf\"\n\t},\n    \"locations\":\n\t[\n\t\t{\n\t\t\t\"latitude\": \"30.515461\",\n\t\t\t\"longitude\": \"-90.471347\"\n\t\t}\n\t]\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{hostname}}/api/v2/targets",
+													"host": [
+														"{{hostname}}"
+													],
+													"path": [
+														"api",
+														"v2",
+														"targets"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "AddAugmentObject - Geographic (location is required)",
+											"request": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Content-Type",
+														"name": "Content-Type",
+														"type": "text",
+														"value": "application/json"
+													},
+													{
+														"key": "DONDE-AUGMENTOR-ORGANIZATION-ID",
+														"type": "text",
+														"value": "{{currentOrganizationId}}"
+													},
+													{
+														"key": "Authorization",
+														"value": "Bearer {{access_token}}",
+														"type": "text"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n\t\"image\":{\n        \"id\":\"{{currentAugmentImageId}}\",\n        \"name\":\"should not matter\",\n        \"url\":\"should not matter\",\n        \"thumbnailUrl\": \"should not matter\",\n        \"fileId\": \"00000000-0000-0000-0000-000000000000\"\n    },\n\t\"title\" : \"Gringotts\",\n\t\"description\": \"Vaults that only Goblins can open\",\n\t\"organizationId\":\"{{currentOrganizationId}}\",\n\t\"type\": \"Geographical\",\n\t\"media\":{\n\t\t\"id\": \"{{currentVideoId}}\",\n\t\t\"type\": \"Video\",\n        \"name\":\"should not matter\",\n        \"url\":\"should not matter\",\n        \"fileId\": \"00000000-0000-0000-0000-000000000000\",\n        \"extension\": \".pdf\"\n\t},\n\t\"locations\":[\n\t\t\n\t]\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{hostname}}/api/v2/targets",
+													"host": [
+														"{{hostname}}"
+													],
+													"path": [
+														"api",
+														"v2",
+														"targets"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "AddAugmentObject - Static- AudioWithAvatar (audio and avatar both need to exists and also belong to organization)",
+											"request": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Content-Type",
+														"name": "Content-Type",
+														"type": "text",
+														"value": "application/json"
+													},
+													{
+														"key": "DONDE-AUGMENTOR-ORGANIZATION-ID",
+														"type": "text",
+														"value": "{{currentOrganizationId}}"
+													},
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "Bearer {{access_token}}"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n\t\"image\":{\n        \"id\":\"{{currentAugmentImageId}}\",\n        \"name\":\"should not matter\",\n        \"url\":\"should not matter\",\n        \"thumbnailUrl\": \"should not matter\",\n        \"fileId\": \"00000000-0000-0000-0000-000000000000\"\n    },\n\t\"title\" : \"UML Commencement\",\n\t\"description\": \"Commencement Speech by President Bruno\",\n\t\"organizationId\":\"{{currentOrganizationId}}\",\n\t\"type\": \"Static\",\n    \"media\":{\n\t\t\"id\": \"{{currentAudioId}}\",\n\t\t\"type\": \"AvatarWithAudio\",\n        \"name\":\"should not matter\",\n        \"url\":\"should not matter\",\n        \"fileId\": \"00000000-0000-0000-0000-000000000000\",\n        \"extension\": \".pdf\"\n\t},\n\t\"avatar\":\n\t{\n\t\t\"id\": \"4bc3a5c1-cb6d-402a-aeda-811f539def3c\",\n        \"name\":\"should not matter\",\n        \"url\":\"should not matter\",\n        \"fileId\": \"00000000-0000-0000-0000-000000000000\",\n        \"extension\": \".pdf\"\n\t}\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{hostname}}/api/v2/targets",
+													"host": [
+														"{{hostname}}"
+													],
+													"path": [
+														"api",
+														"v2",
+														"targets"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "AddAugmentObject - Geographic- AudioWithAvatar(valid avatar and audio must be provided)",
+											"request": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Content-Type",
+														"name": "Content-Type",
+														"type": "text",
+														"value": "application/json"
+													},
+													{
+														"key": "DONDE-AUGMENTOR-ORGANIZATION-ID",
+														"type": "text",
+														"value": "{{currentOrganizationId}}"
+													},
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "Bearer {{access_token}}"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n\t\"image\":{\n        \"id\":\"{{currentAugmentImageId}}\",\n        \"name\":\"should not matter\",\n        \"url\":\"should not matter\",\n        \"thumbnailUrl\": \"should not matter\",\n        \"fileId\": \"00000000-0000-0000-0000-000000000000\"\n    },\n\t\"title\" : \"COLLEGE OF EDUCATION\",\n\t\"description\": \"Southeastern's College of Education fosters a welcoming community where students can gain knowledge and skills by active involvement in the learning process. Our goal is to prepare candidates to become effective professionals who set the standard for educational excellence in their communities.\",\n\t\"organizationId\":\"{{currentOrganizationId}}\",\n\t\"type\": \"Geographical\",\n\t\"media\":{\n\t\t\"id\": \"f28e4813-6314-4f29-bf24-ab80007a7048\",\n\t\t\"type\": \"AvatarWithAudio\",\n        \"name\":\"should not matter\",\n        \"url\":\"should not matter\",\n        \"fileId\": \"00000000-0000-0000-0000-000000000000\",\n        \"extension\": \".pdf\"\n\t},\n\t\"avatar\":\n\t{\n\t\t\"id\": \"{{currentAvatarId}}\",\n        \"name\":\"should not matter\",\n        \"url\":\"should not matter\",\n        \"fileId\": \"00000000-0000-0000-0000-000000000000\",\n        \"extension\": \".pdf\"\n\t},\n\t\"locations\":\n\t[\n\t\t{\n\t\t\t\"latitude\": \"30.515461\",\n\t\t\t\"longitude\": \"-90.471347\"\n\t\t}\n\t]\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{hostname}}/api/v2/targets",
+													"host": [
+														"{{hostname}}"
+													],
+													"path": [
+														"api",
+														"v2",
+														"targets"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "UpdateAugmentObject - StaticVideo(check basic required propertie)",
+											"request": {
+												"method": "PUT",
+												"header": [
+													{
+														"key": "Content-Type",
+														"name": "Content-Type",
+														"type": "text",
+														"value": "application/json"
+													},
+													{
+														"key": "DONDE-AUGMENTOR-ORGANIZATION-ID",
+														"type": "text",
+														"value": "{{currentOrganizationId}}"
+													},
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "Bearer {{access_token}}"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"id\": \"{{currentAugmentObjectId}}\",\n    \"title\": \"Luther H. Dyson Hal11l\",\n    \"description\": \"Roomie welcomes you to Dyson Hall of Southeastern Louisiana University11\",\n    \"type\": \"Static\",\n    \"organizationId\": \"23160c6e-89d1-4e46-990d-ac240084bb91\",\n    \"createdDateUtc\": \"2020-09-04T13:29:13.017804Z\",\n    \"updatedDateUtc\": \"0001-01-01T00:00:00Z\",\n    \"isDeleted\": false,\n    \"image\": {\n        \"id\": \"f73c50ba-ade3-4898-90cf-ac24008562c7\",\n        \"name\": \"FrontLineThankyou.jpg\",\n        \"url\": \"https://donde-augmentor-dev-bucket.s3.amazonaws.com/DondeAugmentorImages/OriginalImages/f73c50ba-ade3-4898-90cf-ac24008562c7.jpg\",\n        \"thumbnailUrl\": \"https://donde-augmentor-dev-bucket.s3.amazonaws.com/DondeAugmentorImages/f73c50ba-ade3-4898-90cf-ac24008562c7.jpg\",\n        \"fileId\": \"f73c50ba-ade3-4898-90cf-ac24008562c7\",\n        \"extension\": \".jpg\"\n    },\n    \"media\": {\n        \"id\": \"94eab688-32c3-4d37-814f-ac24008591ff\",\n        \"name\": \"FrontLineThankyou.mp4\",\n        \"type\": \"Video\",\n        \"url\": \"https://donde-augmentor-dev-bucket.s3.amazonaws.com/DondeAugmentorVideos/94eab688-32c3-4d37-814f-ac24008591ff.mp4\",\n        \"fileId\": \"94eab688-32c3-4d37-814f-ac24008591ff\",\n        \"extension\": \".mp4\"\n    },\n    \"avatar\": null,\n    \"locations\": []\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{hostname}}/api/v2/targets({{currentAugmentObjectId}})",
+													"host": [
+														"{{hostname}}"
+													],
+													"path": [
+														"api",
+														"v2",
+														"targets({{currentAugmentObjectId}})"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "UpdateAugmentObject - Static(cant have location, mediaId needs to be valid)",
+											"request": {
+												"method": "PUT",
+												"header": [
+													{
+														"key": "Content-Type",
+														"name": "Content-Type",
+														"type": "text",
+														"value": "application/json"
+													},
+													{
+														"key": "DONDE-AUGMENTOR-ORGANIZATION-ID",
+														"type": "text",
+														"value": "{{currentOrganizationId}}"
+													},
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "Bearer {{access_token}}"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"id\": \"{{currentAugmentObjectId}}\",\n    \"title\": \"Luther H. Dyson Hal11l\",\n    \"description\": \"Roomie welcomes you to Dyson Hall of Southeastern Louisiana University11\",\n    \"type\": \"Static\",\n    \"organizationId\": \"23160c6e-89d1-4e46-990d-ac240084bb91\",\n    \"createdDateUtc\": \"2020-09-04T13:29:13.017804Z\",\n    \"updatedDateUtc\": \"0001-01-01T00:00:00Z\",\n    \"isDeleted\": false,\n    \"image\": {\n        \"id\": \"f73c50ba-ade3-4898-90cf-ac24008562c7\",\n        \"name\": \"FrontLineThankyou.jpg\",\n        \"url\": \"https://donde-augmentor-dev-bucket.s3.amazonaws.com/DondeAugmentorImages/OriginalImages/f73c50ba-ade3-4898-90cf-ac24008562c7.jpg\",\n        \"thumbnailUrl\": \"https://donde-augmentor-dev-bucket.s3.amazonaws.com/DondeAugmentorImages/f73c50ba-ade3-4898-90cf-ac24008562c7.jpg\",\n        \"fileId\": \"f73c50ba-ade3-4898-90cf-ac24008562c7\",\n        \"extension\": \".jpg\"\n    },\n    \"media\": {\n        \"id\": \"94eab688-32c3-4d37-814f-ac24008591ff\",\n        \"name\": \"FrontLineThankyou.mp4\",\n        \"type\": \"Video\",\n        \"url\": \"https://donde-augmentor-dev-bucket.s3.amazonaws.com/DondeAugmentorVideos/94eab688-32c3-4d37-814f-ac24008591ff.mp4\",\n        \"fileId\": \"94eab688-32c3-4d37-814f-ac24008591ff\",\n        \"extension\": \".mp4\"\n    },\n    \"avatar\": null,\n    // \"locations\": [\n    //     {\n    //         \"latitude\": 20.24,\n    //         \"longitude\": 34.34\n    //     }\n    // ]\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{hostname}}/api/v2/targets({{currentAugmentObjectId}})",
+													"host": [
+														"{{hostname}}"
+													],
+													"path": [
+														"api",
+														"v2",
+														"targets({{currentAugmentObjectId}})"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "UpdateAugmentObject - Geographic(Audio and Avatar both needs to exist and belong to organization)",
+											"request": {
+												"method": "PUT",
+												"header": [
+													{
+														"key": "Content-Type",
+														"name": "Content-Type",
+														"type": "text",
+														"value": "application/json"
+													},
+													{
+														"key": "DONDE-AUGMENTOR-ORGANIZATION-ID",
+														"type": "text",
+														"value": "{{currentOrganizationId}}"
+													},
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "Bearer {{access_token}}"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"id\": \"{{currentAugmentObjectId}}\",\n    \"title\": \"Luther H. Dyson Hal11l\",\n    \"description\": \"Roomie welcomes you to Dyson Hall of Southeastern Louisiana University11\",\n    \"type\": \"Geographical\",\n    \"organizationId\": \"23160c6e-89d1-4e46-990d-ac240084bb91\",\n    \"createdDateUtc\": \"2020-09-04T13:29:13.017804Z\",\n    \"updatedDateUtc\": \"0001-01-01T00:00:00Z\",\n    \"isDeleted\": false,\n    \"image\": {\n        \"id\": \"f73c50ba-ade3-4898-90cf-ac24008562c7\",\n        \"name\": \"FrontLineThankyou.jpg\",\n        \"url\": \"https://donde-augmentor-dev-bucket.s3.amazonaws.com/DondeAugmentorImages/OriginalImages/f73c50ba-ade3-4898-90cf-ac24008562c7.jpg\",\n        \"thumbnailUrl\": \"https://donde-augmentor-dev-bucket.s3.amazonaws.com/DondeAugmentorImages/f73c50ba-ade3-4898-90cf-ac24008562c7.jpg\",\n        \"fileId\": \"f73c50ba-ade3-4898-90cf-ac24008562c7\",\n        \"extension\": \".jpg\"\n    },\n    \"media\":{\n\t\t\"id\": \"{{currentAudioId}}\",\n\t\t\"type\": \"AvatarWithAudio\",\n        \"name\":\"should not matter\",\n        \"url\":\"should not matter\",\n        \"fileId\": \"00000000-0000-0000-0000-000000000000\",\n        \"extension\": \".pdf\"\n\t},\n\t\"avatar\":\n\t{\n\t\t\"id\": \"4bc3a5c1-cb6d-402a-aeda-811f539def3c\",\n        \"name\":\"should not matter\",\n        \"url\":\"should not matter\",\n        \"fileId\": \"00000000-0000-0000-0000-000000000000\",\n        \"extension\": \".pdf\"\n\t},\n    \"locations\": [\n        {\n            \"latitude\": 20.24,\n            \"longitude\": 34.34\n        }\n    ]\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{hostname}}/api/v2/targets({{currentAugmentObjectId}})",
+													"host": [
+														"{{hostname}}"
+													],
+													"path": [
+														"api",
+														"v2",
+														"targets({{currentAugmentObjectId}})"
+													]
+												}
+											},
+											"response": []
+										}
+									],
+									"protocolProfileBehavior": {},
+									"_postman_isSubFolder": true
+								},
+								{
+									"name": "GetAugmentObjects - ALL",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{hostname}}/api/v2/targets?$count=true",
+											"host": [
+												"{{hostname}}"
+											],
+											"path": [
+												"api",
+												"v2",
+												"targets"
+											],
+											"query": [
+												{
+													"key": "$count",
+													"value": "true"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "GetAugmentObjects - By Organization",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{hostname}}/api/v2/targets?$filter=organizationId eq {{currentOrganizationId}}&$top=30&$count=true",
+											"host": [
+												"{{hostname}}"
+											],
+											"path": [
+												"api",
+												"v2",
+												"targets"
+											],
+											"query": [
+												{
+													"key": "$filter",
+													"value": "organizationId eq {{currentOrganizationId}}"
+												},
+												{
+													"key": "$top",
+													"value": "30"
+												},
+												{
+													"key": "$count",
+													"value": "true"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "GetAugmentObjects - StaticOnly",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{hostname}}/api/v2/targets?$filter=organizationId eq {{currentOrganizationId}} and type eq 'Static'&$top=30&$count=true",
+											"host": [
+												"{{hostname}}"
+											],
+											"path": [
+												"api",
+												"v2",
+												"targets"
+											],
+											"query": [
+												{
+													"key": "$filter",
+													"value": "organizationId eq {{currentOrganizationId}} and type eq 'Static'"
+												},
+												{
+													"key": "$top",
+													"value": "30"
+												},
+												{
+													"key": "$count",
+													"value": "true"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "GetAugmentObjects - StaticOnly- Paged and ordered",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{hostname}}/api/v2/targets?$filter=organizationId eq {{currentOrganizationId}} and type eq 'Static'&$top=2&$skip=0&$count=true&$orderby=title desc",
+											"host": [
+												"{{hostname}}"
+											],
+											"path": [
+												"api",
+												"v2",
+												"targets"
+											],
+											"query": [
+												{
+													"key": "$filter",
+													"value": "organizationId eq {{currentOrganizationId}} and type eq 'Static'"
+												},
+												{
+													"key": "$top",
+													"value": "2"
+												},
+												{
+													"key": "$skip",
+													"value": "0"
+												},
+												{
+													"key": "$count",
+													"value": "true"
+												},
+												{
+													"key": "$orderby",
+													"value": "title desc"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "GetAugmentObjects - Geographical only",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{hostname}}/api/v2/targets?$filter=organizationId eq {{currentOrganizationId}} and type eq 'Geographical'&$top=30&$count=true",
+											"host": [
+												"{{hostname}}"
+											],
+											"path": [
+												"api",
+												"v2",
+												"targets"
+											],
+											"query": [
+												{
+													"key": "$filter",
+													"value": "organizationId eq {{currentOrganizationId}} and type eq 'Geographical'"
+												},
+												{
+													"key": "$top",
+													"value": "30"
+												},
+												{
+													"key": "$count",
+													"value": "true"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "AddAugmentObject - Static",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											},
+											{
+												"key": "DONDE-AUGMENTOR-ORGANIZATION-ID",
+												"value": "{{currentOrganizationId}}",
+												"type": "text"
+											},
+											{
+												"key": "Authorization",
+												"value": "Bearer {{access_token}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n\t\"image\":{\n        \"id\":\"{{currentAugmentImageId}}\",\n        \"name\":\"should not matter\",\n        \"url\":\"should not matter\",\n        \"thumbnailUrl\": \"should not matter\",\n        \"fileId\": \"00000000-0000-0000-0000-000000000000\"\n    },\n\t\"title\" : \"Luther H. Dyson Hall\",\n\t\"description\": \"Roomie welcomes you to Dyson Hall of Southeastern Louisiana University\",\n\t\"organizationId\":\"{{currentOrganizationId}}\",\n\t\"type\": \"Static\",\n\t\"media\":{\n\t\t\"id\": \"{{currentVideoId}}\",\n\t\t\"type\": \"Video\",\n        \"name\":\"should not matter\",\n        \"url\":\"should not matter\",\n        \"fileId\": \"00000000-0000-0000-0000-000000000000\",\n        \"extension\": \".pdf\"\n\t}\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{hostname}}/api/v2/targets",
+											"host": [
+												"{{hostname}}"
+											],
+											"path": [
+												"api",
+												"v2",
+												"targets"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "AddAugmentObject - Geographic",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"type": "text",
+												"value": "application/json"
+											},
+											{
+												"key": "DONDE-AUGMENTOR-ORGANIZATION-ID",
+												"type": "text",
+												"value": "{{currentOrganizationId}}"
+											},
+											{
+												"key": "Authorization",
+												"value": "Bearer {{access_token}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n\t\"image\":{\n        \"id\":\"{{currentAugmentImageId}}\",\n        \"name\":\"should not matter\",\n        \"url\":\"should not matter\",\n        \"thumbnailUrl\": \"should not matter\",\n        \"fileId\": \"00000000-0000-0000-0000-000000000000\"\n    },\n\t\"title\" : \"Gringotts\",\n\t\"description\": \"Vaults that only Goblins can open\",\n\t\"organizationId\":\"{{currentOrganizationId}}\",\n\t\"type\": \"Geographical\",\n\t\"media\":{\n\t\t\"id\": \"{{currentVideoId}}\",\n\t\t\"type\": \"Video\",\n        \"name\":\"should not matter\",\n        \"url\":\"should not matter\",\n        \"fileId\": \"00000000-0000-0000-0000-000000000000\",\n        \"extension\": \".pdf\"\n\t},\n\t\"locations\":[\n\t\t{\n\t\t\t\"latitude\": \"30.25\",\n\t\t\t\"longitude\": \"-90.50\"\n\t\t}\n\t]\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{hostname}}/api/v2/targets",
+											"host": [
+												"{{hostname}}"
+											],
+											"path": [
+												"api",
+												"v2",
+												"targets"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "AddAugmentObject - Static- AudioWithAvatar",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"type": "text",
+												"value": "application/json"
+											},
+											{
+												"key": "DONDE-AUGMENTOR-ORGANIZATION-ID",
+												"type": "text",
+												"value": "{{currentOrganizationId}}"
+											},
+											{
+												"key": "Authorization",
+												"value": "Bearer {{access_token}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n\t\"image\":{\n        \"id\":\"{{currentAugmentImageId}}\",\n        \"name\":\"should not matter\",\n        \"url\":\"should not matter\",\n        \"thumbnailUrl\": \"should not matter\",\n        \"fileId\": \"00000000-0000-0000-0000-000000000000\"\n    },\n\t\"title\" : \"UML Commencement\",\n\t\"description\": \"Commencement Speech by President Bruno\",\n\t\"organizationId\":\"{{currentOrganizationId}}\",\n\t\"type\": \"Static\",\n    \"media\":{\n\t\t\"id\": \"{{currentAudioId}}\",\n\t\t\"type\": \"AvatarWithAudio\",\n        \"name\":\"should not matter\",\n        \"url\":\"should not matter\",\n        \"fileId\": \"00000000-0000-0000-0000-000000000000\",\n        \"extension\": \".pdf\"\n\t},\n\t\"avatar\":\n\t{\n\t\t\"id\": \"{{currentAvatarId}}\",\n        \"name\":\"should not matter\",\n        \"url\":\"should not matter\",\n        \"fileId\": \"00000000-0000-0000-0000-000000000000\",\n        \"extension\": \".pdf\"\n\t}\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{hostname}}/api/v2/targets",
+											"host": [
+												"{{hostname}}"
+											],
+											"path": [
+												"api",
+												"v2",
+												"targets"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "AddAugmentObject - Geographic- AudioWithAvatar",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"type": "text",
+												"value": "application/json"
+											},
+											{
+												"key": "DONDE-AUGMENTOR-ORGANIZATION-ID",
+												"type": "text",
+												"value": "{{currentOrganizationId}}"
+											},
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{access_token}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n\t\"image\":{\n        \"id\":\"{{currentAugmentImageId}}\",\n        \"name\":\"should not matter\",\n        \"url\":\"should not matter\",\n        \"thumbnailUrl\": \"should not matter\",\n        \"fileId\": \"00000000-0000-0000-0000-000000000000\"\n    },\n\t\"title\" : \"COLLEGE OF EDUCATION\",\n\t\"description\": \"Southeastern's College of Education fosters a welcoming community where students can gain knowledge and skills by active involvement in the learning process. Our goal is to prepare candidates to become effective professionals who set the standard for educational excellence in their communities.\",\n\t\"organizationId\":\"{{currentOrganizationId}}\",\n\t\"type\": \"Geographical\",\n\t\"media\":{\n\t\t\"id\": \"{{currentAudioId}}\",\n\t\t\"type\": \"AvatarWithAudio\",\n        \"name\":\"should not matter\",\n        \"url\":\"should not matter\",\n        \"fileId\": \"00000000-0000-0000-0000-000000000000\",\n        \"extension\": \".pdf\"\n\t},\n\t\"avatar\":\n\t{\n\t\t\"id\": \"{{currentAvatarId}}\",\n        \"name\":\"should not matter\",\n        \"url\":\"should not matter\",\n        \"fileId\": \"00000000-0000-0000-0000-000000000000\",\n        \"extension\": \".pdf\"\n\t},\n\t\"locations\":\n\t[\n\t\t{\n\t\t\t\"latitude\": \"30.515461\",\n\t\t\t\"longitude\": \"-90.471347\"\n\t\t}\n\t]\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{hostname}}/api/v2/targets",
+											"host": [
+												"{{hostname}}"
+											],
+											"path": [
+												"api",
+												"v2",
+												"targets"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "UpdateAugmentObject - StaticVideo - StaticVideo",
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"type": "text",
+												"value": "application/json"
+											},
+											{
+												"key": "DONDE-AUGMENTOR-ORGANIZATION-ID",
+												"type": "text",
+												"value": "{{currentOrganizationId}}"
+											},
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{access_token}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"id\": \"{{currentAugmentObjectId}}\",\n    \"title\": \"Luther H. Dyson Hal11l\",\n    \"description\": \"Roomie welcomes you to Dyson Hall of Southeastern Louisiana University11\",\n    \"type\": \"Static\",\n    \"organizationId\": \"23160c6e-89d1-4e46-990d-ac240084bb91\",\n    \"createdDateUtc\": \"2020-09-04T13:29:13.017804Z\",\n    \"updatedDateUtc\": \"0001-01-01T00:00:00Z\",\n    \"isDeleted\": false,\n    \"image\": {\n        \"id\": \"f73c50ba-ade3-4898-90cf-ac24008562c7\",\n        \"name\": \"FrontLineThankyou.jpg\",\n        \"url\": \"https://donde-augmentor-dev-bucket.s3.amazonaws.com/DondeAugmentorImages/OriginalImages/f73c50ba-ade3-4898-90cf-ac24008562c7.jpg\",\n        \"thumbnailUrl\": \"https://donde-augmentor-dev-bucket.s3.amazonaws.com/DondeAugmentorImages/f73c50ba-ade3-4898-90cf-ac24008562c7.jpg\",\n        \"fileId\": \"f73c50ba-ade3-4898-90cf-ac24008562c7\",\n        \"extension\": \".jpg\"\n    },\n    \"media\": {\n        \"id\": \"94eab688-32c3-4d37-814f-ac24008591ff\",\n        \"name\": \"FrontLineThankyou.mp4\",\n        \"type\": \"Video\",\n        \"url\": \"https://donde-augmentor-dev-bucket.s3.amazonaws.com/DondeAugmentorVideos/94eab688-32c3-4d37-814f-ac24008591ff.mp4\",\n        \"fileId\": \"94eab688-32c3-4d37-814f-ac24008591ff\",\n        \"extension\": \".mp4\"\n    },\n    \"avatar\": null,\n    \"locations\": []\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{hostname}}/api/v2/targets({{currentAugmentObjectId}})",
+											"host": [
+												"{{hostname}}"
+											],
+											"path": [
+												"api",
+												"v2",
+												"targets({{currentAugmentObjectId}})"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "UpdateAugmentObject - StaticVideo - Static AudioWithAvatar",
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"type": "text",
+												"value": "application/json"
+											},
+											{
+												"key": "DONDE-AUGMENTOR-ORGANIZATION-ID",
+												"type": "text",
+												"value": "{{currentOrganizationId}}"
+											},
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{access_token}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"id\": \"{{currentAugmentObjectId}}\",\n    \"title\": \"Luther H. Dyson Hall\",\n    \"description\": \"Roomie welcomes you to Dyson Hall of Southeastern Louisiana University\",\n    \"type\": \"Static\",\n    \"organizationId\": \"23160c6e-89d1-4e46-990d-ac240084bb91\",\n    \"createdDateUtc\": \"2020-09-04T13:29:13.017804Z\",\n    \"updatedDateUtc\": \"0001-01-01T00:00:00Z\",\n    \"isDeleted\": false,\n    \"image\": {\n        \"id\": \"f73c50ba-ade3-4898-90cf-ac24008562c7\",\n        \"name\": \"FrontLineThankyou.jpg\",\n        \"url\": \"https://donde-augmentor-dev-bucket.s3.amazonaws.com/DondeAugmentorImages/OriginalImages/f73c50ba-ade3-4898-90cf-ac24008562c7.jpg\",\n        \"thumbnailUrl\": \"https://donde-augmentor-dev-bucket.s3.amazonaws.com/DondeAugmentorImages/f73c50ba-ade3-4898-90cf-ac24008562c7.jpg\",\n        \"fileId\": \"f73c50ba-ade3-4898-90cf-ac24008562c7\",\n        \"extension\": \".jpg\"\n    },\n     \"media\":{\n\t\t\"id\": \"{{currentAudioId}}\",\n\t\t\"type\": \"AvatarWithAudio\",\n        \"name\":\"should not matter\",\n        \"url\":\"should not matter\",\n        \"fileId\": \"00000000-0000-0000-0000-000000000000\",\n        \"extension\": \".pdf\"\n\t},\n\t\"avatar\":\n\t{\n\t\t\"id\": \"{{currentAvatarId}}\",\n        \"name\":\"should not matter\",\n        \"url\":\"should not matter\",\n        \"fileId\": \"00000000-0000-0000-0000-000000000000\",\n        \"extension\": \".pdf\"\n\t},\n    \"locations\": []\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{hostname}}/api/v2/targets({{currentAugmentObjectId}})",
+											"host": [
+												"{{hostname}}"
+											],
+											"path": [
+												"api",
+												"v2",
+												"targets({{currentAugmentObjectId}})"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "UpdateAugmentObject - StaticVideo - Geographic Video",
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"type": "text",
+												"value": "application/json"
+											},
+											{
+												"key": "DONDE-AUGMENTOR-ORGANIZATION-ID",
+												"type": "text",
+												"value": "{{currentOrganizationId}}"
+											},
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{access_token}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"id\": \"{{currentAugmentObjectId}}\",\n    \"title\": \"Luther H. Dyson Hall\",\n    \"description\": \"Roomie welcomes you to Dyson Hall of Southeastern Louisiana University\",\n    \"type\": \"Geographical\",\n    \"organizationId\": \"23160c6e-89d1-4e46-990d-ac240084bb91\",\n    \"createdDateUtc\": \"2020-09-04T13:29:13.017804Z\",\n    \"updatedDateUtc\": \"0001-01-01T00:00:00Z\",\n    \"isDeleted\": false,\n    \"image\": {\n        \"id\": \"f73c50ba-ade3-4898-90cf-ac24008562c7\",\n        \"name\": \"FrontLineThankyou.jpg\",\n        \"url\": \"https://donde-augmentor-dev-bucket.s3.amazonaws.com/DondeAugmentorImages/OriginalImages/f73c50ba-ade3-4898-90cf-ac24008562c7.jpg\",\n        \"thumbnailUrl\": \"https://donde-augmentor-dev-bucket.s3.amazonaws.com/DondeAugmentorImages/f73c50ba-ade3-4898-90cf-ac24008562c7.jpg\",\n        \"fileId\": \"f73c50ba-ade3-4898-90cf-ac24008562c7\",\n        \"extension\": \".jpg\"\n    },\n    \"media\": {\n        \"id\": \"94eab688-32c3-4d37-814f-ac24008591ff\",\n        \"name\": \"FrontLineThankyou.mp4\",\n        \"type\": \"Video\",\n        \"url\": \"https://donde-augmentor-dev-bucket.s3.amazonaws.com/DondeAugmentorVideos/94eab688-32c3-4d37-814f-ac24008591ff.mp4\",\n        \"fileId\": \"94eab688-32c3-4d37-814f-ac24008591ff\",\n        \"extension\": \".mp4\"\n    },\n    \"avatar\": null,\n    \"locations\":[\n\t\t{\n\t\t\t\"latitude\": \"30.25\",\n\t\t\t\"longitude\": \"-90.50\"\n\t\t}\n\t]\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{hostname}}/api/v2/targets({{currentAugmentObjectId}})",
+											"host": [
+												"{{hostname}}"
+											],
+											"path": [
+												"api",
+												"v2",
+												"targets({{currentAugmentObjectId}})"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "UpdateAugmentObject - StaticVideo - Geographic AvatarWithAudio",
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"type": "text",
+												"value": "application/json"
+											},
+											{
+												"key": "DONDE-AUGMENTOR-ORGANIZATION-ID",
+												"type": "text",
+												"value": "{{currentOrganizationId}}"
+											},
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{access_token}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"id\": \"{{currentAugmentObjectId}}\",\n    \"title\": \"Luther H. Dyson Hall\",\n    \"description\": \"Roomie welcomes you to Dyson Hall of Southeastern Louisiana University\",\n    \"type\": \"Geographical\",\n    \"organizationId\": \"23160c6e-89d1-4e46-990d-ac240084bb91\",\n    \"createdDateUtc\": \"2020-09-04T13:29:13.017804Z\",\n    \"updatedDateUtc\": \"0001-01-01T00:00:00Z\",\n    \"isDeleted\": false,\n    \"image\": {\n        \"id\": \"f73c50ba-ade3-4898-90cf-ac24008562c7\",\n        \"name\": \"FrontLineThankyou.jpg\",\n        \"url\": \"https://donde-augmentor-dev-bucket.s3.amazonaws.com/DondeAugmentorImages/OriginalImages/f73c50ba-ade3-4898-90cf-ac24008562c7.jpg\",\n        \"thumbnailUrl\": \"https://donde-augmentor-dev-bucket.s3.amazonaws.com/DondeAugmentorImages/f73c50ba-ade3-4898-90cf-ac24008562c7.jpg\",\n        \"fileId\": \"f73c50ba-ade3-4898-90cf-ac24008562c7\",\n        \"extension\": \".jpg\"\n    },\n      \"media\":{\n\t\t\"id\": \"{{currentAudioId}}\",\n\t\t\"type\": \"AvatarWithAudio\",\n        \"name\":\"should not matter\",\n        \"url\":\"should not matter\",\n        \"fileId\": \"00000000-0000-0000-0000-000000000000\",\n        \"extension\": \".pdf\"\n\t},\n\t\"avatar\":\n\t{\n\t\t\"id\": \"{{currentAvatarId}}\",\n        \"name\":\"should not matter\",\n        \"url\":\"should not matter\",\n        \"fileId\": \"00000000-0000-0000-0000-000000000000\",\n        \"extension\": \".pdf\"\n\t},\n    \"locations\": [\n        {\n            \"latitude\": 31.25,\n            \"longitude\": -92.5\n        },\n         {\n            \"latitude\": 315.25,\n            \"longitude\": -952.5\n        }\n    ]\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{hostname}}/api/v2/targets({{currentAugmentObjectId}})",
+											"host": [
+												"{{hostname}}"
+											],
+											"path": [
+												"api",
+												"v2",
+												"targets({{currentAugmentObjectId}})"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "UpdateAugmentObject - StaticAudioWithAvatar-StaticAudioWithAvatar",
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"type": "text",
+												"value": "application/json"
+											},
+											{
+												"key": "DONDE-AUGMENTOR-ORGANIZATION-ID",
+												"type": "text",
+												"value": "{{currentOrganizationId}}"
+											},
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{access_token}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"id\": \"{{currentAugmentObjectId}}\",\n    \"title\": \"Luther H. Dyson Hall\",\n    \"description\": \"Roomie welcomes you to Dyson Hall of Southeastern Louisiana University\",\n    \"type\": \"Static\",\n    \"organizationId\": \"23160c6e-89d1-4e46-990d-ac240084bb91\",\n    \"createdDateUtc\": \"2020-09-04T13:29:13.017804Z\",\n    \"updatedDateUtc\": \"0001-01-01T00:00:00Z\",\n    \"isDeleted\": false,\n    \"image\": {\n        \"id\": \"f73c50ba-ade3-4898-90cf-ac24008562c7\",\n        \"name\": \"FrontLineThankyou.jpg\",\n        \"url\": \"https://donde-augmentor-dev-bucket.s3.amazonaws.com/DondeAugmentorImages/OriginalImages/f73c50ba-ade3-4898-90cf-ac24008562c7.jpg\",\n        \"thumbnailUrl\": \"https://donde-augmentor-dev-bucket.s3.amazonaws.com/DondeAugmentorImages/f73c50ba-ade3-4898-90cf-ac24008562c7.jpg\",\n        \"fileId\": \"f73c50ba-ade3-4898-90cf-ac24008562c7\",\n        \"extension\": \".jpg\"\n    },\n     \"media\":{\n\t\t\"id\": \"{{currentAudioId}}\",\n\t\t\"type\": \"AvatarWithAudio\",\n        \"name\":\"should not matter\",\n        \"url\":\"should not matter\",\n        \"fileId\": \"00000000-0000-0000-0000-000000000000\",\n        \"extension\": \".pdf\"\n\t},\n\t\"avatar\":\n\t{\n\t\t\"id\": \"{{currentAvatarId}}\",\n        \"name\":\"should not matter\",\n        \"url\":\"should not matter\",\n        \"fileId\": \"00000000-0000-0000-0000-000000000000\",\n        \"extension\": \".pdf\"\n\t},\n    \"locations\": []\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{hostname}}/api/v2/targets({{currentAugmentObjectId}})",
+											"host": [
+												"{{hostname}}"
+											],
+											"path": [
+												"api",
+												"v2",
+												"targets({{currentAugmentObjectId}})"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "UpdateAugmentObject - StaticAudioWithAvatar- Geographic AvatarWithAudio",
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"type": "text",
+												"value": "application/json"
+											},
+											{
+												"key": "DONDE-AUGMENTOR-ORGANIZATION-ID",
+												"type": "text",
+												"value": "{{currentOrganizationId}}"
+											},
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{access_token}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"id\": \"{{currentAugmentObjectId}}\",\n    \"title\": \"Luther H. Dyson Hall\",\n    \"description\": \"Roomie welcomes you to Dyson Hall of Southeastern Louisiana University\",\n    \"type\": \"Geographical\",\n    \"organizationId\": \"23160c6e-89d1-4e46-990d-ac240084bb91\",\n    \"createdDateUtc\": \"2020-09-04T13:29:13.017804Z\",\n    \"updatedDateUtc\": \"0001-01-01T00:00:00Z\",\n    \"isDeleted\": false,\n    \"image\": {\n        \"id\": \"f73c50ba-ade3-4898-90cf-ac24008562c7\",\n        \"name\": \"FrontLineThankyou.jpg\",\n        \"url\": \"https://donde-augmentor-dev-bucket.s3.amazonaws.com/DondeAugmentorImages/OriginalImages/f73c50ba-ade3-4898-90cf-ac24008562c7.jpg\",\n        \"thumbnailUrl\": \"https://donde-augmentor-dev-bucket.s3.amazonaws.com/DondeAugmentorImages/f73c50ba-ade3-4898-90cf-ac24008562c7.jpg\",\n        \"fileId\": \"f73c50ba-ade3-4898-90cf-ac24008562c7\",\n        \"extension\": \".jpg\"\n    },\n    \"media\":{\n\t\t\"id\": \"{{currentAudioId}}\",\n\t\t\"type\": \"AvatarWithAudio\",\n        \"name\":\"should not matter\",\n        \"url\":\"should not matter\",\n        \"fileId\": \"00000000-0000-0000-0000-000000000000\",\n        \"extension\": \".pdf\"\n\t},\n\t\"avatar\":\n\t{\n\t\t\"id\": \"{{currentAvatarId}}\",\n        \"name\":\"should not matter\",\n        \"url\":\"should not matter\",\n        \"fileId\": \"00000000-0000-0000-0000-000000000000\",\n        \"extension\": \".pdf\"\n\t},\n    \"locations\": [\n        {\n            \"latitude\": 31.25,\n            \"longitude\": -92.5\n        },\n         {\n            \"latitude\": 315.25,\n            \"longitude\": -952.5\n        }\n    ]\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{hostname}}/api/v2/targets({{currentAugmentObjectId}})",
+											"host": [
+												"{{hostname}}"
+											],
+											"path": [
+												"api",
+												"v2",
+												"targets({{currentAugmentObjectId}})"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "UpdateAugmentObject - StaticAudioWithAvatar- Geographic  Video",
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"type": "text",
+												"value": "application/json"
+											},
+											{
+												"key": "DONDE-AUGMENTOR-ORGANIZATION-ID",
+												"type": "text",
+												"value": "{{currentOrganizationId}}"
+											},
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{access_token}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"id\": \"{{currentAugmentObjectId}}\",\n    \"title\": \"Luther H. Dyson Hall\",\n    \"description\": \"Roomie welcomes you to Dyson Hall of Southeastern Louisiana University\",\n    \"type\": \"Geographical\",\n    \"organizationId\": \"23160c6e-89d1-4e46-990d-ac240084bb91\",\n    \"createdDateUtc\": \"2020-09-04T13:29:13.017804Z\",\n    \"updatedDateUtc\": \"0001-01-01T00:00:00Z\",\n    \"isDeleted\": false,\n    \"image\": {\n        \"id\": \"f73c50ba-ade3-4898-90cf-ac24008562c7\",\n        \"name\": \"FrontLineThankyou.jpg\",\n        \"url\": \"https://donde-augmentor-dev-bucket.s3.amazonaws.com/DondeAugmentorImages/OriginalImages/f73c50ba-ade3-4898-90cf-ac24008562c7.jpg\",\n        \"thumbnailUrl\": \"https://donde-augmentor-dev-bucket.s3.amazonaws.com/DondeAugmentorImages/f73c50ba-ade3-4898-90cf-ac24008562c7.jpg\",\n        \"fileId\": \"f73c50ba-ade3-4898-90cf-ac24008562c7\",\n        \"extension\": \".jpg\"\n    },\n    \"media\": {\n        \"id\": \"94eab688-32c3-4d37-814f-ac24008591ff\",\n        \"name\": \"FrontLineThankyou.mp4\",\n        \"type\": \"Video\",\n        \"url\": \"https://donde-augmentor-dev-bucket.s3.amazonaws.com/DondeAugmentorVideos/94eab688-32c3-4d37-814f-ac24008591ff.mp4\",\n        \"fileId\": \"94eab688-32c3-4d37-814f-ac24008591ff\",\n        \"extension\": \".mp4\"\n    },\n    \"avatar\": null,\n    \"locations\": [\n          {\n            \"latitude\": 31.25,\n            \"longitude\": -92.5\n        }\n    ]\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{hostname}}/api/v2/targets({{currentAugmentObjectId}})",
+											"host": [
+												"{{hostname}}"
+											],
+											"path": [
+												"api",
+												"v2",
+												"targets({{currentAugmentObjectId}})"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "UpdateAugmentObject - GeographicAudioWithAvatar - GeographicVideo",
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"type": "text",
+												"value": "application/json"
+											},
+											{
+												"key": "DONDE-AUGMENTOR-ORGANIZATION-ID",
+												"type": "text",
+												"value": "{{currentOrganizationId}}"
+											},
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{access_token}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"id\": \"{{currentAugmentObjectId}}\",\n    \"title\": \"Luther H. Dyson Hall\",\n    \"description\": \"Roomie welcomes you to Dyson Hall of Southeastern Louisiana University\",\n    \"type\": \"Geographical\",\n    \"organizationId\": \"23160c6e-89d1-4e46-990d-ac240084bb91\",\n    \"createdDateUtc\": \"2020-09-04T13:29:13.017804Z\",\n    \"updatedDateUtc\": \"0001-01-01T00:00:00Z\",\n    \"isDeleted\": false,\n    \"image\": {\n        \"id\": \"f73c50ba-ade3-4898-90cf-ac24008562c7\",\n        \"name\": \"FrontLineThankyou.jpg\",\n        \"url\": \"https://donde-augmentor-dev-bucket.s3.amazonaws.com/DondeAugmentorImages/OriginalImages/f73c50ba-ade3-4898-90cf-ac24008562c7.jpg\",\n        \"thumbnailUrl\": \"https://donde-augmentor-dev-bucket.s3.amazonaws.com/DondeAugmentorImages/f73c50ba-ade3-4898-90cf-ac24008562c7.jpg\",\n        \"fileId\": \"f73c50ba-ade3-4898-90cf-ac24008562c7\",\n        \"extension\": \".jpg\"\n    },\n     \"media\": {\n        \"id\": \"94eab688-32c3-4d37-814f-ac24008591ff\",\n        \"name\": \"FrontLineThankyou.mp4\",\n        \"type\": \"Video\",\n        \"url\": \"https://donde-augmentor-dev-bucket.s3.amazonaws.com/DondeAugmentorVideos/94eab688-32c3-4d37-814f-ac24008591ff.mp4\",\n        \"fileId\": \"94eab688-32c3-4d37-814f-ac24008591ff\",\n        \"extension\": \".mp4\"\n    },\n    \"avatar\": null,\n    \"locations\": [\n        {\n            \"latitude\": 31.25,\n            \"longitude\": -92.5\n        }\n    ]\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{hostname}}/api/v2/targets({{currentAugmentObjectId}})",
+											"host": [
+												"{{hostname}}"
+											],
+											"path": [
+												"api",
+												"v2",
+												"targets({{currentAugmentObjectId}})"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "UpdateAugmentObject - GeographicVideo -GeographicVideo",
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"type": "text",
+												"value": "application/json"
+											},
+											{
+												"key": "DONDE-AUGMENTOR-ORGANIZATION-ID",
+												"type": "text",
+												"value": "{{currentOrganizationId}}"
+											},
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{access_token}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"id\": \"{{currentAugmentObjectId}}\",\n    \"title\": \"Luther H. Dyson Hall\",\n    \"description\": \"Roomie welcomes you to Dyson Hall of Southeastern Louisiana University\",\n    \"type\": \"Geographical\",\n    \"organizationId\": \"23160c6e-89d1-4e46-990d-ac240084bb91\",\n    \"createdDateUtc\": \"2020-09-04T13:29:13.017804Z\",\n    \"updatedDateUtc\": \"0001-01-01T00:00:00Z\",\n    \"isDeleted\": false,\n    \"image\": {\n        \"id\": \"f73c50ba-ade3-4898-90cf-ac24008562c7\",\n        \"name\": \"FrontLineThankyou.jpg\",\n        \"url\": \"https://donde-augmentor-dev-bucket.s3.amazonaws.com/DondeAugmentorImages/OriginalImages/f73c50ba-ade3-4898-90cf-ac24008562c7.jpg\",\n        \"thumbnailUrl\": \"https://donde-augmentor-dev-bucket.s3.amazonaws.com/DondeAugmentorImages/f73c50ba-ade3-4898-90cf-ac24008562c7.jpg\",\n        \"fileId\": \"f73c50ba-ade3-4898-90cf-ac24008562c7\",\n        \"extension\": \".jpg\"\n    },\n    \"media\": {\n        \"id\": \"94eab688-32c3-4d37-814f-ac24008591ff\",\n        \"name\": \"FrontLineThankyou.mp4\",\n        \"type\": \"Video\",\n        \"url\": \"https://donde-augmentor-dev-bucket.s3.amazonaws.com/DondeAugmentorVideos/94eab688-32c3-4d37-814f-ac24008591ff.mp4\",\n        \"fileId\": \"94eab688-32c3-4d37-814f-ac24008591ff\",\n        \"extension\": \".mp4\"\n    },\n    \"avatar\": null,\n    \"locations\": [\n        {\n            \"latitude\": 31.25,\n            \"longitude\": -92.5\n        }\n    ]\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{hostname}}/api/v2/targets({{currentAugmentObjectId}})",
+											"host": [
+												"{{hostname}}"
+											],
+											"path": [
+												"api",
+												"v2",
+												"targets({{currentAugmentObjectId}})"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "UpdateAugmentObject - GeographicVideo - StaticVideo",
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"type": "text",
+												"value": "application/json"
+											},
+											{
+												"key": "DONDE-AUGMENTOR-ORGANIZATION-ID",
+												"type": "text",
+												"value": "{{currentOrganizationId}}"
+											},
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{access_token}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"id\": \"{{currentAugmentObjectId}}\",\n    \"title\": \"Luther H. Dyson Hall\",\n    \"description\": \"Roomie welcomes you to Dyson Hall of Southeastern Louisiana University\",\n    \"type\": \"Static\",\n    \"organizationId\": \"23160c6e-89d1-4e46-990d-ac240084bb91\",\n    \"createdDateUtc\": \"2020-09-04T13:29:13.017804Z\",\n    \"updatedDateUtc\": \"0001-01-01T00:00:00Z\",\n    \"isDeleted\": false,\n    \"image\": {\n        \"id\": \"f73c50ba-ade3-4898-90cf-ac24008562c7\",\n        \"name\": \"FrontLineThankyou.jpg\",\n        \"url\": \"https://donde-augmentor-dev-bucket.s3.amazonaws.com/DondeAugmentorImages/OriginalImages/f73c50ba-ade3-4898-90cf-ac24008562c7.jpg\",\n        \"thumbnailUrl\": \"https://donde-augmentor-dev-bucket.s3.amazonaws.com/DondeAugmentorImages/f73c50ba-ade3-4898-90cf-ac24008562c7.jpg\",\n        \"fileId\": \"f73c50ba-ade3-4898-90cf-ac24008562c7\",\n        \"extension\": \".jpg\"\n    },\n    \"media\": {\n        \"id\": \"94eab688-32c3-4d37-814f-ac24008591ff\",\n        \"name\": \"FrontLineThankyou.mp4\",\n        \"type\": \"Video\",\n        \"url\": \"https://donde-augmentor-dev-bucket.s3.amazonaws.com/DondeAugmentorVideos/94eab688-32c3-4d37-814f-ac24008591ff.mp4\",\n        \"fileId\": \"94eab688-32c3-4d37-814f-ac24008591ff\",\n        \"extension\": \".mp4\"\n    },\n    \"avatar\": null,\n    \"locations\": []\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{hostname}}/api/v2/targets({{currentAugmentObjectId}})",
+											"host": [
+												"{{hostname}}"
+											],
+											"path": [
+												"api",
+												"v2",
+												"targets({{currentAugmentObjectId}})"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "UpdateAugmentObject - GeographicVideo - Static AudioWithAvatar",
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"type": "text",
+												"value": "application/json"
+											},
+											{
+												"key": "DONDE-AUGMENTOR-ORGANIZATION-ID",
+												"type": "text",
+												"value": "{{currentOrganizationId}}"
+											},
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{access_token}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"id\": \"{{currentAugmentObjectId}}\",\n    \"title\": \"Luther H. Dyson Hall\",\n    \"description\": \"Roomie welcomes you to Dyson Hall of Southeastern Louisiana University\",\n    \"type\": \"Static\",\n    \"organizationId\": \"23160c6e-89d1-4e46-990d-ac240084bb91\",\n    \"createdDateUtc\": \"2020-09-04T13:29:13.017804Z\",\n    \"updatedDateUtc\": \"0001-01-01T00:00:00Z\",\n    \"isDeleted\": false,\n    \"image\": {\n        \"id\": \"f73c50ba-ade3-4898-90cf-ac24008562c7\",\n        \"name\": \"FrontLineThankyou.jpg\",\n        \"url\": \"https://donde-augmentor-dev-bucket.s3.amazonaws.com/DondeAugmentorImages/OriginalImages/f73c50ba-ade3-4898-90cf-ac24008562c7.jpg\",\n        \"thumbnailUrl\": \"https://donde-augmentor-dev-bucket.s3.amazonaws.com/DondeAugmentorImages/f73c50ba-ade3-4898-90cf-ac24008562c7.jpg\",\n        \"fileId\": \"f73c50ba-ade3-4898-90cf-ac24008562c7\",\n        \"extension\": \".jpg\"\n    },\n    \"media\":{\n\t\t\"id\": \"{{currentAudioId}}\",\n\t\t\"type\": \"AvatarWithAudio\",\n        \"name\":\"should not matter\",\n        \"url\":\"should not matter\",\n        \"fileId\": \"00000000-0000-0000-0000-000000000000\",\n        \"extension\": \".pdf\"\n\t},\n\t\"avatar\":\n\t{\n\t\t\"id\": \"{{currentAvatarId}}\",\n        \"name\":\"should not matter\",\n        \"url\":\"should not matter\",\n        \"fileId\": \"00000000-0000-0000-0000-000000000000\",\n        \"extension\": \".pdf\"\n\t},\n    \"locations\": []\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{hostname}}/api/v2/targets({{currentAugmentObjectId}})",
+											"host": [
+												"{{hostname}}"
+											],
+											"path": [
+												"api",
+												"v2",
+												"targets({{currentAugmentObjectId}})"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "UpdateAugmentObject - GeographicAudioWithAvatar to GeographicAudioWithAvatar",
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"type": "text",
+												"value": "application/json"
+											},
+											{
+												"key": "DONDE-AUGMENTOR-ORGANIZATION-ID",
+												"type": "text",
+												"value": "{{currentOrganizationId}}"
+											},
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{access_token}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"id\": \"{{currentAugmentObjectId}}\",\n    \"title\": \"Luther H. Dyson Hall\",\n    \"description\": \"Roomie welcomes you to Dyson Hall of Southeastern Louisiana University\",\n    \"type\": \"Geographical\",\n    \"organizationId\": \"23160c6e-89d1-4e46-990d-ac240084bb91\",\n    \"createdDateUtc\": \"2020-09-04T13:29:13.017804Z\",\n    \"updatedDateUtc\": \"0001-01-01T00:00:00Z\",\n    \"isDeleted\": false,\n    \"image\": {\n        \"id\": \"f73c50ba-ade3-4898-90cf-ac24008562c7\",\n        \"name\": \"FrontLineThankyou.jpg\",\n        \"url\": \"https://donde-augmentor-dev-bucket.s3.amazonaws.com/DondeAugmentorImages/OriginalImages/f73c50ba-ade3-4898-90cf-ac24008562c7.jpg\",\n        \"thumbnailUrl\": \"https://donde-augmentor-dev-bucket.s3.amazonaws.com/DondeAugmentorImages/f73c50ba-ade3-4898-90cf-ac24008562c7.jpg\",\n        \"fileId\": \"f73c50ba-ade3-4898-90cf-ac24008562c7\",\n        \"extension\": \".jpg\"\n    },\n   \"media\":{\n\t\t\"id\": \"{{currentAudioId}}\",\n\t\t\"type\": \"AvatarWithAudio\",\n        \"name\":\"should not matter\",\n        \"url\":\"should not matter\",\n        \"fileId\": \"00000000-0000-0000-0000-000000000000\",\n        \"extension\": \".pdf\"\n\t},\n\t\"avatar\":\n\t{\n\t\t\"id\": \"{{currentAvatarId}}\",\n        \"name\":\"should not matter\",\n        \"url\":\"should not matter\",\n        \"fileId\": \"00000000-0000-0000-0000-000000000000\",\n        \"extension\": \".pdf\"\n\t},\n    \"locations\": [\n        {\n            \"latitude\": 31.25,\n            \"longitude\": -92.5\n        },\n         {\n            \"latitude\": 315.25,\n            \"longitude\": -952.5\n        }\n    ]\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{hostname}}/api/v2/targets({{currentAugmentObjectId}})",
+											"host": [
+												"{{hostname}}"
+											],
+											"path": [
+												"api",
+												"v2",
+												"targets({{currentAugmentObjectId}})"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "UpdateAugmentObject - GeographicAudioWithAvatar to StaticVideo",
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"type": "text",
+												"value": "application/json"
+											},
+											{
+												"key": "DONDE-AUGMENTOR-ORGANIZATION-ID",
+												"type": "text",
+												"value": "{{currentOrganizationId}}"
+											},
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{access_token}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"id\": \"{{currentAugmentObjectId}}\",\n    \"title\": \"Luther H. Dyson Hall\",\n    \"description\": \"Roomie welcomes you to Dyson Hall of Southeastern Louisiana University\",\n    \"type\": \"Static\",\n    \"organizationId\": \"23160c6e-89d1-4e46-990d-ac240084bb91\",\n    \"createdDateUtc\": \"2020-09-04T13:29:13.017804Z\",\n    \"updatedDateUtc\": \"0001-01-01T00:00:00Z\",\n    \"isDeleted\": false,\n    \"image\": {\n        \"id\": \"f73c50ba-ade3-4898-90cf-ac24008562c7\",\n        \"name\": \"FrontLineThankyou.jpg\",\n        \"url\": \"https://donde-augmentor-dev-bucket.s3.amazonaws.com/DondeAugmentorImages/OriginalImages/f73c50ba-ade3-4898-90cf-ac24008562c7.jpg\",\n        \"thumbnailUrl\": \"https://donde-augmentor-dev-bucket.s3.amazonaws.com/DondeAugmentorImages/f73c50ba-ade3-4898-90cf-ac24008562c7.jpg\",\n        \"fileId\": \"f73c50ba-ade3-4898-90cf-ac24008562c7\",\n        \"extension\": \".jpg\"\n    },\n    \"media\": {\n        \"id\": \"94eab688-32c3-4d37-814f-ac24008591ff\",\n        \"name\": \"FrontLineThankyou.mp4\",\n        \"type\": \"Video\",\n        \"url\": \"https://donde-augmentor-dev-bucket.s3.amazonaws.com/DondeAugmentorVideos/94eab688-32c3-4d37-814f-ac24008591ff.mp4\",\n        \"fileId\": \"94eab688-32c3-4d37-814f-ac24008591ff\",\n        \"extension\": \".mp4\"\n    },\n    \"avatar\": null,\n    \"locations\": []\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{hostname}}/api/v2/targets({{currentAugmentObjectId}})",
+											"host": [
+												"{{hostname}}"
+											],
+											"path": [
+												"api",
+												"v2",
+												"targets({{currentAugmentObjectId}})"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "DeleteAugmentObject",
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"type": "text",
+												"value": "application/json"
+											},
+											{
+												"key": "DONDE-AUGMENTOR-ORGANIZATION-ID",
+												"type": "text",
+												"value": "{{currentOrganizationId}}"
+											},
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{access_token}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{hostname}}/api/v2/targets({{currentAugmentObjectId}})",
+											"host": [
+												"{{hostname}}"
+											],
+											"path": [
+												"api",
+												"v2",
+												"targets({{currentAugmentObjectId}})"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"protocolProfileBehavior": {},
+							"_postman_isSubFolder": true
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Metrics",
+					"item": [
+						{
+							"name": "V1",
+							"item": [
+								{
+									"name": "AugmentObjectVisit",
+									"item": [
+										{
+											"name": "AddAugmentObjectVisitMetric-WithHeader-Successful",
+											"request": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "DONDE-AUGMENTOR-ORGANIZATION-ID",
+														"type": "text",
+														"value": "{{currentOrganizationId}}"
+													},
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "Bearer {{access_token}}"
+													},
+													{
+														"key": "METRIC-ACCESS-ID",
+														"value": "{{metricAccessId}}",
+														"type": "text"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n\t\"augmentObjectId\":\"{{currentAugmentObjectId}}\",\n\t\"deviceUniqueId\":\"{{currentDeviceUniqueId}}\",\n\t\"deviceName\": \"{{currentDeviceName}}\",\n\t\"deviceId\": \"{{currentDeviceId}}\"\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{hostname}}/api/v1/augmentObjectVisitMetrics",
+													"host": [
+														"{{hostname}}"
+													],
+													"path": [
+														"api",
+														"v1",
+														"augmentObjectVisitMetrics"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "AddAugmentObjectVisitMetric-NoHeader-Failure",
+											"request": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "DONDE-AUGMENTOR-ORGANIZATION-ID",
+														"type": "text",
+														"value": "{{currentOrganizationId}}"
+													},
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "Bearer {{access_token}}"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n\t\"augmentObjectId\":\"{{currentAugmentObjectId}}\",\n\t\"deviceUniqueId\":\"{{currentDeviceUniqueId}}\",\n\t\"deviceName\": \"{{currentDeviceName}}\",\n\t\"deviceId\": \"{{currentDeviceId}}\"\n\t\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{hostname}}/api/v1/augmentObjectVisitMetrics",
+													"host": [
+														"{{hostname}}"
+													],
+													"path": [
+														"api",
+														"v1",
+														"augmentObjectVisitMetrics"
+													]
+												}
+											},
+											"response": []
+										}
+									],
+									"protocolProfileBehavior": {},
+									"_postman_isSubFolder": true
+								},
+								{
+									"name": "AugmentObjectMediaVisit",
+									"item": [
+										{
+											"name": "AddAugmentObjectMediaVisitMetric-WithHeader-Successful Copy",
+											"request": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "DONDE-AUGMENTOR-ORGANIZATION-ID",
+														"type": "text",
+														"value": "{{currentOrganizationId}}"
+													},
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "Bearer {{access_token}}"
+													},
+													{
+														"key": "METRIC-ACCESS-ID",
+														"type": "text",
+														"value": "{{metricAccessId}}"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n\t\"augmentObjectId\":\"{{currentAugmentObjectId}}\",\n\t\"augmentObjectMediaId\":\"{{currentAugmentObjectMediaId}}\",\n\t\"deviceUniqueId\":\"{{currentDeviceUniqueId}}\",\n\t\"deviceName\": \"{{currentDeviceName}}\",\n\t\"deviceId\": \"{{currentDeviceId}}\"\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{hostname}}/api/v1/augmentObjectMediaVisitMetrics",
+													"host": [
+														"{{hostname}}"
+													],
+													"path": [
+														"api",
+														"v1",
+														"augmentObjectMediaVisitMetrics"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "AddAugmentObjectMediaVisitMetric-NoOrWrongHeader-401",
+											"request": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "DONDE-AUGMENTOR-ORGANIZATION-ID",
+														"type": "text",
+														"value": "{{currentOrganizationId}}"
+													},
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "Bearer {{access_token}}"
+													},
+													{
+														"key": "METRIC-ACCESS-ID",
+														"type": "text",
+														"value": "test"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n\t\"augmentObjectId\":\"{{currentAugmentObjectId}}\",\n\t\"augmentObjectMediaId\":\"{{currentAugmentObjectMediaId}}\",\n\t\"deviceUniqueId\":\"{{currentDeviceUniqueId}}\",\n\t\"deviceName\": \"{{currentDeviceName}}\",\n\t\"deviceId\": \"{{currentDeviceId}}\"\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{hostname}}/api/v1/augmentObjectMediaVisitMetrics",
+													"host": [
+														"{{hostname}}"
+													],
+													"path": [
+														"api",
+														"v1",
+														"augmentObjectMediaVisitMetrics"
+													]
+												}
+											},
+											"response": []
+										}
+									],
+									"protocolProfileBehavior": {},
+									"_postman_isSubFolder": true
+								}
+							],
+							"protocolProfileBehavior": {},
+							"_postman_isSubFolder": true
+						},
+						{
+							"name": "V2",
+							"item": [
+								{
+									"name": "AugmentObjectMediaVisit",
+									"item": [
+										{
+											"name": "AddAugmentObjectMediaVisitMetric-NoOrWrongHeader-401 Copy",
+											"request": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "DONDE-AUGMENTOR-ORGANIZATION-ID",
+														"type": "text",
+														"value": "{{currentOrganizationId}}"
+													},
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "Bearer {{access_token}}"
+													},
+													{
+														"key": "METRIC-ACCESS-ID",
+														"type": "text",
+														"value": "test"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n\t\"augmentObjectId\":\"{{currentAugmentObjectId}}\",\n\t\"mediaId\":\"{{mediaId}}\",\n\t\"deviceUniqueId\":\"{{currentDeviceUniqueId}}\",\n\t\"deviceName\": \"{{currentDeviceName}}\",\n\t\"deviceId\": \"{{currentDeviceId}}\"\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{hostname}}/api/v2/targetMediaVisitMetrics",
+													"host": [
+														"{{hostname}}"
+													],
+													"path": [
+														"api",
+														"v2",
+														"targetMediaVisitMetrics"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "AddAugmentObjectMediaVisitMetric-Validation-AugmentObjectAndMediaNotFound",
+											"request": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "DONDE-AUGMENTOR-ORGANIZATION-ID",
+														"type": "text",
+														"value": "{{currentOrganizationId}}"
+													},
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "Bearer {{access_token}}"
+													},
+													{
+														"key": "METRIC-ACCESS-ID",
+														"type": "text",
+														"value": "{{metricAccessId}}"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n\t\"augmentObjectId\":\"{{currentAugmentObjectId}}\",\n\t\"mediaId\":\"{{mediaId}}\",\n\t\"deviceUniqueId\":\"{{currentDeviceUniqueId}}\",\n\t\"deviceName\": \"{{currentDeviceName}}\",\n\t\"deviceId\": \"{{currentDeviceId}}\"\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{hostname}}/api/v2/targetMediaVisitMetrics",
+													"host": [
+														"{{hostname}}"
+													],
+													"path": [
+														"api",
+														"v2",
+														"targetMediaVisitMetrics"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "AddAugmentObjectMediaVisitMetric - 404(deleted augmentObjectMedia and not existing MediaId(audio or videoId)",
+											"request": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "DONDE-AUGMENTOR-ORGANIZATION-ID",
+														"type": "text",
+														"value": "{{currentOrganizationId}}"
+													},
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "Bearer {{access_token}}"
+													},
+													{
+														"key": "METRIC-ACCESS-ID",
+														"type": "text",
+														"value": "{{metricAccessId}}"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n\t\"augmentObjectId\":\"{{currentAugmentObjectId}}\",\n\t\"mediaId\":\"{{mediaId}}\",\n\t\"deviceUniqueId\":\"{{currentDeviceUniqueId}}\",\n\t\"deviceName\": \"{{currentDeviceName}}\",\n\t\"deviceId\": \"{{currentDeviceId}}\"\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{hostname}}/api/v2/targetMediaVisitMetrics",
+													"host": [
+														"{{hostname}}"
+													],
+													"path": [
+														"api",
+														"v2",
+														"targetMediaVisitMetrics"
+													]
+												}
+											},
+											"response": []
+										}
+									],
+									"protocolProfileBehavior": {},
+									"_postman_isSubFolder": true
+								}
+							],
+							"protocolProfileBehavior": {},
+							"_postman_isSubFolder": true
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Avatar",
+					"item": [
+						{
+							"name": "V1",
+							"item": [
+								{
+									"name": "GetAvatars",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{hostname}}/api/v1/avatars?$filter = organizationId eq {{currentOrganizationId}}",
+											"host": [
+												"{{hostname}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"avatars"
+											],
+											"query": [
+												{
+													"key": "$filter ",
+													"value": " organizationId eq {{currentOrganizationId}}"
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"protocolProfileBehavior": {},
+							"_postman_isSubFolder": true
 						}
 					],
 					"protocolProfileBehavior": {},

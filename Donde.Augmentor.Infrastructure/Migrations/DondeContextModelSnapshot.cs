@@ -154,8 +154,7 @@ namespace Donde.Augmentor.Infrastructure.Migrations
 
                     b.HasIndex("AudioId");
 
-                    b.HasIndex("AugmentObjectId")
-                        .IsUnique();
+                    b.HasIndex("AugmentObjectId");
 
                     b.HasIndex("AvatarId");
 

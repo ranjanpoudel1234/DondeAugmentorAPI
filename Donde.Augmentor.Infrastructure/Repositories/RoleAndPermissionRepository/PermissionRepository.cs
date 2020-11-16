@@ -14,7 +14,7 @@ namespace Donde.Augmentor.Infrastructure.Repositories.RoleAndPermissionRepositor
 
         public IQueryable<Permission> GetAll()
         {
-            return GetAll<Permission>();
+            return GetAllAsNoTracking<Permission>();
         }
     }
 }

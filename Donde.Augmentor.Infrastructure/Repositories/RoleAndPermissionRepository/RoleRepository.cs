@@ -17,12 +17,12 @@ namespace Donde.Augmentor.Infrastructure.Repositories.RoleAndPermissionRepositor
 
         public IQueryable<Role> GetAll()
         {
-            return GetAll<Role>().Include(role => role.Permissions).ThenInclude(rolePermission => rolePermission.Permission);
+            return GetAllAsNoTracking<Role>().Include(role => role.Permissions).ThenInclude(rolePermission => rolePermission.Permission);
         }
 
         public IQueryable<Role> GetRoleByIds(List<Guid> roleIds)
         {
-            return GetAll<Role>().Where(x => roleIds.Contains(x.Id));
+            return GetAllAsNoTracking<Role>().Where(x => roleIds.Contains(x.Id));
         }
     }
 }

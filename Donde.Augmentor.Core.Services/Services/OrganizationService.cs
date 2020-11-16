@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace Donde.Augmentor.Core.Services.Services
 {
@@ -18,11 +19,18 @@ namespace Donde.Augmentor.Core.Services.Services
         private IOrganizationRepository _organizationRepository;
         private readonly IMapper _mapper;
         private readonly IValidator<Organization> _validator;
-        public OrganizationService(IOrganizationRepository organizationRepository, IMapper mapper, IValidator<Organization> validator)
+        private readonly IOrganizationResourceService _organizationResourceService;
+      
+
+        public OrganizationService(IOrganizationRepository organizationRepository, 
+            IMapper mapper, 
+            IValidator<Organization> validator,
+            IOrganizationResourceService organizationResourceService)
         {
             _organizationRepository = organizationRepository;
             _mapper = mapper;
             _validator = validator;
+            _organizationResourceService = organizationResourceService;
         }
 
         public async Task<IEnumerable<Organization>> GetClosestOrganizationByRadius(double latitude, double longitude, int radiusInMeters)
@@ -69,16 +77,21 @@ namespace Donde.Augmentor.Core.Services.Services
 
         public async Task<Organization> DeleteOrganizationAsync(Guid entityId)
         {
-            var existingOrganization = GetOrganizations().SingleOrDefault(x => x.Id == entityId);
+            var existingOrganizationIncludingSites = await _organizationRepository.GetOrganizationByIdAsync(entityId, includeSites: true);
 
-            if (existingOrganization == null)
+            if (existingOrganizationIncludingSites == null)
             {
                 throw new HttpNotFoundException(ErrorMessages.ObjectNotFound);
             }
 
-            existingOrganization.IsDeleted = true;
+            await _organizationResourceService.DeleteOrganizationResourcesByOrganizationIdAsync(existingOrganizationIncludingSites.Id);
 
-            return await _organizationRepository.UpdateOrganizationAsync(existingOrganization);
+            existingOrganizationIncludingSites.IsDeleted = true;
+            existingOrganizationIncludingSites.Sites.ForEach(s => { s.IsDeleted = true; s.UpdatedDate = DateTime.UtcNow; });
+
+            var updatedOrganization = await _organizationRepository.UpdateOrganizationAsync(existingOrganizationIncludingSites);
+
+            return updatedOrganization;           
         }
     }
 }
