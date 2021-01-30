@@ -7,6 +7,7 @@
         public const string OrganizationLogoRoute = "organizationLogos";
         public const string SitesRoute = "sites";
         public const string UsersRoute = "users";
+        public const string UserInfo = "userInfo";
         public const string RolesRoute = "roles";
         public const string PermissionsRoute = "permissions";
         public const string AugmentObjectsRoute = "augmentObjects";// this one is for v1. v2 endpoints are being renamed to use target prefix.
